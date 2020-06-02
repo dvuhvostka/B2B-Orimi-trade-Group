@@ -1,1 +1,2 @@
-console.log("hello,world!")
+while (1)
+{console.log("hello,world!")}
