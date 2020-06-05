@@ -1,8 +1,9 @@
 "use strict"
 
 function sendPost(address, data) {
-  var xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
   xhr.open('POST', address, false);
+  xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
   xhr.send(data);
   alert(xhr.responseText);
 }
@@ -20,12 +21,12 @@ function form_check() {
     let sec_pass = document.getElementById('sec_pass');
     let username = document.getElementById('username');
     let email = document.getElementById('email');
-    let data = {
-      p1: first_pass,
-      p2: sec_pass,
-      u1: username,
-      e1: email
-    }
+    let data = JSON.stringify({
+      p1: first_pass.value,
+      p2: sec_pass.value,
+      u1: username.value,
+      e1: email.value
+    });
     if (username.value.length < 3 || username.value.length > 11){
       if(check_pass(first_pass, sec_pass)){
         alert("Измените имя")

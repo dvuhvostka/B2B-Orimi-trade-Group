@@ -3,6 +3,7 @@ var router = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 
+
 /* GET users listing. */
 router.route('/')
   .get(function(req, res) {
@@ -13,5 +14,6 @@ router.route('/')
     //res.redirect('/register');
     res.send(req.body);
   });
+
 
 module.exports = router;
