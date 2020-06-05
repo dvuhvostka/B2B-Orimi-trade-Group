@@ -11,7 +11,7 @@ router.route('/')
   .post(function(req,res){
     console.log(req.body);
     //res.redirect('/register');
-    res.send("Hello,world!");
+    res.send(req.body);
   });
 
 module.exports = router;

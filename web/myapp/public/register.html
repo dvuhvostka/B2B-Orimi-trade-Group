@@ -10,24 +10,12 @@
 </head>
 <body>
   <div class="container">
-<form action="/register" method='POST'>
-<div class="row">
-<div class="col-sm">
-<input type="text" placeholder='Email' name='email'>
-</div>
-<div class="col-sm">
-<input type="text" placeholder='Nickname' name = 'nick'>
-</div>
-<div class="col-sm">
-<input type="password" placeholder='Password' name ='password'>
-</div>
-<div class="col-sm">
-<input type="password" placeholder='Confirm password'>
-</div>
-</div>
-<br>
-<button id='submit_button' onclick="console.log("U r gay x2!")">Submit</button>
-</div>
+<form action="/register">
+  <input type="email" placeholder='Email' id='email' autocomplete="off">
+  <input type="text" placeholder='Nickname' id='username' autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+  <input type="password" placeholder='Password' id="first_pass" autocomplete="off">
+  <input type="password" placeholder='Confirm password' id="sec_pass" autocomplete="off">
+  <input type="submit" onclick="form_check()">
 </form>
 </body>
 </html>
