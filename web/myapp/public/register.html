@@ -11,10 +11,10 @@
 <body>
   <div class="container">
 <form action="/register">
-  <input type="email" placeholder='Email' id='email' autocomplete="off">
-  <input type="text" placeholder='Nickname' id='username' autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
-  <input type="password" placeholder='Password' id="first_pass" autocomplete="off">
-  <input type="password" placeholder='Confirm password' id="sec_pass" autocomplete="off">
+  <input type="email" placeholder='Email' id='email' autocomplete="off" required>
+  <input type="text"  required placeholder='Nickname' id='username' autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
+  <input type="password" placeholder='Password' id="first_pass" autocomplete="off" required>
+  <input type="password" placeholder='Confirm password' id="sec_pass" autocomplete="off" required>
   <input type="submit" onclick="form_check()">
 </form>
 </body>

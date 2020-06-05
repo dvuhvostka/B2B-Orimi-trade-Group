@@ -5,15 +5,15 @@ function sendPost(address, data) {
   xhr.open('POST', address, false);
   xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
   xhr.send(data);
-  alert(xhr.responseText);
+  return xhr.responseText;
 }
 
 function check_pass(p1, p2)
 {
   if (p1.value == p2.value && p1.value.length > 6) {
     //первичная проверка паролей
-    return true;
-  } else return false;
+    return false;
+  } else return true;
 }
 
 function form_check() {
@@ -27,18 +27,13 @@ function form_check() {
       u1: username.value,
       e1: email.value
     });
-    if (username.value.length < 3 || username.value.length > 11){
-      if(check_pass(first_pass, sec_pass)){
-        alert("Измените имя")
-      } else {
-        alert("Имя и пароль введены не верно")
-      }
-    } else {
-      if(check_pass(first_pass, sec_pass)){
-        sendPost("/register", data)
-      }
-      else {
-        alert("Слишком короткий пароль или пароли не совпадают")
+    switch (true) {
+      case username.value.length > 14: alert('Имя слишком длинное'); break;
+      case username.value.length < 3: alert('Имя слишком короткое'); break;
+      case check_pass(first_pass, sec_pass): alert('Пароль слишком короткий или не совпадают'); break;
+      default: {
+        var res = sendPost("/register", data);
+        alert(res);
       }
     }
   }
