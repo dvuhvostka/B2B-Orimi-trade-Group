@@ -2,7 +2,8 @@ var express = require('express');
 var router = express();
 var path = require('path');
 var bodyParser = require('body-parser');
-
+var pgp = require("pg-promise")(/*options*/);
+var db = pgp("postgres://s0rax:12345@25.58.69.64:5432/mydb");
 
 function xss_check(replace){
   var pattern = /script|javascript|src|onerror|%|<|>/g;
@@ -33,6 +34,14 @@ router.route('/')
     if (errCode!=0) {res.send("err"+errCode)} else {
       res.send("true") //выводим код ошибки. Если ошибки нет, выводим true.
       // ЗАНОСИМ ДАННЫЕ В БД.
+      db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions})', {
+          username: req.body.u1,
+          email: req.body.e1,
+          password: req.body.p1,
+          ip_addr: '127.0.0.1',
+          balance: 0,
+          permissions: 'user'
+      });
     }
   });
 
