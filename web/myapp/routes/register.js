@@ -1,3 +1,5 @@
+"use strict"
+
 var express = require('express');
 var router = express();
 var path = require('path');
@@ -34,14 +36,25 @@ router.route('/')
     if (errCode!=0) {res.send("err"+errCode)} else {
       res.send("true") //выводим код ошибки. Если ошибки нет, выводим true.
       // ЗАНОСИМ ДАННЫЕ В БД.
-      db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions})', {
-          username: req.body.u1,
-          email: req.body.e1,
-          password: req.body.p1,
-          ip_addr: '127.0.0.1',
-          balance: 0,
-          permissions: 'user'
-      });
+      db.any('SELECT * FROM users WHERE email = $1', req.body.e1)
+      .then(function (data) {
+          if(data.length != 0){
+            console.log("Email already registred: "+data[0].email);
+            //нужно сообщить клиенту, что этот email уже занят.
+          } else {
+            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions})', {
+                username: req.body.u1,
+                email: req.body.e1,
+                password: req.body.p1,
+                ip_addr: '127.0.0.1',
+                balance: 0,
+                permissions: 'user'
+            });
+          }
+      })
+      .catch(error => {
+       console.log('ERROR:', error);
+   });
     }
   });
 
