@@ -21,6 +21,7 @@ function form_check() {
     let sec_pass = document.getElementById('sec_pass');
     let username = document.getElementById('username');
     let email = document.getElementById('email');
+    let client_type = document.getElementById('client_type');
     let data = JSON.stringify({
       p1: first_pass.value,
       p2: sec_pass.value,
