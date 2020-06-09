@@ -32,6 +32,8 @@ router.route('/')
   })
   .post(function(req,res){
     var errCode = reg_data_checker(req.body);
+    var ip = req.ip;
+    var ip_result = ip.replace("::ffff:", "");
     //res.redirect('/register');
     if (errCode!=0) {res.send("err"+errCode)} else {
       res.send("true") //выводим код ошибки. Если ошибки нет, выводим true.
@@ -42,13 +44,14 @@ router.route('/')
             console.log("Email already registred: "+data[0].email);
             //нужно сообщить клиенту, что этот email уже занят.
           } else {
-            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions})', {
+            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type})',  {
                 username: req.body.u1,
                 email: req.body.e1,
                 password: req.body.p1,
-                ip_addr: '127.0.0.1',
+                ip_addr: ip_result,
                 balance: 0,
-                permissions: 'user'
+                permissions: 'user',
+                client_type: req.body.c1
             });
           }
       })
