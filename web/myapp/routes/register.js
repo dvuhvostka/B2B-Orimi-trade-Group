@@ -4,6 +4,7 @@ var express = require('express');
 var router = express();
 var path = require('path');
 var bodyParser = require('body-parser');
+var crypto = require('crypto');
 var pgp = require("pg-promise")(/*options*/);
 var db = pgp("postgres://s0rax:12345@25.58.69.64:5432/mydb");
 
@@ -24,6 +25,10 @@ function reg_data_checker(data)
   }
 }
 
+function md5(pass) {
+  var hash = crypto.createHash('md5').update(pass).digest('hex');
+  return hash;
+}
 
 /* GET users listing. */
 router.route('/')
@@ -44,14 +49,15 @@ router.route('/')
             console.log("Email already registred: "+data[0].email);
             //нужно сообщить клиенту, что этот email уже занят.
           } else {
-            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type})',  {
+            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type, number) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number})',  {
                 username: req.body.u1,
                 email: req.body.e1,
-                password: req.body.p1,
+                password: md5(req.body.p1),
                 ip_addr: ip_result,
                 balance: 0,
                 permissions: 'user',
-                client_type: req.body.c1
+                client_type: req.body.c1,
+                number: req.body.n1
             });
           }
       })

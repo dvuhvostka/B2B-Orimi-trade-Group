@@ -12,6 +12,7 @@
   <div class="container">
 <form action="/register">
   <input type="email" placeholder='Email' id='email' autocomplete="off" required>
+  <input type="text" placeholder='Your number' id="phone_number" autocomplete="off" required>
   <input type="text"  required placeholder='Nickname' id='username' autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
   <input type="password" placeholder='Password' id="first_pass" autocomplete="off" required>
   <input type="password" placeholder='Confirm password' id="sec_pass" autocomplete="off" required>
@@ -19,11 +20,11 @@
   <hr>
   <label for="phys_type">
     <p>Физическое лицо</p>
-    <input type="radio" value="Физ. лицо" name="client_type">
+    <input type="radio" value="Физ. лицо" id="chb_1" name="client_type" checked>
   </label>
   <label for="urid_type">
     <p>Юридическое лицо</p>
-    <input type="radio" value="Юр. лицо" name="client_type">
+    <input type="radio" value="Юр. лицо" id="chb_2" name="client_type">
   </label>
   <input type="submit" onclick="form_check()">
 </form>
