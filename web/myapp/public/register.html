@@ -15,6 +15,16 @@
   <input type="text"  required placeholder='Nickname' id='username' autocomplete="off" readonly onfocus="this.removeAttribute('readonly')">
   <input type="password" placeholder='Password' id="first_pass" autocomplete="off" required>
   <input type="password" placeholder='Confirm password' id="sec_pass" autocomplete="off" required>
+  <br>
+  <hr>
+  <label for="phys_type">
+    <p>Физическое лицо</p>
+    <input type="radio" value="Физ. лицо" id="client_type" name="client_type">
+  </label>
+  <label for="urid_type">
+    <p>Юридическое лицо</p>
+    <input type="radio" value="Юр. лицо" name="client_type">
+  </label>
   <input type="submit" onclick="form_check()">
 </form>
 </body>
