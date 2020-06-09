@@ -25,7 +25,8 @@ function form_check() {
       p1: first_pass.value,
       p2: sec_pass.value,
       u1: username.value,
-      e1: email.value
+      e1: email.value,
+      c1:
     });
     switch (true) {
       case username.value.length > 14: alert('Имя слишком длинное'); break;
