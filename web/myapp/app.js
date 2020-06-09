@@ -10,6 +10,7 @@ var usersRouter = require('./routes/user');
 var newsRouter = require('./routes/news');
 var shopRouter = require('./routes/shop');
 var registerRouter = require('./routes/register');
+var loginRouter = require('./routes/login')
 var app = express();
 
 app.disable('x-powered-by');
@@ -29,6 +30,7 @@ app.use('/user', usersRouter);
 app.use('/news', newsRouter);
 app.use('/shop', shopRouter);
 app.use('/register', registerRouter);
+app.use('/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
