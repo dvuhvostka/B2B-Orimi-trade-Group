@@ -6,15 +6,18 @@ const pgSession = require('connect-pg-simple')(session);
 var {Pool, Client} = require('pg');
 var bodyParser = require('body-parser')
 var crypto = require('crypto');
-var app = require('../app')
+var app = require('../app');
+
+global.userinfo = {
+  user_id: null
+}
 
 /* GET users listing. */
 
 const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
 
-function checkLogged (){
-
-
+function consolelogout() {
+    console.log('login.js')
 }
 
   //var for sessions and connecting to databse
@@ -23,9 +26,9 @@ function checkLogged (){
     ENVIRONMENT = 'development',
     SESS_NAME = 'sid',
     SESS_SECRET = 'ssh!quiet,it\'dexat0randz0rax!',
-    USER = 'dexat0r',
-    PASSWORD = '121212',
-    HOST = 'localhost'
+    USER = 's0rax',
+    PASSWORD = '12345',
+    HOST = '25.58.69.64'
   } = process.env
   //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
   const IN_PROD = ENVIRONMENT === 'production';
@@ -37,23 +40,6 @@ function checkLogged (){
     database: 'mydb'
   });
 
-
-  //Coockies, session config
-  login.use(session({
-    name: SESS_NAME,
-    resave: false,
-    saveUninitialized: false,
-    secret: SESS_SECRET,
-    cookie: {
-      maxAge: SESS_LIFETIME,
-      sameSite: true,
-      secure: IN_PROD,
-    },
-    store: new pgSession({
-        pool: pgPool,
-        tableName: 'session'
-    })
-  }))
 const query = `
 SELECT id
 FROM users
@@ -74,21 +60,21 @@ login.route('/login')
     .post(function(req, res){
       const {email, password} = req.body;
       console.log(email + ' ' + password)
-      console.log(req.body.email + ' ' + req.body.password)
-      pgPool.query(query,[email,md5(password)], function(err, res){
-        //console.log(err,res)
-          if(!err){
-            console.log(res.rows[0].id);
-            pgPool.end();
-          }
-      })
-
+try {
+  pgPool.query(query,[email,md5(password)], function(err, res){
+    if(res.rows.length!=0){
+      userinfo.user_id = res.rows[0].id;
+      //console.log(user_id);
+    } else console.log("Undefined ID")
+  });
+} catch (e) {
+  console.log("error: "+e)
+}
       res.redirect('/')
-
-    });
-
+});
 
 
-
-
-module.exports = login;
+module.exports = {
+  login: login,
+  //user_identifier: userinfo.user_id
+}

@@ -41,7 +41,7 @@ app.use('/', usersRouter);
 app.use('/', newsRouter);
 app.use('/', shopRouter);
 app.use('/', registerRouter);
-app.use('/', loginRouter);
+app.use('/', loginRouter.login);
 app.use('/', logoutRoute);
 
 
@@ -51,9 +51,9 @@ const {
   ENVIRONMENT = 'development',
   SESS_NAME = 'sid',
   SESS_SECRET = 'ssh!quiet,it\'dexat0randz0rax!',
-  USER = 'dexat0r',
-  PASSWORD = '121212',
-  HOST = 'localhost'
+  USER = 's0rax',
+  PASSWORD = '12345',
+  HOST = '25.58.69.64'
 } = process.env
 //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
 const IN_PROD = ENVIRONMENT === 'production';
@@ -84,15 +84,18 @@ app.use(session({
   })
 }))
 
-
-
-app.get('/', function(req,res){
-  const { userID } = req.session
-  module.exports = req.session.userID // export userid to manage redirect if not autorizide
-  res.sendFile(path.join(__dirname, '/public/index.html'));
+app.use(function(req, res, next) {
+  switch (!null) {
+    case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
+  }
+  next();
 })
 
-
+app.get('/', function(req,res){
+  const { userId } = req.session;
+  console.log(req.session.userId);
+  res.sendFile(path.join(__dirname, '/public/index.html'));
+})
 
 
 // catch 404 and forward to error handler
