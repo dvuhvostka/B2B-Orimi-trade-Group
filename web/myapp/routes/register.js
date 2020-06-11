@@ -7,11 +7,15 @@ var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var pgp = require("pg-promise")(/*options*/);
 var db = pgp("postgres://s0rax:12345@25.58.69.64:5432/mydb");
+var app = require('../app');
 
 function xss_check(replace){
   var pattern = /script|javascript|src|onerror|%|<|>/g;
   if(replace.u1.search(pattern)<0 && replace.e1.search(pattern)<0) return false; else return true;
 }
+
+
+
 
 function reg_data_checker(data)
 {
@@ -31,7 +35,7 @@ function md5(pass) {
 }
 
 /* GET users listing. */
-router.route('/')
+router.route('/register')
   .get(function(req, res) {
     res.sendFile(path.resolve(__dirname, '../public/register.html'));
   })

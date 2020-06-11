@@ -28,6 +28,7 @@ function getCheckedCheckBoxes() {
 }
 
 function form_check() {
+    alert('its working');
     let first_pass = document.getElementById('first_pass');
     let sec_pass = document.getElementById('sec_pass');
     let username = document.getElementById('username');

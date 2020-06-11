@@ -3,7 +3,7 @@ var router = express.Router();
 var path = require('path');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/shop', function(req, res, next) {
   res.sendFile(path.resolve(__dirname, '../public/shop.html'));
 
 });

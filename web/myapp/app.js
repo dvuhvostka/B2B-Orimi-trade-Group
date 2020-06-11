@@ -4,16 +4,25 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var helmet = require('helmet');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+var {Pool, Client} = require('pg');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user');
 var newsRouter = require('./routes/news');
 var shopRouter = require('./routes/shop');
 var registerRouter = require('./routes/register');
-var loginRouter = require('./routes/login')
+var loginRouter = require('./routes/login');
+var logoutRoute = require('./routes/logout')
+
 var app = express();
 
+const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
+
 app.disable('x-powered-by');
+app.use(helmet());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -22,21 +31,74 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
+app.use(express.static('public/javascripts'));
+app.use(express.static('public/stylesheets'));
 
 //app.use('/', indexRouter);
-app.use('/user', usersRouter);
-app.use('/news', newsRouter);
-app.use('/shop', shopRouter);
-app.use('/register', registerRouter);
-app.use('/login', loginRouter);
+app.use('/', usersRouter);
+app.use('/', newsRouter);
+app.use('/', shopRouter);
+app.use('/', registerRouter);
+app.use('/', loginRouter);
+app.use('/', logoutRoute);
+
+
+//var for sessions and connecting to databse
+const {
+  SESS_LIFETIME = TWO_DAYS,
+  ENVIRONMENT = 'development',
+  SESS_NAME = 'sid',
+  SESS_SECRET = 'ssh!quiet,it\'dexat0randz0rax!',
+  USER = 'dexat0r',
+  PASSWORD = '121212',
+  HOST = 'localhost'
+} = process.env
+//while we develop the web site ENVIRONMENT = development and IN_PROD = false.
+const IN_PROD = ENVIRONMENT === 'production';
+//coneccting to database config
+var pgPool = new Pool({
+  host: HOST,
+  user: USER,
+  password: PASSWORD,
+  database: 'mydb'
+});
+
+
+
+//Coockies, session config
+app.use(session({
+  name: SESS_NAME,
+  resave: false,
+  saveUninitialized: false,
+  secret: SESS_SECRET,
+  cookie: {
+    maxAge: SESS_LIFETIME,
+    sameSite: true,
+    secure: IN_PROD,
+  },
+  store: new pgSession({
+      pool: pgPool,
+      tableName: 'session'
+  })
+}))
+
+
+
+app.get('/', function(req,res){
+  const { userID } = req.session
+  module.exports = req.session.userID // export userid to manage redirect if not autorizide
+  res.sendFile(path.join(__dirname, '/public/index.html'));
+})
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
