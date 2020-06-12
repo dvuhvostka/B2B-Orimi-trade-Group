@@ -55,7 +55,7 @@ function md5(pass) {
 
 login.route('/login')
     .get(function(req,res){
-      res.sendFile(path.resolve(__dirname, '../public/login.html'));
+      res.render('login.pug');
     })
     .post(function(req, res){
       const {email, password} = req.body;

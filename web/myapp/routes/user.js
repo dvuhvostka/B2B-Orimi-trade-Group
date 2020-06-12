@@ -1,19 +1,26 @@
 var express = require('express');
-var router = express.Router();
+var user = express.Router();
 var path = require('path');
 var app = require('../app');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
-/* GET users listing. */
+
 const redirectLogin = function(req,res,next){
-  if(!app.userID){
+  if(!req.session.userId){
     res.redirect('/login')
   }else {
     next()
   }
 }
-router.get('/user', redirectLogin, function(req, res, next) {
+
+user.use(session({
+    secret:'ssh!quiet,it\'dexat0randz0rax!'
+}))
+
+user.get('/user', redirectLogin, function(req, res, next) {
   res.sendFile(path.resolve(__dirname, '../public/user.html'));
   console.log(app.userID)
 });
 
-module.exports = router;
+module.exports = user;

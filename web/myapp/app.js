@@ -21,29 +21,6 @@ var app = express();
 
 const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
 
-app.disable('x-powered-by');
-app.use(helmet());
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(express.static('public/javascripts'));
-app.use(express.static('public/stylesheets'));
-
-//app.use('/', indexRouter);
-app.use('/', usersRouter);
-app.use('/', newsRouter);
-app.use('/', shopRouter);
-app.use('/', registerRouter);
-app.use('/', loginRouter.login);
-app.use('/', logoutRoute);
-
 
 //var for sessions and connecting to databse
 const {
@@ -66,7 +43,7 @@ var pgPool = new Pool({
 });
 
 
-
+app.use(cookieParser());
 //Coockies, session config
 app.use(session({
   name: SESS_NAME,
@@ -77,12 +54,36 @@ app.use(session({
     maxAge: SESS_LIFETIME,
     sameSite: true,
     secure: IN_PROD,
+    path: '/'
   },
   store: new pgSession({
       pool: pgPool,
       tableName: 'session'
   })
 }))
+
+app.disable('x-powered-by');
+app.use(helmet());
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(express.static('public/javascripts'));
+app.use(express.static('public/stylesheets'));
+
+//app.use('/', indexRouter);
+app.use('/', usersRouter);
+app.use('/', newsRouter);
+app.use('/', shopRouter);
+app.use('/', registerRouter);
+app.use('/', loginRouter.login);
+app.use('/', logoutRoute);
+
 
 app.use(function(req, res, next) {
   switch (!null) {
@@ -93,8 +94,19 @@ app.use(function(req, res, next) {
 
 app.get('/', function(req,res){
   const { userId } = req.session;
+  console.log(req.session.id);
+  console.log(req.session);
   console.log(req.session.userId);
-  res.sendFile(path.join(__dirname, '/public/index.html'));
+  if(req.session.userId)
+    var isRegistred = true;
+  else
+    isRegistred = false;
+  console.log(isRegistred);
+  //res.sendFile(path.join(__dirname, '/public/index.html'));
+  res.render('index', {
+    title: 'Main page',
+    isRegistred: req.session.userId !== undefined, 
+});
 })
 
 
@@ -113,4 +125,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = {
+  app: app,
+
+};

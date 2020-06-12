@@ -4,18 +4,24 @@ var logout = express.Router();
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
 
-logout.use(cookieParser('ssh!quiet,it\'dexat0randz0rax!'))
+
+
 logout.use(session({
   secret:'ssh!quiet,it\'dexat0randz0rax!'
 }))
 logout.route('/logout')
-.post(function(req, res) {
-  //res.send('hello world');
-  console.log('cookies: ' + req.session.cookie);
-})
 .get(function(req, res) {
+  //res.send('hello world');
+  console.log('cookies: ' + JSON.stringify(req.session.id));
+  req.session.destroy(function(err){
+    if(err){
+      console.log(err);
+    }
+    userinfo.user_id = null;
+    res.clearCookie('sid');
+    res.redirect('/');
+  })
+})
 
- res.send('hello world');
-});
 
 module.exports   = logout;

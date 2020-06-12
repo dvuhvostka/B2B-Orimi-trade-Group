@@ -1,0 +1,13 @@
+extends layout
+
+block append scripts
+    link(rel='stylesheet' href='login_style.css')
+block content
+  form(action='/login' method='POST' id='form_input_by_client')
+    .form-group
+      label(for='exampleInputEmail1') Email 
+      input(type="email" class="form-control" class='input_login' id="exampleInputEmail1" aria-describedby="emailHelp" name='email' required)
+    .form-group
+      label(for='exampleInputPassword1') Пароль
+      input(type="password" class="form-control" class ='input_login' id="exampleInputPassword1" name='password' required)
+    button(class='btn' class='btn-primary' ) Войти
