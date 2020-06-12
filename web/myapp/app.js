@@ -52,8 +52,8 @@ const {
   SESS_NAME = 'sid',
   SESS_SECRET = 'ssh!quiet,it\'dexat0randz0rax!',
   USER = 's0rax',
-  PASSWORD = '12345',
-  HOST = '25.58.69.64'
+  PASSWORD = '121212',
+  HOST = 'localhost'
 } = process.env
 //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
 const IN_PROD = ENVIRONMENT === 'production';

@@ -27,8 +27,8 @@ function consolelogout() {
     SESS_NAME = 'sid',
     SESS_SECRET = 'ssh!quiet,it\'dexat0randz0rax!',
     USER = 's0rax',
-    PASSWORD = '12345',
-    HOST = '25.58.69.64'
+    PASSWORD = '121212',
+    HOST = 'localhost'
   } = process.env
   //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
   const IN_PROD = ENVIRONMENT === 'production';
@@ -62,6 +62,7 @@ login.route('/login')
       console.log(email + ' ' + password)
 try {
   pgPool.query(query,[email,md5(password)], function(err, res){
+    console.log(res.rows);
     if(res.rows.length!=0){
       userinfo.user_id = res.rows[0].id;
       //console.log(user_id);
