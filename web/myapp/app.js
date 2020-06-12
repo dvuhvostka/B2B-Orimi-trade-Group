@@ -105,7 +105,8 @@ app.get('/', function(req,res){
   //res.sendFile(path.join(__dirname, '/public/index.html'));
   res.render('index', {
     title: 'Main page',
-    isRegistred: req.session.userId !== undefined, 
+    isRegistred: req.session.userId !== undefined,
+    isRoot: true
 });
 })
 

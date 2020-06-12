@@ -1,0 +1,23 @@
+extends layout
+
+block append scripts
+  script(src='register_script.js')
+
+  
+block content
+  form(action='/login' method='POST' id='form_input_by_client' class='need-validation' novalidate)
+    .form-row
+      div(class='col-md-2 mb-3')
+        label(for="validationCustom01") Email
+        input(type='email' class='form-control' id='validationCustom01' required placeholder='ivanov@yandex.ru' name='email')
+        .valid-feedback Awesome email!
+      div(class='col-md-2 mb-3')
+        label(for="validationCustom01") Name
+        input(type='text' class='form-control' id='validationCustom02' required placeholder='Ivan' name='name')
+        .valid-feedback Awesome name!
+
+
+
+
+  script(src='jquery-3.5.1.js')
+  script(src='jquery.maskedinput.js')

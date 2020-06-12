@@ -37,7 +37,9 @@ function md5(pass) {
 /* GET users listing. */
 router.route('/register')
   .get(function(req, res) {
-    res.sendFile(path.resolve(__dirname, '../public/register.html'));
+    res.render('register.pug',{
+      isRegister: true
+    });
   })
   .post(function(req,res){
     var errCode = reg_data_checker(req.body);

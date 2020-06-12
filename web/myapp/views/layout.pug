@@ -11,23 +11,27 @@ html
     script(type='text/javascript').      
       var isHome = window.location.pathname;
       console.log(isHome);
-    block nav
-      ul(class= 'nav')
-        li.nav-item
-          a(href='/shop' class='nav-link') Магазин
-        li.nav-item
-          a(href='/news' class='nav-link') Новости
-        if isRegistred
-          li.nav-item
-            a(href='/user' class='nav-link') Кабинет  
-          li
-            a(href='/logout' class='nav-link') Выход
-        else      
-          li.nav-item
-            a(href='/register' class='nav-link') Регистрация
-          li.nav-item
-            a(href='/login' class='nav-link') Вход
-          li.nav-item
-            a(href='/' class='nav-link') Главная страница
+    nav(class="navbar navbar-expand-lg navbar-light bg-light")
+      div(class="collapse navbar-collapse" id="navbarSupportedContent" )
+        ul(class= 'navbar-nav mr-auto')
+          li(class='nav-item active')
+            a(href='/shop' class='nav-link') Магазин
+          li(class='nav-item active')
+            a(href='/news' class='nav-link') Новости
+          if isRegistred
+            li(class='nav-item active')
+              a(href='/user' class='nav-link') Кабинет  
+            li(class='nav-item active')
+              a(href='/logout' class='nav-link') Выход
+          else  
+            if !isRegister    
+              li(class='nav-item active')
+                a(href='/register' class='nav-link') Регистрация
+            if !isLogin
+              li(class='nav-item active')
+                a(href='/login' class='nav-link') Вход
+          if !isRoot
+            li(class='nav-item active')
+              a(href='/' class='nav-link') Главная страница
         
     block content
