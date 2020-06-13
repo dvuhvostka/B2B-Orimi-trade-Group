@@ -7,7 +7,9 @@ var session = require('express-session')
 
 
 logout.use(session({
-  secret:'ssh!quiet,it\'dexat0randz0rax!'
+  secret:'ssh!quiet,it\'dexat0randz0rax!',
+  resave: false,
+  saveUninitialized: false
 }))
 logout.route('/logout')
 .get(function(req, res) {

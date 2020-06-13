@@ -15,7 +15,9 @@ const redirectLogin = function(req,res,next){
 }
 
 user.use(session({
-    secret:'ssh!quiet,it\'dexat0randz0rax!'
+    secret:'ssh!quiet,it\'dexat0randz0rax!',
+    resave: false,
+    saveUninitialized: false
 }))
 
 user.get('/user', redirectLogin, function(req, res, next) {
