@@ -8,42 +8,7 @@ var crypto = require('crypto');
 var pgp = require("pg-promise")(/*options*/);
 var db = pgp("postgres://s0rax:12345@25.58.69.64:5432/mydb");
 var app = require('../app');
-const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
-var {Pool, Client} = require('pg');
-var config = require('../config');
 const { v4: uuidv4 } = require('uuid');
-
-
-
-const query = `
-SELECT id
-FROM users
-WHERE email = $1
-AND password = $2
-
-`;
-
-const {
-  SESS_LIFETIME = config.SESS_TIME,
-  ENVIRONMENT = config.ENVIRONMENT,
-  SESS_NAME = config.SESS_NAME,
-  SESS_SECRET = config.SESS_SECRET,
-  USER = config.DB_USER,
-  PASSWORD = config.DB_PASSWORD,
-  HOST = config.DB_HOST,
-  DBNAME = config.DB_NAME
-} = process.env
-//while we develop the web site ENVIRONMENT = development and IN_PROD = false.
-const IN_PROD = ENVIRONMENT === 'production';
-//coneccting to database config
-var pgPool = new Pool({
-  host: HOST,
-  user: USER,
-  password: PASSWORD,
-  database: DBNAME
-});
-
 
 
 
