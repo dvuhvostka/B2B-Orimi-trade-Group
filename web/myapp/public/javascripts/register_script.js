@@ -28,7 +28,6 @@ function getCheckedCheckBoxes() {
 }
 
 function form_check() {
-    alert('its working');
     let first_pass = document.getElementById('first_pass');
     let sec_pass = document.getElementById('sec_pass');
     let username = document.getElementById('username');
@@ -44,13 +43,13 @@ function form_check() {
       n1: phone_number.value
     });
 
-    switch (true) {
-      case username.value.length > 14: alert('Имя слишком длинное'); break;
-      case username.value.length < 3: alert('Имя слишком короткое'); break;
-      case check_pass(first_pass, sec_pass): alert('Пароль слишком короткий или не совпадают'); break;
-      default: {
-        var res = sendPost("/register", data);
-        alert(res);
-      }
-    }
-  }
+  //   switch (true) {
+  //     case username.value.length > 14: alert('Имя слишком длинное'); break;
+  //     case username.value.length < 3: alert('Имя слишком короткое'); break;
+  //     case check_pass(first_pass, sec_pass): alert('Пароль слишком короткий или не совпадают'); break;
+  //     default: {
+  //       var res = sendPost("/register", data);
+  //       alert(res);
+  //     }
+  //   }
+  // }

@@ -2,22 +2,59 @@ extends layout
 
 block append scripts
   script(src='register_script.js')
+  link(rel='stylesheet' href='register_style.css')
+  script(src='jquery-3.5.1.js')
+  script(src='jquery.maskedinput.js')
+  
 
   
 block content
-  form(action='/login' method='POST' id='form_input_by_client' class='need-validation' novalidate)
+  
+  form(action='/register' method='POST' id='form_input_by_client' class='needs-validation' novalidate)
     .form-row
       div(class='col-md-2 mb-3')
         label(for="validationCustom01") Email
-        input(type='email' class='form-control' id='validationCustom01' required placeholder='ivanov@yandex.ru' name='email')
+        input(type='email' class='form-control email' id='validationCustom01' required placeholder='ivanov@yandex.ru' name='email')
         .valid-feedback Awesome email!
+        .invalid-feedback Некорректный email!
       div(class='col-md-2 mb-3')
-        label(for="validationCustom01") Name
-        input(type='text' class='form-control' id='validationCustom02' required placeholder='Ivan' name='name')
+        label(for="validationCustom02") Имя
+        input(type='text' class='form-control name' id='validationCustom02' required placeholder='Ivan' name='name')
         .valid-feedback Awesome name!
+        .invalid-feedback Некорректное имя!
+      div(class='col-md-2 mb-3')
+        label(for="telephone") Номер телефона
+        input(type='text' class='phone form-control' id='phone' required placeholder='+7 (___) ___-__-__' name='phone_number')
+        .valid-feedback Awesome phone number!
+        .invalid-feedback Некорректный номер телефона!
+        script.
+          $(function(){
+            $("#phone").mask("+7 (999) 999-99-99");
+          });
+    .form-row
+      div(class='col-md-2 mb-3')
+        label(for="validationCustom03") Пароль
+        input(type='password' class='form-control pass' id='validationCustom03' required  name='password')
+        .invalid-feedback Слишком короткий пароль!
+        .valid-feedback Крутой пароль!
+      div(class='col-md-2 mb-3')
+        label(for="validationCustom04") Подтвердите пароль
+        input(type='password' class='form-control conf_pass' id='validationCustom04' required  name='confirm_password')
+        .invalid-feedback Пароли не совпадают!
+        .valid-feedback Пароли совпадают!
+    .form-row
+      div(class="custom-control custom-radio custom-control-inline")
+        input(type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input phys" checked value='phys_type')
+        label(class="custom-control-label" for="customRadioInline1") Физическое лицо
+      div(class="custom-control custom-radio custom-control-inline")
+        input(type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input ur" value='ur_type')
+        label(class="custom-control-label" for="customRadioInline2") Юридическое лицо
+    br
+    button(class="btn btn-primary validate-btn" type="submit") Зарегестрироваться
 
 
-
-
+  script(src='validate_form_register.js')
   script(src='jquery-3.5.1.js')
   script(src='jquery.maskedinput.js')
+  
+  
