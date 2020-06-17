@@ -23,10 +23,17 @@
 function emailIsValid (email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
-
+function nameIsValid(name){
+  return /^([а-яё]{1,23}|[a-z]{1,23})$/gm.test(name)
+}
+function xss_check(replace){
+  var pattern = /script|javascript|src|onerror|%|<|>/g;
+  if(replace.name.search(pattern)<0 && replace.email.search(pattern)<0) return false; else return true;
+}
 function validateInput(email, name, pass, conf, phone){
   flag = true;
-  if (name.value.length == 0){
+  if (!nameIsValid(name.value)){
+    name.classList.remove('is-valid');
     name.classList.add('is-invalid');
   }else {
     name.classList.remove('is-invalid');
@@ -34,6 +41,7 @@ function validateInput(email, name, pass, conf, phone){
     flag = false;
   }
   if (phone.value.length == 0){
+    phone.classList.remove('is-valid');
     phone.classList.add('is-invalid');
     flag = true;
   } else{
@@ -42,9 +50,11 @@ function validateInput(email, name, pass, conf, phone){
     flag = false;
   }
   if (email.value.length == 0){
+    email.classList.remove('is-valid');
     email.classList.add('is-invalid');
     flag = true;
-  } else if (!emailIsValid(email.value)){
+  } else if (!emailIsValid(email.value) || !xss_check(email.value)){
+    email.classList.remove('is-valid');
     email.classList.add('is-invalid');
     flag = true;
   }else {
@@ -53,6 +63,7 @@ function validateInput(email, name, pass, conf, phone){
     flag = false;
   }
   if (pass.value.length <= 7){
+    pass.classList.remove('is-valid');
     pass.classList.add('is-invalid');
     flag = true;
   } else{
@@ -60,6 +71,7 @@ function validateInput(email, name, pass, conf, phone){
     pass.classList.add('is-valid');
     flag = false;
     if(pass.value != conf.value){
+      pass.classList.remove('is-valid');
       conf.classList.add('is-invalid');
       flag = true;
     } else{

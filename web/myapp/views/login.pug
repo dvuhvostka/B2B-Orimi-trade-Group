@@ -2,13 +2,16 @@ extends layout
 
 block append scripts
   link(rel='stylesheet' href='login_style.css')
+  script(src='validate_form_login.js')
 
 block content
-  form(action='/login' method='POST' id='form_input_by_client')
+  form(action='/login' method='POST' id='form_input_by_client' novalidate)
     .form-group
-      label(for='exampleInputEmail1') Email 
-      input(type="email" class="form-control" class='input_login' id="exampleInputEmail1" aria-describedby="emailHelp" name='email' required)
+      label(for='email') Email 
+      input(type="email" class="form-control" class='input_login' aria-describedby="emailHelp" name='email' required class='email')
+      .invalid-feedback Некорректный email
     .form-group
-      label(for='exampleInputPassword1') Пароль
-      input(type="password" class="form-control" class ='input_login' id="exampleInputPassword1" name='password' required)
-    button(class='btn' class='btn-primary' ) Войти
+      label(for='password') Пароль
+      input(type="password" class="form-control" class ='input_login'  name='password' required class='password')
+      .invalid-feedback Сликшом короткий пароль
+    button(class='btn' class='btn-primary' type='submit' ) Войти

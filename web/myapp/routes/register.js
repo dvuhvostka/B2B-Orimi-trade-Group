@@ -40,9 +40,13 @@ function md5(pass) {
 /* GET users listing. */
 router.route('/register')
   .get(function(req, res) {
+    if(!userinfo.user_id){
     res.render('register.pug',{
       isRegister: true
     });
+  }else {
+    res.redirect('/');
+  }
   })
   //  res.sendFile(path.resolve(__dirname, '../public/register.html'));
   //})
@@ -61,7 +65,8 @@ router.route('/register')
             //res.render('/error_regiter.pug')
             //нужно сообщить клиенту, что этот email уже занят.
           } else {
-            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type, number) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number})',  {
+            userinfo.user_id = uuidv4();
+            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type, number, id) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, $(id))',  {
                 username: req.body.name,
                 email: req.body.email,
                 password: md5(req.body.password),
@@ -69,7 +74,8 @@ router.route('/register')
                 balance: 0,
                 permissions: 'user',
                 client_type: req.body.customRadioInline1,
-                number: req.body.phone_number
+                number: req.body.phone_number,
+                id: userinfo.user_id
             });
           }
       })
@@ -77,7 +83,6 @@ router.route('/register')
        console.log('ERROR:', error);
    });
    //session and coockies
-      userinfo.user_id = uuidv4();
       res.redirect('/');
     }
   });

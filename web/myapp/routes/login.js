@@ -54,9 +54,13 @@ function md5(pass) {
 
 login.route('/login')
     .get(function(req,res){
+      if(userinfo.user_id){
+        res.redirect('/')
+      }else {
       res.render('login.pug', {
         isLogin: true
       });
+    }
     })
     .post(function(req, res){
       const {email, password} = req.body;

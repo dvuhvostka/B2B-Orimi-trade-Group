@@ -42,6 +42,7 @@ function form_check() {
       c1: chb,
       n1: phone_number.value
     });
+  }
 
   //   switch (true) {
   //     case username.value.length > 14: alert('Имя слишком длинное'); break;

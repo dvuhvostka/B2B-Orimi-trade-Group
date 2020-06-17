@@ -79,6 +79,20 @@ app.use(bodyParser.json());
 app.use(express.static('public/javascripts'));
 app.use(express.static('public/stylesheets'));
 
+
+app.get('/', function(req,res){
+  const { userId } = req.session;
+  if(req.session.userId)
+    userinfo.user_id = req.session.userId;
+  //res.sendFile(path.join(__dirname, '/public/index.html'));
+  res.render('index', {
+    title: 'Main page',
+    isRegistred: req.session.userId,
+    isRoot: true
+});
+})
+
+
 //app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/', newsRouter);
@@ -86,32 +100,9 @@ app.use('/', shopRouter);
 app.use('/', registerRouter);
 app.use('/', loginRouter.login);
 app.use('/', logoutRoute);
-
-
-app.use(function(req, res, next) {
-  switch (!null) {
-    case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
-  }
-  next();
-})
-
-app.get('/', function(req,res){
-  const { userId } = req.session;
-  console.log(req.session.id);
-  console.log(req.session);
-  console.log(req.session.userId);
-  if(req.session.userId)
-    var isRegistred = true;
-  else
-    isRegistred = false;
-  console.log(isRegistred);
-  //res.sendFile(path.join(__dirname, '/public/index.html'));
-  res.render('index', {
-    title: 'Main page',
-    isRegistred: req.session.userId !== undefined,
-    isRoot: true
+app.use('/?', function(req,res){
+  res.redirect('/');
 });
-})
 
 
 // catch 404 and forward to error handler
