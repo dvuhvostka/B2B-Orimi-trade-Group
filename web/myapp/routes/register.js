@@ -42,7 +42,7 @@ router.route('/register')
   .get(function(req, res) {
     if(!userinfo.user_id){
     res.render('register.pug',{
-      isRegister: true
+      isRegister: req.session.userId,
     });
   }else {
     res.redirect('/');

@@ -1,0 +1,7 @@
+html,body,header,.view{
+  height: 100%;
+  scroll-behavior: smooth;
+}
+.top-nav-collapse{
+  background-color: indigo;
+}

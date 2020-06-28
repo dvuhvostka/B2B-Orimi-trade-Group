@@ -8,6 +8,11 @@ var helmet = require('helmet');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 var {Pool, Client} = require('pg');
+//var govno = require('@2bad/bitrix');
+// import Bitrix from '@2bad/bitrix';
+// //bitrix kusok govna
+// var bitrix = govno.Bitrix('https://b24-19sfov.bitrix24.ru/rest/1/k7b057mlumv9vmhd/profile/');
+
 
 var config = require('./config');
 
@@ -78,12 +83,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('public/javascripts'));
 app.use(express.static('public/stylesheets'));
+app.use(express.static('public/images'));
 
+
+
+app.use(function(req, res, next) {
+  switch (!null) {
+    case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
+  }
+  next();
+})
 
 app.get('/', function(req,res){
+  console.log('main page seeing id is ',userinfo.user_id);
   const { userId } = req.session;
-  if(req.session.userId)
+  console.log('main page coockie id is ', req.session.userId);
+  if(req.session.userId){
+    console.log('here')
     userinfo.user_id = req.session.userId;
+  }
   //res.sendFile(path.join(__dirname, '/public/index.html'));
   res.render('index', {
     title: 'Main page',

@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@2bad/bitrix": "^2.3.1",
     "connect-pg-simple": "^6.1.0",
     "cookie-parser": "~1.4.4",
     "crypto": "^1.0.1",
@@ -20,6 +21,10 @@
     "uuid": "^8.1.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/node": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
     "nodemon": "^2.0.4",
     "standard": "^14.3.4"
   }

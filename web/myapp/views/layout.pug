@@ -2,18 +2,20 @@ doctype html
 html
   head
     title= title
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous")
     block scripts
-      link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous")
-  body
-    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin='anonymous')
-    script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous")
-    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous")
+  body(style='background: brown;')
     script(type='text/javascript').      
       var isHome = window.location.pathname;
       console.log(isHome);
-    nav(class="navbar navbar-expand-lg navbar-light bg-light")
-      div(class="collapse navbar-collapse" id="navbarSupportedContent" )
-        ul(class= 'navbar-nav mr-auto')
+  headder  
+    nav(class="navbar navbar-expand-md navbar-light bg-light fixed-top scrolling-navbar")
+      a( class="navbar-brand" href="/") Orimi Trade Group
+      button( class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" )
+        span( class="navbar-toggler-icon")
+      div(class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent" )
+        ul(class= 'navbar-nav')
           li(class='nav-item active')
             a(href='/shop' class='nav-link') Магазин
           li(class='nav-item active')
@@ -30,23 +32,8 @@ html
             if !isLogin
               li(class='nav-item active')
                 a(href='/login' class='nav-link') Вход
-          if !isRoot
-            li(class='nav-item active justify-content-end')
-              a(href='/' class='nav-link') Главная страница
-              
-              
-              
-        //- ul(class="nav nav-pills mb-3" id="pills-tab" role="tablist")
-        //-   li(class="nav-item" role="presentation")
-        //-     a( class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true") Home
-        //-   li(class="nav-item" role="presentation")
-        //-     a(class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false") Profile
-        //-   li(class="nav-item" role="presentation")
-        //-     a(class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false") Contact
-        //- div(class="tab-content" id="pills-tabContent")
-        //-   div(class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab") ...
-        //-   div(class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab") ...
-        //-   div(class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab") ...
-      
-        
-    block content
+  script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous")
+  script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin='anonymous')
+  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous")
+  block content
+

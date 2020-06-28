@@ -54,11 +54,11 @@ function md5(pass) {
 
 login.route('/login')
     .get(function(req,res){
-      if(userinfo.user_id){
+      if(req.session.userId){
         res.redirect('/')
       }else {
+      console.log('12313')
       res.render('login.pug', {
-        isLogin: true
       });
     }
     })
@@ -70,7 +70,7 @@ try {
     console.log(res.rows);
     if(res.rows.length!=0){
       userinfo.user_id = res.rows[0].id;
-      //console.log(user_id);
+      console.log('After checking id is ', userinfo.user_id);
     } else console.log("Undefined ID")
   });
 } catch (e) {

@@ -1,0 +1,52 @@
+html
+	head
+		title #{title}
+		meta(name='viewport' content='width=device-width, initial-scale=1.0')
+		link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous")
+		link(rel='stylesheet' href='style.css')
+		block scripts
+	body
+		header(class='sticky-top')
+			nav(class='navbar navbar-expand-md navbar-dark bg-dark')
+				a(class='navbar-brand' href='/') Orimi Trade Group
+				button(class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarid' aria-controls="navbarid" aria-expanded="false" aria-label="Toggle navigation")
+					span(class='navbar-toggler-icon')
+				div(id='navbarid' class='collapse navbar-collapse')
+					ul(class='navbar-nav mr-auto mt-2 mt-lg-0')
+							li(class='nav-item')
+								a(class='nav-link' href='/shop') Магазин
+							li(class='nav-item')
+								a(class='nav-link' href='/news') Новости
+							if isRegistred
+								li(class='nav-item')
+									a(class='nav-link' href='/user') Аккаунт
+					if !isRegistred
+						ul(class='navbar-nav justify-content-end')
+							li(class='nav-item dropdown')
+								a(class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Войти/Регистрация
+								div(class='dropdown-menu' area-lablelledby='navbarDropdownMenuLink')
+									a(href="/login" class='dropdown-item') Войти
+									a(href="/register" class='dropdown-item') Регистрация
+					else
+						ul(class='navbar-nav mr-auto w-100 justify-content-end')
+							li(class='nav-item')
+								a(class='nav-link' href='#') Корзина
+									img(class='img-fluid' src="open-iconic-master/svg/cart.svg" alt='')
+							li(class='nav-item')
+								a(class='nav-link btn btn-dark active ' href='/logout') Выход
+		main
+			block content
+		footer
+			hr
+			.container-fluid
+				.row
+					.col-4
+						p  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus ut vitae, cum ex dignissimos, alias corporis quam ad similique dicta fuga sint nulla expedita est illo itaque! Dolorem, ut, unde.
+					.col-4
+						p  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsum odit, aliquid, minima, ab accusamus numquam aperiam dignissimos quod et deserunt possimus voluptatum. Placeat a perspiciatis, illum possimus laboriosam! Asperiores, labore.
+					.col-4
+						p  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque possimus ab voluptatem aperiam est quia, consectetur voluptate vel asperiores doloremque. Dolores officia officiis voluptas amet debitis, blanditiis qui excepturi neque.
+	script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous")
+	script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin='anonymous')
+	script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous")
+
