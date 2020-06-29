@@ -4,7 +4,7 @@
   "SESS_NAME": "sid",
   "DB_USER": "s0rax",
   "DB_PASSWORD": "12345",
-  "DB_HOST": "localhost",
+  "DB_HOST": "25.58.69.64",
   "DB_NAME": "mydb",
   "SESS_TB_NAME": "session",
   "SESS_TIME": 172800000

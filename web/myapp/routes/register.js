@@ -6,7 +6,8 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var pgp = require("pg-promise")(/*options*/);
-var db = pgp("postgres://s0rax:12345@25.58.69.64:5432/mydb");
+var config = require('../config');
+var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
 var app = require('../app');
 const { v4: uuidv4 } = require('uuid');
 

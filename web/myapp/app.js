@@ -8,11 +8,10 @@ var helmet = require('helmet');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 var {Pool, Client} = require('pg');
-//var govno = require('@2bad/bitrix');
-// import Bitrix from '@2bad/bitrix';
-// //bitrix kusok govna
-// var bitrix = govno.Bitrix('https://b24-19sfov.bitrix24.ru/rest/1/k7b057mlumv9vmhd/profile/');
 
+//Bitrix
+var bitrix_1 = require('@2bad/bitrix');
+var bitrix = bitrix_1["default"]('https://b24-19sfov.bitrix24.ru/rest/1/k7b057mlumv9vmhd/profile/');
 
 var config = require('./config');
 
@@ -27,7 +26,6 @@ var logoutRoute = require('./routes/logout')
 var app = express();
 
 //const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
-
 
 //var for sessions and connecting to databse
 const {
