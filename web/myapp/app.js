@@ -8,10 +8,13 @@ var helmet = require('helmet');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 var {Pool, Client} = require('pg');
+const request = require('request');
 
 //Bitrix
-var bitrix_1 = require('@2bad/bitrix');
-var bitrix = bitrix_1["default"]('https://b24-19sfov.bitrix24.ru/rest/1/k7b057mlumv9vmhd/profile/');
+//https://b24-19sfov.bitrix24.ru/rest/1/k7b057mlumv9vmhd/profile/
+
+//sp7qzwhxsgq2b112 - Вебхук
+
 
 var config = require('./config');
 
@@ -83,7 +86,13 @@ app.use(express.static('public/javascripts'));
 app.use(express.static('public/stylesheets'));
 app.use(express.static('public/images'));
 
-
+function getDataFromBX(method){
+   var url = "https://b24-19sfov.bitrix24.ru/rest/1/sp7qzwhxsgq2b112/"+method;
+   request(url, function(error, response, body) {
+     var res = JSON.parse(body)
+     console.log(res)
+   })
+}
 
 app.use(function(req, res, next) {
   switch (!null) {
@@ -93,6 +102,7 @@ app.use(function(req, res, next) {
 })
 
 app.get('/', function(req,res){
+  getDataFromBX("crm.contact.list");
   console.log('main page seeing id is ',userinfo.user_id);
   const { userId } = req.session;
   console.log('main page coockie id is ', req.session.userId);
