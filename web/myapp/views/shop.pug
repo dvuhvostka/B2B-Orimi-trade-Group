@@ -1,4 +1,12 @@
-extends layout2 
+extends layout2
 
 block content
-  p Hello world!
+  - var q = products_quantity
+  - var bx24_url = "http://b24-19sfov.bitrix24.ru"
+  - for(var x = 0; x < q; x++)
+    li
+      img(src=bx24_url+products_list.result[x].DETAIL_PICTURE.showUrl, style="width: 250px; height: 250px;" class="product_image")
+      p Название: #{products_list.result[x].NAME}
+      p Описание: #{products_list.result[x].DESCRIPTION}
+      p Цена: #{products_list.result[x].PRICE}
+  

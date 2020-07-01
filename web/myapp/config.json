@@ -7,5 +7,6 @@
   "DB_HOST": "25.58.69.64",
   "DB_NAME": "mydb",
   "SESS_TB_NAME": "session",
-  "SESS_TIME": 172800000
+  "SESS_TIME": 172800000,
+  "BX24_URI": "https://b24-19sfov.bitrix24.ru/rest/1/sp7qzwhxsgq2b112/"
 }
