@@ -1,12 +1,18 @@
 extends layout2
 
 block content
-  - var q = products_quantity
-  - var bx24_url = "http://b24-19sfov.bitrix24.ru"
-  - for(var x = 0; x < q; x++)
-    li
-      img(src=bx24_url+products_list.result[x].DETAIL_PICTURE.showUrl, style="width: 250px; height: 250px;" class="product_image")
-      p Название: #{products_list.result[x].NAME}
-      p Описание: #{products_list.result[x].DESCRIPTION}
-      p Цена: #{products_list.result[x].PRICE}
-  
+	- var q = products_quantity
+	- var bx24_url = "http://b24-19sfov.bitrix24.ru"
+	.container(class='mt-3')
+		.card(class='p-3')
+			- for(var rows = 0;rows < q/3; rows++)
+				.row
+					- for(var goods = 0;goods < 3; goods++)
+						.col-xl-4(class='justify-content-center col-md-6')
+							.card(style='height: 450px;' class='mb-2')
+								.card-body
+									.container
+										img(src=bx24_url+products_list.result[goods+2*rows].DETAIL_PICTURE.showUrl class='card-img-top img-fluid justify-content-center' style='height:250px; width:250px;')
+										p Название: #{products_list.result[goods+2*rows].NAME}
+										p Описание: #{products_list.result[goods+2*rows].DESCRIPTION}
+										p Цена: #{products_list.result[goods+2*rows].PRICE}
