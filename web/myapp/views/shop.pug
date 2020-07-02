@@ -5,14 +5,15 @@ block content
 	- var bx24_url = "http://b24-19sfov.bitrix24.ru"
 	.container(class='mt-3')
 		.card(class='p-3')
-			- for(var rows = 0;rows < q/3; rows++)
-				.row
-					- for(var goods = 0;goods < 3; goods++)
-						.col-xl-4(class='justify-content-center col-md-6')
-							.card(style='height: 450px;' class='mb-2')
-								.card-body
-									.container
-										img(src=bx24_url+products_list.result[goods+2*rows].DETAIL_PICTURE.showUrl+"&auth="+img_token class='card-img-top img-fluid justify-content-center' style='height:250px; width:250px;')
-										p Название: #{products_list.result[goods+2*rows].NAME}
-										p Описание: #{products_list.result[goods+2*rows].DESCRIPTION}
-										p Цена: #{products_list.result[goods+2*rows].PRICE}
+			.card-deck
+				- for(var rows = 0;rows < q/3; rows++)
+					.row
+						- for(var goods = 0;goods < 3; goods++)
+							.col-xl-4(class='justify-content-center col-md-6')
+								.card(class='mb-2')
+									.card-body
+										.container
+											img(src=bx24_url+products_list.result[goods+2*rows].DETAIL_PICTURE.showUrl+"&auth="+img_token class='card-img-top img-fluid justify-content-center' style='height:250px; width:250px;')
+											p Название: #{products_list.result[goods+2*rows].NAME}
+											p Описание: #{products_list.result[goods+2*rows].DESCRIPTION}
+											p Цена: #{products_list.result[goods+2*rows].PRICE}
