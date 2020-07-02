@@ -8,6 +8,7 @@ var helmet = require('helmet');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 var {Pool, Client} = require('pg');
+const request = require('request');
 
 //Bitrix
 //https://b24-19sfov.bitrix24.ru/rest/1/k7b057mlumv9vmhd/profile/
@@ -24,6 +25,8 @@ var shopRouter = require('./routes/shop');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var logoutRoute = require('./routes/logout')
+
+var addnewsRoute = require('./routes/add')
 
 var app = express();
 
@@ -86,6 +89,30 @@ app.use(express.static('public/stylesheets'));
 app.use(express.static('public/images'));
 
 
+//Работа с токенами.
+//Обновление access_token с помощью refresh_token
+const get_ref_token_query = `SELECT refresh_token FROM token`;
+const push_tokens_query = `UPDATE token SET access_token = $1, refresh_token = $2`;
+
+pgPool.query(get_ref_token_query,[], function(err, res){
+  if (err) return console.error(error);
+  var ref_token = res.rows[0].refresh_token;
+  var data = {
+    "grant_type": "refresh_token",
+    "client_id": "local.5efcca2890c0a4.68844285",
+    "client_secret": "pEwdb00OZbM0zUaUsc5FB9FKhvWvhvgQhgp0dnJz5VpTIm8K0M",
+    "refresh_token": ref_token
+  }
+  request.post({url: "https://oauth.bitrix.info/oauth/token/", formData: data}, function(error, response, body) {
+    if (error) return console.error(error);
+    var res = JSON.parse(body);
+    pgPool.query(push_tokens_query, [res.access_token, res.refresh_token], function(err, res){});
+    console.log("\x1b[37m","NEW ACCESS_TOKEN:"+"\x1b[32m",res.access_token,"\x1b[37m");
+    console.log("\x1b[37m","NEW REFRESH_TOKEN:"+"\x1b[32m",res.refresh_token,"\x1b[37m");
+  });
+});
+
+
 
 app.use(function(req, res, next) {
   switch (!null) {
@@ -118,6 +145,7 @@ app.use('/', shopRouter);
 app.use('/', registerRouter);
 app.use('/', loginRouter.login);
 app.use('/', logoutRoute);
+app.use('/', addnewsRoute);
 app.use('/?', function(req,res){
   res.redirect('/');
 });

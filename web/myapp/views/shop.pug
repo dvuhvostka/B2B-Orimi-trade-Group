@@ -12,7 +12,7 @@ block content
 							.card(style='height: 450px;' class='mb-2')
 								.card-body
 									.container
-										img(src=bx24_url+products_list.result[goods+2*rows].DETAIL_PICTURE.showUrl class='card-img-top img-fluid justify-content-center' style='height:250px; width:250px;')
+										img(src=bx24_url+products_list.result[goods+2*rows].DETAIL_PICTURE.showUrl+"&auth="+img_token class='card-img-top img-fluid justify-content-center' style='height:250px; width:250px;')
 										p Название: #{products_list.result[goods+2*rows].NAME}
 										p Описание: #{products_list.result[goods+2*rows].DESCRIPTION}
 										p Цена: #{products_list.result[goods+2*rows].PRICE}

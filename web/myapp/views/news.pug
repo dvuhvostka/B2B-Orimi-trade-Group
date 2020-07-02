@@ -1,4 +1,21 @@
 extends layout2
 
 block content
-  
+  - var q_n = news_q
+    input(placeholder="Название статьи")#newsTitle
+    input(placeholder="Описание")#newsDescription
+    input(placeholder="Текст статьи")#newsBody
+    input(placeholder="Ссылка на изображение к статье", value="https://via.placeholder.com/600")#newsImg
+    button(onclick="addNews();location.reload();")#add Добавить статью
+    button(onclick="document.location.href='/add';")#delete Удалить все нахуй!
+    script(src='/shop.js')
+  - for(var i=0; i<q_n; i++)
+      .news_container
+        h3 #{pnews[i].header}
+        p #{pnews[i].intro}
+        p #{pnews[i].body}
+        img(src=pnews[i].img_url)
+        p Дата написания: #{pnews[i].date}
+      
+      
+        
