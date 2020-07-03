@@ -25,7 +25,7 @@ var shopRouter = require('./routes/shop');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
 var logoutRoute = require('./routes/logout')
-
+var cartRoute = require('./routes/cart')
 var addnewsRoute = require('./routes/add')
 
 var app = express();
@@ -146,6 +146,7 @@ app.use('/', registerRouter);
 app.use('/', loginRouter.login);
 app.use('/', logoutRoute);
 app.use('/', addnewsRoute);
+app.use('/', cartRoute);
 app.use('/?', function(req,res){
   res.redirect('/');
 });

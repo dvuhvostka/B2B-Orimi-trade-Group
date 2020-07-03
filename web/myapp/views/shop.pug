@@ -3,6 +3,7 @@ extends layout2
 block content
 	- var q = products_quantity
 	- var bx24_url = "http://b24-19sfov.bitrix24.ru"
+	script(src="/jquery-3.5.1.js")
 	.container(class='mt-3')
 		.card(class='p-3')
 			.card-deck
@@ -12,8 +13,10 @@ block content
 							.col-xl-4(class='justify-content-center col-md-6')
 								.card(class='mb-2')
 									.card-body
-										.container
+										div(class="container" id=products_list.result[goods+2*rows].ID)
 											img(src=bx24_url+products_list.result[goods+2*rows].DETAIL_PICTURE.showUrl+"&auth="+img_token class='card-img-top img-fluid justify-content-center' style='height:250px; width:250px;')
 											p Название: #{products_list.result[goods+2*rows].NAME}
 											p Описание: #{products_list.result[goods+2*rows].DESCRIPTION}
 											p Цена: #{products_list.result[goods+2*rows].PRICE}
+											button(class="add-to-cart" data-id=products_list.result[goods+2*rows].ID) Купить
+	script(src="/cart.js")
