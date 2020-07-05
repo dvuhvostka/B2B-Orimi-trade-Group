@@ -1,5 +1,8 @@
 extends layout2
 
+block append scripts
+  link(rel='stylesheet' href='news.css')
+
 block content
   - var q_n = news_q
     input(placeholder="Название статьи")#newsTitle
@@ -9,20 +12,47 @@ block content
     button(onclick="addNews();location.reload();")#add Добавить статью
     button(onclick="document.location.href='/add';")#delete Удалить все нахуй!
     script(src='/news.js')
-    .container(class='mt-3')
-      - for(var j=0;j<q_n/2; j++)
-        .row
-          - for(var i=0; i<2 && i+2*j<q_n; i++)
-            div(class='col-xl-9 col-md-12 mx-auto')
-              .card(class=' mx-1 mb-3')
-                .card-header
-                  h3(class='card-title text-center' ) #{pnews[i+2*j].header}                  
-                img(src=pnews[i+2*j].img_url class='card-img-top' alt='...' style='max-height: 250px; min-height: 200px;')
-                .card-body
-                  h5(class='card-subtitle') #{pnews[i+2*j].intro}
-                  p(class='card-text') #{pnews[i+2*j].body}
-                  .col-xl-12
-                    p(class="font-weight-lighter card-text" style='font-size: 0.7rem;') Дата написания: #{pnews[i+2*j].date} 
-          
-      
-        
+    div(class='news_wrap')
+      .container(class='col-xl-4')
+        - for(var i=0; i<q_n; i++) 
+            .card(class='border-secondary mb-4 text-center')
+              .card-header()
+                h3(class='card-title' ) #{pnews[i].header}            
+              .card-body
+                if pnews[i].img_url                  
+                  img(src=pnews[i].img_url class='card-img-top mb-3 img-thumbnail shadow img-flex' alt='...'  style='width: 500px; height: 400px;')
+                h5(class='card-subtitle' id='subtitle-text' + i) #{pnews[i].intro}
+                button(type='button' class='close' aria-label='close' style='display:none;')
+                  span( aria-hidden="true") &times;
+                a(href='#' onclick='return false' class='link-news text-right' id='link-n' + i) Читать далее...
+                p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
+              .card-footer
+                p(class="text-muted" style='font-size: 0.7rem;') Дата написания: #{pnews[i].date} 
+  script.  
+    $.fx.off = false;
+    $(document).ready(function(){
+      $('.link-news').on('click', function(){
+        var link_open = $(this);
+        link_open.parents('.card').removeClass('h-100');
+        setTimeout(function(){
+          link_open.siblings('.card-text').show(600);
+          link_open.siblings('.card-subtitle').hide(20);
+          link_open.siblings('.close').show(600);
+          link_open.hide(20);
+        },300);
+      });
+      $('.close').on('click', function(){
+        var link_close = $(this);
+        link_close.siblings('.card-text').hide(600);
+        link_close.siblings('.card-subtitle').show(20);
+        link_close.siblings('.link-news').show(20);
+        link_close.hide(20);
+        setTimeout(function(){
+          link_close.parents('.card').addClass('h-100');
+        },600);
+      });
+    });
+                    
+                    
+                                    
+    
