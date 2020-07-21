@@ -4,19 +4,33 @@ block content
 	- var q = products_quantity
 	- var bx24_url = "http://b24-19sfov.bitrix24.ru"
 	script(src="/jquery-3.5.1.js")
-	.container(class='mt-3')
-		.card(class='p-3')
-			.card-deck
-				- for(var rows = 0;rows < q/3; rows++)
-					.row
-						- for(var goods = 0;goods < 3; goods++)
-							.col-xl-4(class='justify-content-center col-md-6')
-								.card(class='mb-2')
-									.card-body
-										div(class="container" id=products_list.result[goods+2*rows].ID)
-											img(src=bx24_url+products_list.result[goods+2*rows].DETAIL_PICTURE.showUrl+"&auth="+img_token class='card-img-top img-fluid justify-content-center' style='height:250px; width:250px;')
-											p Название: #{products_list.result[goods+2*rows].NAME}
-											p Описание: #{products_list.result[goods+2*rows].DESCRIPTION}
-											p Цена: #{products_list.result[goods+2*rows].PRICE}
-											button(class="add-to-cart" data-id=products_list.result[goods+2*rows].ID) Купить
+	.container
+		div(class='carousel slide carousel-fade' data-ride='carousel' id='carousel_shop')
+			ol(class='carousel-indicators')
+				li(data-target='#carousel_shop' data-slide-to='0' class='active')
+				li(data-target='#carousel_shop' data-slide-to='1')
+				li(data-target='#carousel_shop' data-slide-to='2')
+			.carousel-inner
+				.carousel-item(class='active')
+					img(src='https://oboihd-plus.ucoz.ru/_ph/18/533644236.jpg' alt='...' class='d-block w-100')
+				.carousel-item
+					img(src='https://lh3.googleusercontent.com/proxy/EElfI2zDTJmW-pVfTx79UtAfFIM5nVKAzRwuKfLuaHI1h0xWynF2bnUhJ8PL783n1kXollYllb-HNjWHJcSSSZKcfFeu1i0AarY6DqoLIV6PdGg_nE7DuK4dZMPi7L5B' alt='...' class='d-block w-100')
+				.carousel-item
+					img(src='https://i.ytimg.com/vi/gfCTv07hzyM/maxresdefault.jpg' alt='...' class='d-block w-100')
+			a(class="carousel-control-prev" href="#carousel_shop" role="button" data-slide="prev")
+				span(class="carousel-control-prev-icon" aria-hidden="true")
+				span( class="sr-only") Previous
+			a(class="carousel-control-next" href="#carousel_shop" role="button" data-slide="next")
+				span(class="carousel-control-next-icon" aria-hidden="true")
+				span( class="sr-only") Next
+	.container(class='mt-3 card')
+		.card-group(class='h-100')
+			- for(var goods = 0; goods<q;goods++)
+				div(class="col-sm-12 card card-content mx-2 mb-4 text-center h-100 shadow-lg" id=products_list.result[goods].ID)
+					.card-body
+						img(src=bx24_url+products_list.result[1].DETAIL_PICTURE.showUrl+"&auth="+img_token class='mx-auto w-100 h-50')
+						p  #{products_list.result[goods].NAME}
+						p  #{products_list.result[goods].DESCRIPTION}
+						p Цена: #{products_list.result[goods].PRICE}
+						button(class="add-to-cart" data-id=products_list.result[goods].ID) Купить
 	script(src="/cart.js")

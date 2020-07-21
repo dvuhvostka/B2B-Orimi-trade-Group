@@ -27,15 +27,15 @@ var pgPool = new Pool({
 
 var getNews = `SELECT * FROM news ORDER BY id DESC`;
 /* GET users listing. */
-router.get('/news', function(req, res, next) {
+router.get('/sales', function(req, res, next) {
   pgPool.query(getNews,[], function(err, response){
     if (err) return console.error(err);
-    var news = response.rows;
+    var sales = response.rows;
     //console.log(news); //debug
-    res.render('news.pug',{
+    res.render('sales.pug',{
     	isRegistred: req.session.userId,
-      pnews: news,
-      news_q: news.length
+      pnews: sales,
+      news_q: sales.length
     })
   });
 });

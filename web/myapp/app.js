@@ -20,7 +20,7 @@ var config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user');
-var newsRouter = require('./routes/news');
+var salesRouter = require('./routes/sales');
 var shopRouter = require('./routes/shop');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
@@ -140,7 +140,7 @@ app.get('/', function(req,res){
 
 //app.use('/', indexRouter);
 app.use('/', usersRouter);
-app.use('/', newsRouter);
+app.use('/', salesRouter);
 app.use('/', shopRouter);
 app.use('/', registerRouter);
 app.use('/', loginRouter.login);

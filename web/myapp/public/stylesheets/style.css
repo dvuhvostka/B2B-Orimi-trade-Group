@@ -2,3 +2,17 @@
 	position: sticky;
 	top: 0;
 }
+
+
+#main-wrap {
+	height: auto;
+	min-height: 100vh;
+
+}
+
+.card-content{
+	width: 30%;
+	min-width: 290px;
+	justify-content: center;
+	padding-left: 0;
+}

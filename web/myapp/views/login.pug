@@ -5,19 +5,19 @@ block append scripts
   script(src='validate_form_login.js')
 
 block content
-  .container(class='col-xl-5')
-    .card(class='my-5 p-2 shadow-lg')
-      .card-body
-        form(action='/login' method='POST' id='form_input_by_client' novalidate)
-          .row(class='justify-content-center')
-            div(class='col-lg-6 mb-3')
-              label(for='email') Email 
-              input(type="email" class="form-control" class='input_login' aria-describedby="emailHelp" name='email' required class='email')
-              .invalid-feedback Некорректный email
-          .row(class='justify-content-center')
-            div(class='col-lg-6 mb-1')
-              label(for='password') Пароль
-              input(type="password" class="form-control" class ='input_login'  name='password' required class='password')
-              .invalid-feedback Сликшом короткий пароль
-          .row(class='justify-content-center')
-            button(class='btn mt-3' class='btn-primary' type='submit' ) Войти
+  .card(class='shadow-lg mx-auto card-content ')
+    .card-body
+      h2(class='card-text text-center') Войти
+      form(action='/login' method='POST' id='form_input_by_client' novalidate)
+        .row(class='justify-content-center')
+          div(class='col-lg-6 mb-3')
+            label(for='email') Email 
+            input(type="email" class="form-control" class='input_login' aria-describedby="emailHelp" name='email' required class='email')
+            .invalid-feedback Некорректный email
+        .row(class='justify-content-center')
+          div(class='col-lg-6 mb-1')
+            label(for='password') Пароль
+            input(type="password" class="form-control" class ='input_login'  name='password' required class='password')
+            .invalid-feedback Сликшом короткий пароль
+        .row(class='justify-content-center')
+          button(class='btn mt-3' class='btn-primary' type='submit' ) Войти
