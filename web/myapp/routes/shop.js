@@ -6,7 +6,9 @@ var config = require('../config');
 
 /* GET users listing. */
 router.get('/shop', function(req, res, next) {
-  res.render('shop.pug');
+  res.render('shop.pug', {
+    isRegistred: req.session.userId
+  });
 });
 
 module.exports = router;

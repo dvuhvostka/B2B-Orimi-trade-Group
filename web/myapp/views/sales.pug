@@ -13,20 +13,22 @@ block content
     button(onclick="document.location.href='/add';")#delete Удалить все 
     script(src='/news.js')
     div(class='news_wrap')
-      - for(var i=0; i<q_n; i++) 
-          .card(class='mx-auto mb-4 text-center shadow-lg card-content')
-            .card-header
-              h3(class='card-title') #{pnews[i].header}            
-            .card-body
-              if pnews[i].img_url                  
-                img(src=pnews[i].img_url class='card-img-top mb-3 img-thumbnail shadow' alt='...'  style='width: 500px; height: 400px;')
-              h5(class='card-subtitle' id='subtitle-text' + i) #{pnews[i].intro}
-              button(type='button' class='close' aria-label='close' style='display:none;')
-                span( aria-hidden="true") &times;
-              a(href='#' onclick='return false' class='link-news text-right' id='link-n' + i) Читать далее...
-              p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
-            .card-footer
-              p(class="text-muted" style='font-size: 0.7rem;') Дата написания: #{pnews[i].date} 
+      .row
+        - for(var i=0; i<q_n; i++) 
+          .col-sm-4
+            .card(class='mx-auto mb-4 text-center shadow-lg')
+              .card-header
+                h3(class='card-title') #{pnews[i].header}            
+              .card-body
+                if pnews[i].img_url                  
+                  img(src=pnews[i].img_url class='card-img-top mb-3 img-thumbnail shadow' alt='...')
+                h5(class='card-subtitle' id='subtitle-text' + i) #{pnews[i].intro}
+                button(type='button' class='close' aria-label='close' style='display:none;')
+                  span( aria-hidden="true") &times;
+                a(href='#' onclick='return false' class='link-news text-right' id='link-n' + i) Читать далее...
+                p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
+              .card-footer
+                p(class="text-muted" style='font-size: 0.7rem;') Дата написания: #{pnews[i].date} 
   script.  
     $.fx.off = false;
     $(document).ready(function(){

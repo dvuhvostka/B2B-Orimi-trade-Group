@@ -18,7 +18,7 @@ html
 							li(class='nav-item')
 								a(class='nav-link' href='/shop') Магазин
 							li(class='nav-item')
-								a(class='nav-link' href='/sales') Новости
+								a(class='nav-link' href='/sales') Акции	
 							if isRegistred
 								li(class='nav-item')
 									a(class='nav-link' href='/user') Аккаунт
@@ -38,10 +38,7 @@ html
 							li(class='nav-item my-auto')
 								a(class='nav-link' href='/logout') Выход
 		main
-			.container-fluid(id='main-wrap')
-				.row
-					.col-sm(class='flex-sm-middle'  class='mt-3')
-						block content
+			block content
 		footer
 			hr
 			.container-fluid
