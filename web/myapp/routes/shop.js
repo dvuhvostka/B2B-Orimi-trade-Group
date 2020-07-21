@@ -5,8 +5,13 @@ const request = require('request');
 var config = require('../config');
 
 /* GET users listing. */
-router.get('/shop', function(req, res, next) {
-  res.render('shop.pug');
-});
+router.route('/shop')
+  .get(function(req,res){
+    res.render('shop.pug', {
+      isRegistred: req.session.userId
+    });
+  }).post(function(req,res){
+    res.send("POST");
+  });
 
 module.exports = router;

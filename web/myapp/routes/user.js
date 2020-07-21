@@ -16,7 +16,7 @@ const redirectLogin = function(req,res,next){
 
 user.get('/user', redirectLogin, function(req, res, next) {
   res.render('user',{
-    isRegistred: req.session.userId,
+    isRegistred: req.session.userId
   })
 });
 

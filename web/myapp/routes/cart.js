@@ -4,7 +4,6 @@ var path = require('path');
 const session = require('express-session');
 var bodyParser = require('body-parser')
 var config = require('../config');
-var bx24_url = config.BX24_URI;
 var {Pool, Client} = require('pg');
 var request = require('request');
 
@@ -34,32 +33,7 @@ router.route('/cart')
       isRegistred: req.session.userId
     })
   }).post(function(req,res){
-    request(bx24_url+"crm.product.list", function(error, response, body){
-      console.log(JSON.parse(body));
-      var parsedbody = JSON.parse(body);
-      var i = 0;
-      var result = []
-      for (var w in req.body){
-        serverCart[i] = {
-          id: w,
-          quantity: req.body[w]
-        };
-        for(var x=0; x<parsedbody.total; x++){
-          if (serverCart[i].id == parsedbody.result[x].ID){
-            result[i] = {
-              id: parsedbody.result[x].ID,
-              name: parsedbody.result[x].NAME,
-              count: serverCart[i].quantity,
-              price: parsedbody.result[x].PRICE,
-              desc: parsedbody.result[x].DESCRIPTION,
-              img: parsedbody.result[x].PREVIEW_PICTURE.showUrl
-            };break;
-          }
-        }
-        i++;
-      }
-      res.send(result);
-    });
+    res.send("POST");
   });
 
   module.exports = router;
