@@ -76,7 +76,7 @@ try {
 } catch (e) {
   console.log("error: "+e)
 }
-      res.redirect('/')
+      res.redirect(303,'/')
 });
 
 
