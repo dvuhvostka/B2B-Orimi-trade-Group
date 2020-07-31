@@ -115,13 +115,13 @@ ul {
 
 .filters > li {
 	list-style: none;
-	margin-bottom: 25px;
+	margin-bottom: 15px;
 	background-color: white;
 	text-align:left;
 }
 
 .filters_tags{
-	font-size: 14px;;
+	font-size: 19px;
 	font-weight: bold;
 }
 
@@ -235,6 +235,27 @@ ul {
 	font-size: 10px;
 }
 
+.categories {
+	display: flex;
+	flex-direction: column;
+	margin-top: 5px;
+}
+
+.categories > a {
+	color: black;
+	font-size: 18px;
+	margin-top:5px;
+	width:auto;
+}
+
+.fa-angle-right {
+	margin-left:10px;
+}
+
+.categories > a:hover {
+	text-decoration: none;
+}
+
 .price {
 	display: flex;
 	vertical-align: bottom;
@@ -259,21 +280,71 @@ ul {
 	vertical-align: middle;
 }
 
-.tea_brand_wrap {
+.submenu_wrap {
 	display: flex;
 	flex-direction: column;
+	margin-top:10px;
 }
 
-.tea_brand > label{
+.submenu > label{
 	margin-left:5px;
-	font-size: 13px;
+	font-size: 15px;
 	vertical-align: top;
 	padding-top:1px;
 }
 
-.tea_brand:nth-child(1) {
-	margin-top: 10px;
+.tea_type_wrap{
+	display: flex;
+	flex-direction: column;
+	margin-top:10px;
+	font-size: 15px;
 }
+
+.tea_type > input {
+	margin-right: 5px;
+}
+
+.options {
+	margin-left: 15px;
+}
+
+.options > label {
+	margin-left: 5px;
+}
+
+#one_collection {
+	margin-top:10px;
+}
+
+#one_collection > label {
+	margin-left: 5px;
+	font-size: 15px;
+}
+
+.weight_wrap {
+	display: flex;
+	vertical-align: bottom;
+}
+
+.weight_wrap > p{
+	margin-bottom: 0;
+	vertical-align: middle;
+	padding-top: 2px;
+
+}
+
+.weight_wrap > input[type='text']{
+	width:45px;
+	height:75%;
+	min-width:45px;
+}
+
+.weight_wrap > input[type='range']{
+	width:90%;
+	margin: 0 10px;
+	vertical-align: middle;
+}
+
 /*-------------*/
 
 
