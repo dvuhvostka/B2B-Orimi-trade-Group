@@ -5,29 +5,143 @@ block content
 	- var bx24_url = "http://b24-19sfov.bitrix24.ru"
 	script(src="/jquery-3.5.1.js")
 	script(src="/cart.js")
-	
-	.flex-container
+
+	.grid-container
+		.carousel-v.
+			ipsum enim nisi cillum quae aliqua aliqua aute irure aute dolor quorum minim 
+			tempor dolore dolor irure fugiat elit aliqua illum anim multos quem dolor multos 
+			amet irure duis esse export quae nisi culpa culpa quem sunt esse dolore legam 
+			esse aliqua sunt aute elit esse magna aute legam multos irure export anim ipsum 
+			quem nulla sint aute aute malis nisi sint sunt malis noster summis sunt duis 
+			noster multos nisi tamen tamen multos legam illum sint elit sunt aute esse magna 
+			eram nulla labore amet amet noster enim fore quid fugiat culpa sunt export amet 
+			sint cillum enim nisiipsum enim nisi cillum quae aliqua aliqua aute irure aute dolor quorum minim 
+			tempor dolore dolor irure fugiat elit aliqua illum anim multos quem dolor multos 
+			amet irure duis esse export quae nisi culpa culpa quem sunt esse dolore legam 
+			esse aliqua sunt aute elit esse magna aute legam multos irure export anim ipsum 
+			quem nulla sint aute aute malis nisi sint sunt malis noster summis sunt duis 
+			noster multos nisi tamen tamen multos legam illum sint elit sunt aute esse magna 
+			eram nulla labore amet amet noster enim fore quid fugiat culpa sunt export amet 
+			sint cillum enim nisiipsum enim nisi cillum quae aliqua aliqua aute irure aute dolor quorum minim 
+			tempor dolore dolor irure fugiat elit aliqua illum anim multos quem dolor multos 
+			amet irure duis esse export quae nisi culpa culpa quem sunt esse dolore legam 
+			esse aliqua sunt aute elit esse magna aute legam multos irure export anim ipsum 
+			quem nulla sint aute aute malis nisi sint sunt malis noster summis sunt duis 
+			noster multos nisi tamen tamen multos legam illum sint elit sunt aute esse magna 
+			eram nulla labore amet amet noster enim fore quid fugiat culpa sunt export amet 
+			sint cillum enim nisi
 		.carousel(class='slide' id='slider' data-rede='carousel')
-			ul(class='carousel-indicators')
-				li(data-target='#slider' data-slide-to='0' class='active')
-				li(data-target='#slider' data-slide-to='1' )
-				li(data-target='#slider' data-slide-to='2')
 			.carousel-inner
 				.carousel-item(class='active')
-					img(src='https://www.rabstol.net/uploads/gallery/main/610/rabstol_net_kung_fu_panda_09.jpg')
-				.carousel-item
-					img(src='https://www.kino-teatr.ru/art/4266/56597.jpg')
-				.carousel-item
-					img(src='https://cs4.pikabu.ru/post_img/big/2016/01/11/9/1452522100195423088.png')
-		div(class='flex-wraps')
-		.flex-i.
-			A esse consequat reprehenderit, aliqua e mentitum, doctrina dolore expetendis 
-			cupidatat ita amet et pariatur de ubi nescius te incididunt, e amet transferrem, 
-		
-		.flex-i.
-			Noster excepteur reprehenderit, offendit transferrem se constias. Legam aliquip 
-			ubi coniunctione in eu aliqua probant cohaerescant, aute deserunt de occaecat 
-			nam 
-		.flex-i.
-			export quis eram veniam cillum duis duis ipsum quorum enim summis irure tamen 
-			enim ipsum quem ipsum amet esse sint
+					img(src='https://energosbyt.ru/upload/medialibrary/ed1/ed1fb178be3b07ac589a907e78e5cc09.jpg')
+		.main-content(class='item_list')
+			div(class='shop_item')
+				div(class='carousel_img')
+					img(src='store_items/gfd25/png/1.png')
+				a(href='#' class='item_name') Зеленый чай в пакетиках Greenfield Flying Dragon, 25 шт.
+				p(class='item_price') 320р.
+				div.footer_item
+					button.btn.btn-primary Купить
+					div Кол-во
+						.range_items
+							button.btn.btn-secondary
+								i.fas.fa-minus.controls
+							input(type='text' value='1')
+							button.btn.btn-secondary
+								i.fas.fa-plus.controls
+			div(class='shop_item')
+				div(class='carousel_img')
+					img(src='store_items/gee100/png/1.png')
+				a(href='#' class='item_name') Черный чай в пакетиках Greenfield English Edition, 100 шт.
+				p(class='item_price') 725
+					i.fas.fa-ruble-sign
+				button.btn.btn-primary Купить					
+			div(class='shop_item')
+				div(class='carousel_img')
+					img(src='store_items/ggm25/png/1.png')
+				a(href='#' class='item_name') Зеленый чай в пакетиках Greenfield Green Melissa, 25 шт.
+				p(class='item_price') 320р.
+				button.btn.btn-primary Купить			
+			div(class='shop_item')
+				div(class='carousel_img')
+					img(src='store_items/gjd25/png/1.png')
+				a(href='#' class='item_name') Зеленый чай в пакетиках Greenfield Jasmine Dream, 25 шт.
+				p(class='item_price') 320р.
+				button.btn.btn-primary Купить				
+			div(class='shop_item')
+				div(class='carousel_img')
+					img(src='https://phpclub.tech/1281608/thumb/15425386608140s.jpg')
+				a(href='#' class='item_name').
+					labore aute illum
+				p(class='item_price') 320р.
+				button.btn.btn-primary Купить		
+			div(class='shop_item')
+				div(class='carousel_img')
+					img(src='https://phpclub.tech/1281608/thumb/15425386608140s.jpg')
+				a(href='#' class='item_name').
+					labore aute illum
+				p(class='item_price') 320р.
+				button.btn.btn-primary Купить		
+		.sidebar
+			ul(class='filters')
+				li 
+					a(class='filters_tags') Категория
+				li 
+					a(class='filters_tags') Цена
+					div
+						| 0р. 
+						input(type='range')
+						|  1000р.
+				li
+					a(class='filters_tags') Бренд
+					div
+						a(href='#' class='tea_brand') Greenfield
+						a(href='#' class='tea_brand') Tess
+						a(href='#' class='tea_brand') Принцесса Нури
+				li
+					a(class='filters_tags') Вид чая
+					
+				li
+					a(class='filters_tags') В одной коллекции
+					input(type='checkbox')
+				li
+					a(class='filters_tags') Вес
+					input(type='range')
+				li
+					a(class='filters_tags') Число пакетиков
+					label 20
+					input(type='checkbox')
+					label 25
+					input(type='checkbox')
+					label 100
+					input(type='checkbox')
+				li
+					a(class='filters_tags') Вид упаковки
+					ul(class='tea_box')
+						li Коробка 
+						li Пакет
+						li Подарочная упкаовка
+				li
+					a(class='filters_tags') Прочее
+	script.
+		window.onload = function(){
+			var a = document.getElementsByClassName('carousel_img');
+			console.log(a);
+			var counter = 1;
+			var isHovered = false;
+			for(var i =0; i < a.length; i++){
+				a[i].addEventListener('mouseover', function(e){
+					isHovered = true;
+					
+					var x = e.offsetX==undefined?e.layerX:e.offsetX;
+					var y = e.offsetY==undefined?e.layerY:e.offsetY;
+				
+					
+				})
+				a[i].addEventListener('mouseout', function(e){
+					isHovered = false;
+				})
+				}
+			
+			
+		}
