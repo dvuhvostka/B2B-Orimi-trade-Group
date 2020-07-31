@@ -40,6 +40,7 @@ ul {
 /* shop styles */
 .carousel-v{
 	grid-area: cv;
+	height:auto;
 }
 .carousel-inner {
 	height: 100%;
@@ -109,11 +110,12 @@ ul {
 .filters {
 	margin-right: auto;
 	text-decoration: none;
+	margi
 }
 
 .filters > li {
 	list-style: none;
-	margin-bottom: 20px;
+	margin-bottom: 25px;
 	background-color: white;
 	text-align:left;
 }
@@ -142,7 +144,7 @@ ul {
 	flex-direction: column;
 	align-items: start;
 	padding:1em;
-	grid-template-rows: minmax(250px, 50%) minmax(72px, 1fr) auto auto;
+	grid-template-rows: minmax(250px, 50%) minmax(72px, 1fr) auto minmax(65px,1fr);
 	-webkit-box-shadow: 0px 0px 100px 0px rgba(53, 53, 53, 0.5);
 	-moz-box-shadow:    0px 0px 30px 0px rgba(53, 53, 53, 0.5);
 	box-shadow:         0px 0px 15px 0px rgba(53, 53, 53, 0.3);
@@ -231,6 +233,46 @@ ul {
 	margin: auto;
 	padding: 0;
 	font-size: 10px;
+}
+
+.price {
+	display: flex;
+	vertical-align: bottom;
+}
+
+.price > p{
+	margin-bottom: 0;
+	vertical-align: middle;
+	padding-top: 2px;
+
+}
+
+.price > input[type='text']{
+	width:45px;
+	height:75%;
+	min-width:45px;
+}
+
+.price > input[type='range']{
+	width:90%;
+	margin: 0 10px;
+	vertical-align: middle;
+}
+
+.tea_brand_wrap {
+	display: flex;
+	flex-direction: column;
+}
+
+.tea_brand > label{
+	margin-left:5px;
+	font-size: 13px;
+	vertical-align: top;
+	padding-top:1px;
+}
+
+.tea_brand:nth-child(1) {
+	margin-top: 10px;
 }
 /*-------------*/
 

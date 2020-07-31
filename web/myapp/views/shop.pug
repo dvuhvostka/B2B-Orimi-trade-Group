@@ -88,16 +88,22 @@ block content
 					a(class='filters_tags') Категория
 				li 
 					a(class='filters_tags') Цена
-					div
-						| 0р. 
-						input(type='range')
-						|  1000р.
+					div.price
+						p 0р. 
+						input(type='range' min='0' max='1000' id='range' value='1000' step='1')
+						input(type='text' value='1000' id='input_range')
 				li
 					a(class='filters_tags') Бренд
-					div
-						a(href='#' class='tea_brand') Greenfield
-						a(href='#' class='tea_brand') Tess
-						a(href='#' class='tea_brand') Принцесса Нури
+					div.tea_brand_wrap
+						.tea_brand
+							input(type='checkbox')
+							label Greenfield
+						.tea_brand
+							input(type='checkbox')
+							label Tess
+						.tea_brand
+							input(type='checkbox')
+							label Принцесса Нури
 				li
 					a(class='filters_tags') Вид чая
 					
@@ -125,6 +131,14 @@ block content
 					a(class='filters_tags') Прочее
 	script.
 		window.onload = function(){
+			var x = document.getElementById('range');
+			var inp = document.getElementById('input_range');
+			x.addEventListener('mousemove', function(){
+				inp.value = x.value;
+			});
+			inp.addEventListener('change', function(){
+				x.value = inp.value;
+			});
 			var a = document.getElementsByClassName('carousel_img');
 			console.log(a);
 			var counter = 1;
