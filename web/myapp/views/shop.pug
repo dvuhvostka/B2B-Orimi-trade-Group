@@ -13,7 +13,7 @@ block content
 					img(src='https://energosbyt.ru/upload/medialibrary/ed1/ed1fb178be3b07ac589a907e78e5cc09.jpg')
 		.main-content(class='item_list')
 			- for(var i=0; i<q; i++) 
-				div(class='shop_item' id=products[i].id)
+				div(class='shop_item' id=products[i].id type=products[i].type)
 					div(class='carousel_img')
 						img(src=products[i].carousel_img)
 					a(href='#' class='item_name') #{products[i].item_name}

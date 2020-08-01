@@ -4,8 +4,8 @@ var path = require('path');
 const request = require('request');
 var config = require('../config');
 var {Pool, Client} = require('pg');
-var pgp = require("pg-promise")(/*options*/);
-var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
+//var pgp = require("pg-promise")(/*options*/);
+//var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
