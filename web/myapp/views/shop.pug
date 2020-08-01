@@ -7,29 +7,6 @@ block content
 	script(src="/cart.js")
 
 	.grid-container
-		.carousel-v.
-			ipsum enim nisi cillum quae aliqua aliqua aute irure aute dolor quorum minim 
-			tempor dolore dolor irure fugiat elit aliqua illum anim multos quem dolor multos 
-			amet irure duis esse export quae nisi culpa culpa quem sunt esse dolore legam 
-			esse aliqua sunt aute elit esse magna aute legam multos irure export anim ipsum 
-			quem nulla sint aute aute malis nisi sint sunt malis noster summis sunt duis 
-			noster multos nisi tamen tamen multos legam illum sint elit sunt aute esse magna 
-			eram nulla labore amet amet noster enim fore quid fugiat culpa sunt export amet 
-			sint cillum enim nisiipsum enim nisi cillum quae aliqua aliqua aute irure aute dolor quorum minim 
-			tempor dolore dolor irure fugiat elit aliqua illum anim multos quem dolor multos 
-			amet irure duis esse export quae nisi culpa culpa quem sunt esse dolore legam 
-			esse aliqua sunt aute elit esse magna aute legam multos irure export anim ipsum 
-			quem nulla sint aute aute malis nisi sint sunt malis noster summis sunt duis 
-			noster multos nisi tamen tamen multos legam illum sint elit sunt aute esse magna 
-			eram nulla labore amet amet noster enim fore quid fugiat culpa sunt export amet 
-			sint cillum enim nisiipsum enim nisi cillum quae aliqua aliqua aute irure aute dolor quorum minim 
-			tempor dolore dolor irure fugiat elit aliqua illum anim multos quem dolor multos 
-			amet irure duis esse export quae nisi culpa culpa quem sunt esse dolore legam 
-			esse aliqua sunt aute elit esse magna aute legam multos irure export anim ipsum 
-			quem nulla sint aute aute malis nisi sint sunt malis noster summis sunt duis 
-			noster multos nisi tamen tamen multos legam illum sint elit sunt aute esse magna 
-			eram nulla labore amet amet noster enim fore quid fugiat culpa sunt export amet 
-			sint cillum enim nisi
 		.carousel(class='slide' id='slider' data-rede='carousel')
 			.carousel-inner
 				.carousel-item(class='active')
@@ -51,6 +28,7 @@ block content
 								button.btn.btn-secondary
 									i.fas.fa-plus.controls
 		.sidebar
+			- var Type = 'tea';
 			ul(class='filters')
 				li 
 					a(class='filters_tags') Категория
@@ -64,7 +42,9 @@ block content
 					div.price
 						p 0р. 
 						input(type='range' min='0' max='1000' id='range_price' value='1000' step='1')
-						input(type='text' value='1000' id='input_range_price')
+						.price_opt
+							p до
+							input(type='text' value='1000' id='input_range_price')
 				li
 					a(class='filters_tags') Бренд
 					div.submenu_wrap
@@ -77,6 +57,15 @@ block content
 						.submenu
 							input(type='checkbox')
 							label Принцесса Нури
+						.submenu
+							input(type='checkbox')
+							label Принцесса Ява
+						.submenu
+							input(type='checkbox')
+							label Принцесса Канди
+						.submenu
+							input(type='checkbox')
+							label Шах
 				li
 					a(class='filters_tags') Вид чая
 					.tea_type_wrap
@@ -103,9 +92,11 @@ block content
 				li
 					a(class='filters_tags') Вес
 					.weight_wrap
-						p 0г.
-						input(type='range' min='0' max='500' id='range_weight' value='500')
-						input(type='text' value='500' id='input_range_weight')
+						p 36г.
+						input(type='range' min='36' max='400' id='range_weight' value='400')
+						.weight_opt
+							p до
+							input(type='text' value='400' id='input_range_weight')
 				li
 					a(class='filters_tags') Число пакетиков
 					.submenu_wrap
@@ -115,6 +106,12 @@ block content
 						.submenu
 							input(type='checkbox')
 							label 25
+						.submenu
+							input(type='checkbox')
+							label 30
+						.submenu
+							input(type='checkbox')
+							label 50
 						.submenu
 							input(type='checkbox')
 							label 100
@@ -148,23 +145,4 @@ block content
 			input_range_weight.addEventListener('change', function(){
 				range_weight.value = input_range_weight.value;
 			});
-			var a = document.getElementsByClassName('carousel_img');
-			console.log(a);
-			var counter = 1;
-			var isHovered = false;
-			for(var i =0; i < a.length; i++){
-				a[i].addEventListener('mouseover', function(e){
-					isHovered = true;
-					
-					var x = e.offsetX==undefined?e.layerX:e.offsetX;
-					var y = e.offsetY==undefined?e.layerY:e.offsetY;
-				
-					
-				})
-				a[i].addEventListener('mouseout', function(e){
-					isHovered = false;
-				})
-				}
-			
-			
 		}

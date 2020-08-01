@@ -85,10 +85,9 @@ ul {
 .grid-container {
 	display: grid;
 	grid-gap:1em;
-	grid-template-columns: repeat(5, 1fr);
-	grid-template-rows: auto 200px auto;
+	grid-template-columns: repeat(5,1fr);
+	grid-template-rows: 200px auto;
 	grid-template-areas:
-		". cv cv cv ."
 		". c c c ."
 		"s m m m ."
 	;
@@ -263,17 +262,38 @@ ul {
 
 .price > p{
 	margin-bottom: 0;
-	vertical-align: middle;
 	padding-top: 2px;
-
+	margin-top:3px;
 }
 
-.price > input[type='text']{
-	width:45px;
-	height:75%;
-	min-width:45px;
+.price_opt {
+	display: flex;
+	border: 2px solid #b1b9c2;
+	padding:2px;
+	vertical-align: middle;
+	border-radius: 5px;
 }
 
+.price_opt:hover {
+	border-color: #99bdff;
+}
+
+.price_opt > p{
+	margin:0;
+	font-size: 12px;
+	vertical-align: middle;
+	margin-top:3px;
+	margin-left: 5px;
+	margin-right: 5px;
+	color: #b1b9c2;
+}
+
+.price_opt > input {
+	width: 60px;
+	border: 0;
+	outline:none;
+	text-align: center;
+}
 .price > input[type='range']{
 	width:90%;
 	margin: 0 10px;
@@ -343,6 +363,36 @@ ul {
 	width:90%;
 	margin: 0 10px;
 	vertical-align: middle;
+	min-width:70px;
+}
+
+.weight_opt {
+	display: flex;
+	border: 2px solid #b1b9c2;
+	padding:2px;
+	vertical-align: middle;
+	border-radius: 5px;
+}
+
+.weight_opt:hover {
+	border-color: #99bdff;
+}
+
+.weight_opt > p{
+	margin:0;
+	font-size: 12px;
+	vertical-align: middle;
+	margin-top:3px;
+	margin-left: 5px;
+	margin-right: 5px;
+	color: #b1b9c2;
+}
+
+.weight_opt > input {
+	width: 60px;
+	border: 0;
+	outline:none;
+	text-align: center;
 }
 
 /*-------------*/
@@ -356,7 +406,6 @@ ul {
 	}
 	.grid-container{
 		grid-template-areas:
-			"cv cv cv cv cv"
 			"c c c c c"
 			"s m m m ."
 		;
@@ -371,7 +420,6 @@ ul {
 	.grid-container {
 		display: grid;
 		grid-template-areas:
-			"cv"
 			"c"
 			"s"
 			"m";
