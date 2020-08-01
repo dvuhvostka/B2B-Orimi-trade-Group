@@ -4,8 +4,8 @@ var path = require('path');
 const request = require('request');
 var config = require('../config');
 var {Pool, Client} = require('pg');
-//var pgp = require("pg-promise")(/*options*/);
-//var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
+var pgp = require("pg-promise")(/*options*/);
+var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -26,6 +26,18 @@ var pgPool = new Pool({
 });
 
 var getProducts = `SELECT * FROM products ORDER BY id DESC`;
+
+function addProduct() {
+  db.none('INSERT INTO products(carousel_img, item_name, item_price, type, sort) VALUES(${src}, ${name}, ${price}, ${type}, ${sort})',{
+    src: 'store_prods/tea/1/1.jpg',
+    name: 'Зеленый чай в пакетиках Greenfield Flying Dragon, 25 шт.',
+    price: 358,
+    type: 'tea',
+    sort: "greenfield"
+  });
+}
+
+
 
 /* GET users listing. */
 router.route('/shop')

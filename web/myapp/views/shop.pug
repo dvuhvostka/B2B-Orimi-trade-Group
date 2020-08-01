@@ -15,7 +15,7 @@ block content
 			- for(var i=0; i<q; i++) 
 				div(class='shop_item' id=products[i].id type=products[i].type)
 					div(class='carousel_img')
-						img(src=products[i].carousel_img)
+						img(src="store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
 					a(href='#' class='item_name') #{products[i].item_name}
 					p(class='item_price') #{products[i].item_price} р.
 					div.footer_item
