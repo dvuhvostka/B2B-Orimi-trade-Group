@@ -171,9 +171,9 @@ ul {
 }
 .carousel_img > img{
 	width:100%;
-	max-width: 250px;
+	max-width: 200px;
 	height:250px;
-	align-self: center;
+	justify-self: center;
 }
 
 .item_name{
