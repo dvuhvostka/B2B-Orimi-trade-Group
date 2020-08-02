@@ -19,9 +19,11 @@ var salesRouter = require('./routes/sales');
 var shopRouter = require('./routes/shop');
 var registerRouter = require('./routes/register');
 var loginRouter = require('./routes/login');
-var logoutRoute = require('./routes/logout')
-var cartRoute = require('./routes/cart')
-var addnewsRoute = require('./routes/add')
+var logoutRoute = require('./routes/logout');
+var cartRoute = require('./routes/cart');
+var addnewsRoute = require('./routes/add');
+var teaRoute = require('./routes/tea');
+var coffeeRoute = require('./routes/coffee');
 
 var app = express();
 
@@ -117,6 +119,8 @@ app.use('/', loginRouter.login);
 app.use('/', logoutRoute);
 app.use('/', addnewsRoute);
 app.use('/', cartRoute);
+app.use('/', teaRoute);
+app.use('/', coffeeRoute);
 app.use('/?', function(req,res){
   res.redirect('/');
 });
