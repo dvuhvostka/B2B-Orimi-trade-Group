@@ -47,7 +47,8 @@ router.route('/shop')
         res.render('shop.pug', {
           isRegistred: req.session.userId,
           products: prods,
-          prod_count: prods.length
+          prod_count: prods.length,
+          title: 'Фирменный магазин Орими-трэйд'
         });
       });
   }).post(function(req,res){

@@ -121,6 +121,9 @@ ul {
 .price{
 	text-align:left;
 }
+
+/* ------------------------ */
+
 /* Goods styles */
 
 .item_list{
@@ -231,7 +234,9 @@ ul {
 	padding: 0;
 	font-size: 10px;
 }
+/* ---------------------------- */
 
+/* sidebar styles */
 .categories {
 	display: flex;
 	flex-direction: column;
@@ -395,6 +400,46 @@ ul {
 
 /*-------------*/
 
+/* login and register styles */
+
+.card {
+	width: 40%;
+	margin-top:20px;
+	min-width: 280px;
+	height: 600px;
+}
+
+.card > ul {
+	display: flex;
+	color: black;
+	margin: auto;
+}
+
+.card > ul > li:nth-child(1)::after{
+	content: '/';
+	margin-left: 10px;
+	font-size: 18px;
+}
+
+.card > ul > li > a{
+	color: black;
+	font-size: 18px;
+	font-weight: lighter;
+}
+
+.card > ul > li {
+	margin-right: 10px;
+}
+
+.card-body {
+	margin-top: 100px;
+}
+
+.noLink {
+	pointer-events: none;
+}
+
+/* ------------------------- */
 
 /* media */
 

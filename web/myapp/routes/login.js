@@ -59,6 +59,7 @@ login.route('/login')
       }else {
       console.log('12313')
       res.render('login.pug', {
+        title: 'Вход',
       });
     }
     })
