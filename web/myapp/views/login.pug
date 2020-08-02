@@ -6,6 +6,11 @@ block append scripts
 
 block content
   .card(class='shadow-lg mx-auto card-content ')
+    ul
+      li
+        a.noLink(href='/login' onclick='return 0') Вход
+      li
+        a(href='/register') Регистрация
     .card-body
       h2(class='card-text text-center') Войти
       form(action='/login' method='POST' id='form_input_by_client' novalidate)
