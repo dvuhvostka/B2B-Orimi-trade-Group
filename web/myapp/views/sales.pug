@@ -29,7 +29,7 @@ block content
                 p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
               .card-footer
                 p(class="text-muted" style='font-size: 0.7rem;') Дата написания: #{pnews[i].date} 
-  script.  
+  script.
     $.fx.off = false;
     $(document).ready(function(){
       $('.link-news').on('click', function(){

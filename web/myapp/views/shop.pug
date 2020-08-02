@@ -8,8 +8,7 @@ block content
 	.grid-container
 		.carousel(class='slide' id='slider' data-rede='carousel')
 			.carousel-inner
-				.carousel-item(class='active')
-					img(src='welcome_to_orimi.gif')
+				img(src='welcome_to_orimi.gif')
 		.main-content(class='item_list')
 			- for(var i=0; i<q; i++) 
 				div(class='shop_item' id=products[i].id type=products[i].type)
@@ -21,10 +20,10 @@ block content
 						button.btn.btn-primary Купить
 						div Кол-во
 							.range_items
-								button.btn.btn-secondary
+								button.btn.btn-secondary.minus
 									i.fas.fa-minus.controls
-								input(type='text' value='1')
-								button.btn.btn-secondary
+								input(type='text' value='1' class='input')
+								button.btn.btn-secondary.plus
 									i.fas.fa-plus.controls
 		.sidebar
 			- var Type = 'tea';
@@ -131,7 +130,7 @@ block content
 			var range_price = document.getElementById('range_price');
 			var input_range_price = document.getElementById('input_range_price');
 			var range_weight = document.getElementById('range_weight');
-			var input_range_weight = document.getElementById('input_range_weight');			
+			var input_range_weight = document.getElementById('input_range_weight');	
 			range_price.addEventListener('mousemove', function(){
 				input_range_price.value = range_price.value;
 			});
@@ -145,3 +144,17 @@ block content
 				range_weight.value = input_range_weight.value;
 			});
 		}
+		
+		$('.minus').on('click', function(){
+			var item = $(this);
+			if (item.siblings('.input').val() > 1){
+				item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
+			} else {
+				return 0;
+			}
+		})
+		
+		$('.plus').on('click', function(){
+			var item = $(this);
+			item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+		})
