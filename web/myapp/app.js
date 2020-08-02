@@ -22,8 +22,6 @@ var loginRouter = require('./routes/login');
 var logoutRoute = require('./routes/logout');
 var cartRoute = require('./routes/cart');
 var addnewsRoute = require('./routes/add');
-var teaRoute = require('./routes/tea');
-var coffeeRoute = require('./routes/coffee');
 
 var app = express();
 
@@ -85,8 +83,6 @@ app.use(express.static('public/javascripts'));
 app.use(express.static('public/stylesheets'));
 app.use(express.static('public/images'));
 
-
-
 app.use(function(req, res, next) {
   switch (!null) {
     case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
@@ -119,8 +115,7 @@ app.use('/', loginRouter.login);
 app.use('/', logoutRoute);
 app.use('/', addnewsRoute);
 app.use('/', cartRoute);
-app.use('/', teaRoute);
-app.use('/', coffeeRoute);
+
 app.use('/?', function(req,res){
   res.redirect('/');
 });
