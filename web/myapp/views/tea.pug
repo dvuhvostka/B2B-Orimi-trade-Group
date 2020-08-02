@@ -2,17 +2,17 @@ extends layout2
 
 block content
 	- var q = prod_count
-	script(src="/jquery-3.5.1.js")
+	script(src="../jquery-3.5.1.js")
 
 	.grid-container
 		.carousel(class='slide' id='slider' data-rede='carousel')
 			.carousel-inner
-				img(src='../welcome_to_orimi.gif')
+				img(src='welcome_to_orimi.gif')
 		.main-content(class='item_list')
 			- for(var i=0; i<q; i++) 
 				div(class='shop_item' id=products[i].id type=products[i].type)
 					div(class='carousel_img')
-						img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
+						img(src="store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
 					a(href='#' class='item_name') #{products[i].item_name}
 					p(class='item_price') #{products[i].item_price} р.
 					div.footer_item

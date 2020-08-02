@@ -37,20 +37,37 @@ function addProduct() {
   });
 }
 
+
 /* GET users listing. */
-router.route('/shop')
+
+router.route('/shop/:type?')
   .get(function(req,res){
+    var type = req.params.type;
+    if (!type) {
       pgPool.query(getProducts,[], function(err, response){
-        if (err) return console.error(err);
-        var prods = response.rows;
-        console.log(prods); //debug
-        res.render('shop.pug', {
-          isRegistred: req.session.userId,
-          products: prods,
-          prod_count: prods.length,
-          title: 'Фирменный магазин Орими-трэйд'
+      if (err) return console.error(err);
+      var prods = response.rows;
+      console.log(prods); //debug
+      res.render('shop.pug', {
+        isRegistred: req.session.userId,
+        products: prods,
+        prod_count: prods.length,
+        title: 'Фирменный магазин Орими-трэйд'
         });
       });
+    }else if(type == 'tea'){
+      pgPool.query(getProducts,[], function(err, response){
+      if (err) return console.error(err);
+      var prods = response.rows;
+      console.log(prods); //debug
+      res.render('shop.pug', {
+        isRegistred: req.session.userId,
+        products: prods,
+        prod_count: prods.length,
+        title: 'Фирменный магазин Орими-трэйд'
+        });
+      });
+    }
   }).post(function(req,res){
     res.send("POST");
   });
