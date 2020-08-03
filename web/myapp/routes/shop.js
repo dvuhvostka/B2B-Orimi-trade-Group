@@ -76,7 +76,7 @@ function checkFilters (data){
   teabag_sql = teabag_sql.slice(2);
   tea_pack_sql = tea_pack_sql.slice(2);
 
-  final_sql = (brand_sql? brand_sql: '') + (tea_type_sql? 'and' + tea_type_sql : '') + (teabag_sql?  'and' + teabag_sql : '') + (tea_pack_sql? 'and' + tea_pack_sql : '') + (final_sql? final_sql: '');
+  final_sql = (brand_sql? 'and' + brand_sql: '') + (tea_type_sql? 'and' + tea_type_sql : '') + (teabag_sql?  'and' + teabag_sql : '') + (tea_pack_sql? 'and' + tea_pack_sql : '') + (final_sql? final_sql: '');
   return final_sql;
 }
 function addProduct() {
@@ -114,7 +114,7 @@ router.route('/shop/:type?')
       });
     }else if(type == 'tea'){
       var sql = checkFilters(req.query);
-      var teaFilters = `SELECT * FROM products WHERE type='tea' AND item_price < `+req.query.range_of_price+` AND weight< `+req.query.weight+` AND` + sql + ` ORDER BY id DESC`;
+      var teaFilters = `SELECT * FROM tea WHERE type='tea' AND item_price < `+req.query.range_of_price+` AND weight< `+req.query.weight+`` + sql + ` ORDER BY id DESC`;
       console.log(teaFilters);
       pgPool.query(teaFilters,[], function(err, response){
       if (err) return console.error(err);
