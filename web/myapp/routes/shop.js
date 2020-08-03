@@ -52,7 +52,7 @@ router.route('/shop/:type?')
         isRegistred: req.session.userId,
         products: prods,
         prod_count: prods.length,
-        title: 'Фирменный магазин Орими-трэйд'
+        title: 'Фирменный магазин Орими-трэйд',
         });
       });
     }else if(type == 'tea'){
@@ -64,7 +64,22 @@ router.route('/shop/:type?')
         isRegistred: req.session.userId,
         products: prods,
         prod_count: prods.length,
-        title: 'Фирменный магазин Орими-трэйд'
+        title: 'Фирменный магазин Орими-трэйд',
+        type: 'tea',
+        });
+      });
+    }
+    else if(type=='coffee'){
+      pgPool.query(getProducts,[], function(err, response){
+      if (err) return console.error(err);
+      var prods = response.rows;
+      console.log(prods); //debug
+      res.render('shop.pug', {
+        isRegistred: req.session.userId,
+        products: prods,
+        prod_count: prods.length,
+        title: 'Фирменный магазин Орими-трэйд',
+        type: 'coffee',
         });
       });
     }
