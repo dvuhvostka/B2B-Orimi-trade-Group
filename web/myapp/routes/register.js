@@ -44,6 +44,7 @@ router.route('/register')
     if(!userinfo.user_id){
     res.render('register.pug',{
       isRegister: req.session.userId,
+      title: 'Регистрация',
     });
   }else {
     res.redirect('/');

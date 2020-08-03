@@ -5,10 +5,10 @@ block append scripts
   script(src='validate_form_login.js')
 
 block content
-  .card(class='shadow-lg mx-auto card-content ')
+  .card#log_page(class='shadow-lg mx-auto card-content ')
     ul
       li
-        a.noLink(href='/login' onclick='return 0') Вход
+        a.noLink(href='/login' onclick='return 0') Войти
       li
         a.link(href='/register') Регистрация
     .card-body

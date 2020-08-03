@@ -421,17 +421,25 @@ ul {
 
 /*-------------*/
 /* login and register styles */
-.card {
+.card#log_page {
   width: 40%;
   margin-top: 20px;
   min-width: 280px;
-  height: 600px;
+  max-height: 550px;
 }
+
+.card#reg_page {
+  width: 40%;
+  margin-top: 20px;
+  min-width: 280px;
+  max-height: 850px;
+}
+
 
 .card>ul {
   display: flex;
   color: black;
-  margin: auto;
+  margin: 0 auto;
 	padding: 0;
 	margin-top:60px;
 }
