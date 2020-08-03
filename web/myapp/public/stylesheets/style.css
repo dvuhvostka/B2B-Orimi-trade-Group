@@ -26,6 +26,7 @@ nav {
   font-family: 'Roboto Slab', serif;
 }
 
+
 li {
   list-style: none;
 }
@@ -34,10 +35,12 @@ ul {
   margin-top: 10px;
 }
 
+/* navbar styles */
 .navbar-collapse>* {
   margin-top: 0;
 }
 
+/* ----------------- */
 #main-wrap {
   display: flex;
 }
@@ -72,6 +75,14 @@ ul {
 }
 
 /* shop styles */
+.tea {
+  background-color: #2bcb12;
+}
+
+.coffee {
+
+}
+
 .grid-container {
   display: grid;
   grid-gap: 1em;
@@ -323,6 +334,7 @@ ul {
   width: 90%;
   margin: 0 10px;
   vertical-align: middle;
+  min-width: 70px;
 }
 
 .submenu_wrap {
