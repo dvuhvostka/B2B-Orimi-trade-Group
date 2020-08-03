@@ -25,7 +25,7 @@ var pgPool = new Pool({
   database: DBNAME
 });
 
-var getProducts = `SELECT * FROM products ORDER BY id DESC`;
+
 
 function addProduct() {
   db.none('INSERT INTO products(carousel_img, item_name, item_price, type, sort) VALUES(${src}, ${name}, ${price}, ${type}, ${sort})',{
@@ -39,6 +39,10 @@ function addProduct() {
 
 
 /* GET users listing. */
+
+var getProducts = `SELECT * FROM products ORDER BY id DESC`;
+var getTea = `SELECT * FROM products WHERE type='tea' ORDER BY id DESC`;
+var getCoffee = `SELECT * FROM products WHERE type='coffee' ORDER BY id DESC`;
 
 router.route('/shop/:type?')
   .get(function(req,res){
@@ -55,7 +59,7 @@ router.route('/shop/:type?')
         });
       });
     }else if(type == 'tea'){
-      pgPool.query(getProducts,[], function(err, response){
+      pgPool.query(getTea,[], function(err, response){
       if (err) return console.error(err);
       var prods = response.rows;
       console.log(prods); //debug
@@ -69,7 +73,7 @@ router.route('/shop/:type?')
       });
     }
     else if(type=='coffee'){
-      pgPool.query(getProducts,[], function(err, response){
+      pgPool.query(getCoffee,[], function(err, response){
       if (err) return console.error(err);
       var prods = response.rows;
       console.log(prods); //debug
