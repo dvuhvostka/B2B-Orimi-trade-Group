@@ -44,6 +44,8 @@ var getProducts = `SELECT * FROM products ORDER BY id DESC`;
 var getTea = `SELECT * FROM products WHERE type='tea' ORDER BY id DESC`;
 var getCoffee = `SELECT * FROM products WHERE type='coffee' ORDER BY id DESC`;
 
+
+
 router.route('/shop/:type?')
   .get(function(req,res){
     var type = req.params.type;
@@ -59,7 +61,9 @@ router.route('/shop/:type?')
         });
       });
     }else if(type == 'tea'){
-      pgPool.query(getTea,[], function(err, response){
+      var teaFilters = `SELECT * FROM products WHERE type='tea' AND item_price < `+req.query.range_of_price+` AND weight< `+req.query.weight+`  ORDER BY id DESC`;
+      console.log(req.query)
+      pgPool.query(teaFilters,[], function(err, response){
       if (err) return console.error(err);
       var prods = response.rows;
       console.log(prods); //debug
