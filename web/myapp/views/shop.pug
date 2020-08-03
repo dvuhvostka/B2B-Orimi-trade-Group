@@ -39,7 +39,7 @@ block content
 											i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
-								div.price
+								.price
 									p 0р. 
 									input.tea(type='range' name='range_of_price' min='0' max='1000' id='range_price' value='1000' step='1')
 									.price_opt
@@ -48,24 +48,25 @@ block content
 							li
 								a(class='filters_tags') Бренд
 								div.submenu_wrap
-									.submenu
-										input(type='checkbox' name='greenfield')
-										label Greenfield
-									.submenu
-										input(type='checkbox' name='tess')
-										label Tess
-									.submenu
-										input(type='checkbox' name='nuri')
-										label Принцесса Нури
-									.submenu
-										input(type='checkbox' name='java')
-										label Принцесса Ява
-									.submenu
-										input(type='checkbox' name='candy')
-										label Принцесса Канди
-									.submenu
-										input(type='checkbox' name='shah')
-										label Шах
+									fieldset
+										.submenu
+											input(type='checkbox' name='greenfield')
+											label Greenfield
+										.submenu
+											input(type='checkbox' name='tess')
+											label Tess
+										.submenu
+											input(type='checkbox' name='nuri')
+											label Принцесса Нури
+										.submenu
+											input(type='checkbox' name='java')
+											label Принцесса Ява
+										.submenu
+											input(type='checkbox' name='candy')
+											label Принцесса Канди
+										.submenu
+											input(type='checkbox' name='shah')
+											label Шах
 							li
 								a(class='filters_tags') Вид чая
 								.tea_type_wrap
@@ -73,13 +74,13 @@ block content
 										input(type='checkbox' name='black')
 										label Черный
 										.options
-											input(type='checkbox' name='black_2')
+											input(type='checkbox' name='black_1')
 											label с добавками
 									.tea_type
 										input(type='checkbox' name='green')
 										label Зеленый
 										.options
-											input(type='checkbox' name='green_2')
+											input(type='checkbox' name='green_1')
 											label с добавками
 									.tea_type
 										input(type='checkbox' name='herbal')
@@ -87,7 +88,7 @@ block content
 							li
 								a(class='filters_tags') В одной коллекции
 								#one_collection
-									input(type='checkbox' name='one_collection')
+									input(type='checkbox' name='in_one_collection')
 									label Да
 							li
 								a(class='filters_tags') Вес
@@ -127,7 +128,7 @@ block content
 									.submenu
 										input(type='checkbox' name='present')
 										label Подарочная упакаовка
-							input(type="submit" value="Найти")
+							input.btn.btn-primary(type="submit" value="Найти")
 				when 'coffee'
 					ul(class='filters')
 						li 
@@ -202,7 +203,7 @@ block content
 								.submenu
 									input(type='checkbox' name='capsule')
 									label Капсулы
-						input(type="submit" value="Найти")
+						input.btn.btn-primary(type="submit" value="Найти")
 										
 				default
 					ul(class='filters')

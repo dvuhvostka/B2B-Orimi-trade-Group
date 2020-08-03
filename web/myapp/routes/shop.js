@@ -25,8 +25,60 @@ var pgPool = new Pool({
   database: DBNAME
 });
 
+function checkFilters (data){
+  var brand_tea = ['greenfield','nuri','tess','java','candy','shah'];
+  var tea_type = ['black','black_1','green','green_1','herbal'];
+  var teabag = ['20','25','30','50','100'];
+  var tea_pack = ['box','package','present'];
+  var collection = 'in_one_collection';
+  var filters = Object.keys(data);
+  var brand_sql = '';
+  var tea_type_sql ='';
+  var teabag_sql = '';
+  var tea_pack_sql = '';
+  var final_sql = '';
+  console.log('huy');
+  for (var each of brand_tea){
+    for (var item of filters){
+      if (each == item) {
+        brand_sql+=`or sort = '${item}' `;
+      }
+    }
+  }
+  for (var each of tea_type){
+    for (var item of filters){
+      if (each == item) {
+        tea_type_sql+=`or about = '${item}' `;
+      }
+    }
+  }
+  for (var each of teabag){
+    for (var item of filters){
+      if ('teabag_'+each == item) {
+        teabag_sql+=`or tea_bags = '${each}' `;
+      }
+    }
+  }
+  for (var each of tea_pack){
+    for (var item of filters){
+      if (each == item) {
+        tea_pack_sql+=`or packaging = '${item}' `;
+      }
+    }
+  }
+  for (var item of filters){
+    if (collection == item){
+      final_sql+=`and in_one_collection = 'true'`;
+    }
+  }
+  brand_sql = brand_sql.slice(2);
+  tea_type_sql = tea_type_sql.slice(2);
+  teabag_sql = teabag_sql.slice(2);
+  tea_pack_sql = tea_pack_sql.slice(2);
 
-
+  final_sql = (brand_sql? brand_sql: '') + (tea_type_sql? 'and' + tea_type_sql : '') + (teabag_sql?  'and' + teabag_sql : '') + (tea_pack_sql? 'and' + tea_pack_sql : '') + (final_sql? final_sql: '');
+  return final_sql;
+}
 function addProduct() {
   db.none('INSERT INTO products(carousel_img, item_name, item_price, type, sort) VALUES(${src}, ${name}, ${price}, ${type}, ${sort})',{
     src: 'store_prods/tea/1/1.jpg',
@@ -61,12 +113,13 @@ router.route('/shop/:type?')
         });
       });
     }else if(type == 'tea'){
-      var teaFilters = `SELECT * FROM products WHERE type='tea' AND item_price < `+req.query.range_of_price+` AND weight< `+req.query.weight+`  ORDER BY id DESC`;
-      console.log(req.query)
+      var sql = checkFilters(req.query);
+      var teaFilters = `SELECT * FROM products WHERE type='tea' AND item_price < `+req.query.range_of_price+` AND weight< `+req.query.weight+` AND` + sql + ` ORDER BY id DESC`;
+      console.log(teaFilters);
       pgPool.query(teaFilters,[], function(err, response){
       if (err) return console.error(err);
       var prods = response.rows;
-      console.log(prods); //debug
+      // console.log(prods); //debug
       res.render('shop.pug', {
         isRegistred: req.session.userId,
         products: prods,
