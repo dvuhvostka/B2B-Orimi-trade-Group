@@ -3,7 +3,7 @@ extends layout2
 block content
 	- var q = prod_count
 	- var Type = type;
-	script(src="/jquery-3.5.1.js")
+	script(src="../jquery-3.5.1.js")
 
 	.grid-container
 		.carousel(class='slide' id='slider' data-rede='carousel')
@@ -11,7 +11,7 @@ block content
 				img(src='../welcome_to_orimi.gif')
 		.main-content(class='item_list')
 			- for(var i=0; i<q; i++) 
-				div(class='shop_item' id=products[i].id type=products[i].type)
+				div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
 					div(class='carousel_img')
 						img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
 					a(href='#' class='item_name') #{products[i].item_name}
@@ -28,19 +28,20 @@ block content
 		.sidebar
 			case Type
 				when 'tea'
-					ul(class='filters')
-						li 
-							a(class='filters_tags') Категория
-								.categories
-									a.active_type.link(href='/shop/tea') Чай
-										i.fas.fa-angle-right
-									a.link(href='/shop/coffee') Кофе
-										i.fas.fa-angle-right
+					form(method="GET" action="/shop/tea")
+						ul(class='filters')
+							li 
+								a(class='filters_tags') Категория
+									.categories
+										a.active_type.link(href='/shop/tea') Чай
+											i.fas.fa-angle-right
+										a.link(href='/shop/coffee') Кофе
+											i.fas.fa-angle-right
 						li 
 							a(class='filters_tags') Цена
 							div.price
 								p 0р. 
-								input(type='range' min='0' max='1000' id='range_price' value='1000' step='1')
+								input(type='range' name='range_of_price' min='0' max='1000' id='range_price' value='1000' step='1')
 								.price_opt
 									p до
 									input(type='text' value='1000' id='input_range_price')
@@ -48,51 +49,51 @@ block content
 							a(class='filters_tags') Бренд
 							div.submenu_wrap
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='greenfield')
 									label Greenfield
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='tess')
 									label Tess
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='nuri')
 									label Принцесса Нури
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='java')
 									label Принцесса Ява
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='candy')
 									label Принцесса Канди
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='shah')
 									label Шах
 						li
 							a(class='filters_tags') Вид чая
 							.tea_type_wrap
 								.tea_type
-									input(type='checkbox')
+									input(type='checkbox' name='black')
 									label Черный
 									.options
-										input(type='checkbox')
+										input(type='checkbox' name='black_1')
 										label с добавками
 								.tea_type
-									input(type='checkbox')
+									input(type='checkbox' name='green')
 									label Зеленый
 									.options
-										input(type='checkbox')
+										input(type='checkbox' name='green_2')
 										label с добавками
 								.tea_type
-									input(type='checkbox')
+									input(type='checkbox' name='herbal')
 									label Гербальный
 						li
 							a(class='filters_tags') В одной коллекции
 							#one_collection
-								input(type='checkbox')
+								input(type='checkbox' name='one_collection')
 								label Да
 						li
 							a(class='filters_tags') Вес
 							.weight_wrap
 								p 36г.
-								input(type='range' min='36' max='400' id='range_weight' value='400')
+								input(type='range' min='36' max='400' id='range_weight' value='400' name='weight')
 								.weight_opt
 									p до
 									input(type='text' value='400' id='input_range_weight')
@@ -100,32 +101,33 @@ block content
 							a(class='filters_tags') Число пакетиков
 							.submenu_wrap
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='teabag_20')
 									label 20
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='teabag_25')
 									label 25
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='teabag_30')
 									label 30
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='teabag_50')
 									label 50
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='teabag_100')
 									label 100
 						li
 							a(class='filters_tags') Вид упаковки
 							.submenu_wrap
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='box')
 									label Коробка 
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='package')
 									label Пакет
 								.submenu
-									input(type='checkbox')
+									input(type='checkbox' name='present')
 									label Подарочная упкаовка
+						input(type="submit" value="Найти")
 				when 'coffee'
 					ul(class='filters')
 						li 
