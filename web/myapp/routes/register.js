@@ -85,7 +85,7 @@ router.route('/register')
        console.log('ERROR:', error);
    });
    //session and coockies
-      res.redirect('/');
+      setTimeout(res.redirect('/shop'),1000);
     }
   });
 

@@ -57,7 +57,6 @@ login.route('/login')
       if(req.session.userId){
         res.redirect('/')
       }else {
-      console.log('12313')
       res.render('login.pug', {
         title: 'Вход',
       });
@@ -71,13 +70,12 @@ try {
     console.log(res.rows);
     if(res.rows.length!=0){
       userinfo.user_id = res.rows[0].id;
-      console.log('After checking id is ', userinfo.user_id);
     } else console.log("Undefined ID")
   });
 } catch (e) {
-  console.log("error: "+e)
+  console.log("error: "+e);
 }
-      res.redirect(303,'/')
+    res.redirect('/shop');
 });
 
 

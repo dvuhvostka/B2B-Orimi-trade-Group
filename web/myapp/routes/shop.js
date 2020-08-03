@@ -47,9 +47,8 @@ router.route('/shop/:type?')
       pgPool.query(getProducts,[], function(err, response){
       if (err) return console.error(err);
       var prods = response.rows;
-      console.log(prods); //debug
       res.render('shop.pug', {
-        isRegistred: req.session.userId,
+        isRegistred: userinfo.user_id,
         products: prods,
         prod_count: prods.length,
         title: 'Фирменный магазин Орими-трэйд',
