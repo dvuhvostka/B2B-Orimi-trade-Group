@@ -242,7 +242,15 @@ block content
 			input_range_weight.addEventListener('change', function(){
 				range_weight.value = input_range_weight.value;
 			});
-			
+		}
+		var params={};
+		window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {params[key] = value;});
+		for (key in params) {
+			var input = document.getElementsByName(key)[0];
+				if (key=="range_of_price"){input.value = params[key]; var input2 = document.getElementById('input_range_price'); input2.value = params[key];}
+				if (key=="weight"){input.value = params[key]; var input3 = document.getElementById('input_range_weight'); input3.value = params[key];}
+			input.checked = !0;
+			console.log(input);
 		}
 		
 		$('.minus').on('click', function(){
