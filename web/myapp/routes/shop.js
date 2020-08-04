@@ -37,7 +37,6 @@ function checkFilters (data){
   var teabag_sql = '';
   var tea_pack_sql = '';
   var final_sql = '';
-  console.log('huy');
   for (var each of brand_tea){
     for (var item of filters){
       if (each == item) {
@@ -81,6 +80,45 @@ function checkFilters (data){
   return final_sql;
 }
 
+function checkCoffeeFilters (data){
+  var coffee_brand = ['Jardin','Jokey','Piazza'];
+  var coffee_type = ['milled','milled_2','cereal','cereal_2','cereal_3', 'cereal_4', 'sublem', 'granul'];
+  var coffee_pack = ['glass_jar','can','soft_pack', 'capsule'];
+  var filters = Object.keys(data);
+  var coffee_brand_sql = '';
+  var coffee_type_sql ='';
+  var coffee_pack_sql = '';
+  var final_sql = '';
+  for (var each of  coffee_brand){
+    for (var item of filters){
+      if (each == item) {
+        coffee_brand_sql+=`or sort = '${item}' `;
+      }
+    }
+  }
+  for (var each of coffee_type){
+    for (var item of filters){
+      if (each == item) {
+        coffee_type_sql+=`or category = '${item}' `;
+      }
+    }
+  }
+  for (var each of coffee_pack){
+    for (var item of filters){
+      if (each == item) {
+        coffee_pack_sql+=`or packaging = '${item}' `;
+      }
+    }
+  }
+  coffee_brand_sql = coffee_brand_sql.slice(2);
+  coffee_type_sql = coffee_type_sql.slice(2);
+  coffee_pack_sql = coffee_pack_sql.slice(2);
+
+
+  final_sql = (coffee_brand_sql? 'and' + coffee_brand_sql: '') + (coffee_type_sql? 'and' + coffee_type_sql : '') + (coffee_pack_sql? 'and' + coffee_pack_sql : '') + (final_sql? final_sql: '');
+  return final_sql;
+}
+
 function addProduct() {
   db.none('INSERT INTO products(carousel_img, item_name, item_price, type, sort) VALUES(${src}, ${name}, ${price}, ${type}, ${sort})',{
     src: 'store_prods/tea/1/1.jpg',
@@ -116,7 +154,7 @@ router.route('/shop/:type?')
     }else if(type == 'tea'){
       var sql = checkFilters(req.query);
       console.log('here ', req.query);
-       var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? ' AND item_price < ' + req.query.range_of_price : '') + (req.query.weight? ' AND weight < '+ req.query.weight : ' ') + sql + ` ORDER BY id DESC`;
+       var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? 'AND item_price < ' + req.query.range_of_price : ' ') + (req.query.weight? ' AND weight < '+ req.query.weight : ' ') + sql + ` ORDER BY id DESC`;
        console.log(teaFilters);
       pgPool.query(teaFilters,[], function(err, response){
       if (err) return console.log(err);
@@ -132,7 +170,11 @@ router.route('/shop/:type?')
       });
   }
     else if(type=='coffee'){
-      pgPool.query(getCoffee,[], function(err, response){
+      var sql = checkCoffeeFilters(req.query);
+      console.log('here ', req.query);
+      var coffeeFilters = `SELECT * FROM coffee WHERE type='coffee' ` + (req.query.range_of_price? 'AND item_price < ' + req.query.range_of_price : ' ') + sql + ` ORDER BY id DESC`;
+      console.log(coffeeFilters);
+      pgPool.query(coffeeFilters,[], function(err, response){
       if (err) return console.error(err);
       var prods = response.rows;
       console.log(prods); //debug
