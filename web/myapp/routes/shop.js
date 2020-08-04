@@ -95,7 +95,7 @@ function addProduct() {
 /* GET users listing. */
 
 var getProducts = `SELECT * FROM tea ORDER BY id DESC`;
-var getCoffee = `SELECT * FROM tea WHERE type='coffee' ORDER BY id DESC`;
+var getCoffee = `SELECT * FROM coffee WHERE type='coffee' ORDER BY id DESC`;
 
 
 
@@ -115,10 +115,11 @@ router.route('/shop/:type?')
       });
     }else if(type == 'tea'){
       var sql = checkFilters(req.query);
-       var teaFilters = `SELECT * FROM tea WHERE type='tea'`+ (req.query.range_of_price? 'AND item_price < `+req.query.range_of_price+`': '') + (req.query.weight? 'AND weight< `+req.query.weight+`': '') + sql + ` ORDER BY id DESC`;
+      console.log('here ', req.query);
+       var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? ' AND item_price <' + req.query.range_of_price[0] : '') + (req.query.weight? 'AND weight< '+ req.query.weight[0] : '') + sql + ` ORDER BY id DESC`;
        console.log(teaFilters);
       pgPool.query(teaFilters,[], function(err, response){
-      if (err) return console.error(err);
+      if (err) return console.log(err);
       var prods = response.rows;
       console.log(prods); //debug
       res.render('shop.pug', {
@@ -129,7 +130,7 @@ router.route('/shop/:type?')
         type: 'tea',
         });
       });
-    }
+  }
     else if(type=='coffee'){
       pgPool.query(getCoffee,[], function(err, response){
       if (err) return console.error(err);

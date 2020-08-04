@@ -44,29 +44,28 @@ block content
 									input.tea(type='range' name='range_of_price' min='0' max='1000' id='range_price' value='1000' step='1')
 									.price_opt
 										p до
-										input(type='text' value='1000' id='input_range_price')
+										input(type='text' value='1000' id='input_range_price' )
 							li
 								a(class='filters_tags') Бренд
 								div.submenu_wrap
-									fieldset
-										.submenu
-											input(type='checkbox' name='greenfield')
-											label Greenfield
-										.submenu
-											input(type='checkbox' name='tess')
-											label Tess
-										.submenu
-											input(type='checkbox' name='nuri')
-											label Принцесса Нури
-										.submenu
-											input(type='checkbox' name='java')
-											label Принцесса Ява
-										.submenu
-											input(type='checkbox' name='candy')
-											label Принцесса Канди
-										.submenu
-											input(type='checkbox' name='shah')
-											label Шах
+									.submenu
+										input(type='checkbox' name='greenfield')
+										label Greenfield
+									.submenu
+										input(type='checkbox' name='tess')
+										label Tess
+									.submenu
+										input(type='checkbox' name='nuri')
+										label Принцесса Нури
+									.submenu
+										input(type='checkbox' name='java')
+										label Принцесса Ява
+									.submenu
+										input(type='checkbox' name='candy')
+										label Принцесса Канди
+									.submenu
+										input(type='checkbox' name='shah')
+										label Шах
 							li
 								a(class='filters_tags') Вид чая
 								.tea_type_wrap
@@ -223,11 +222,13 @@ block content
 									p до
 									input(type='text' value='1000' id='input_range_price')
 	script.
+		
 		window.onload = function(){
 			var range_price = document.getElementById('range_price');
 			var input_range_price = document.getElementById('input_range_price');
 			var range_weight = document.getElementById('range_weight');
 			var input_range_weight = document.getElementById('input_range_weight');	
+			
 			range_price.addEventListener('mousemove', function(){
 				input_range_price.value = range_price.value;
 			});
@@ -240,6 +241,7 @@ block content
 			input_range_weight.addEventListener('change', function(){
 				range_weight.value = input_range_weight.value;
 			});
+			
 		}
 		
 		$('.minus').on('click', function(){
