@@ -116,7 +116,7 @@ router.route('/shop/:type?')
     }else if(type == 'tea'){
       var sql = checkFilters(req.query);
       console.log('here ', req.query);
-       var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? ' AND item_price <' + req.query.range_of_price[0] : '') + (req.query.weight? 'AND weight< '+ req.query.weight[0] : '') + sql + ` ORDER BY id DESC`;
+       var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? ' AND item_price < ' + req.query.range_of_price : '') + (req.query.weight? ' AND weight < '+ req.query.weight : ' ') + sql + ` ORDER BY id DESC`;
        console.log(teaFilters);
       pgPool.query(teaFilters,[], function(err, response){
       if (err) return console.log(err);
