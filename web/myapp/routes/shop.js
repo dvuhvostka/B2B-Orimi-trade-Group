@@ -95,7 +95,7 @@ function addProduct() {
 /* GET users listing. */
 
 var getProducts = `SELECT * FROM tea ORDER BY id DESC`;
-var getCoffee = `SELECT * FROM products WHERE type='coffee' ORDER BY id DESC`;
+var getCoffee = `SELECT * FROM tea WHERE type='coffee' ORDER BY id DESC`;
 
 
 
