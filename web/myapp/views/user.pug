@@ -14,3 +14,30 @@ block content
           p Имя: #{user_name}
           p Фамилия: #{user_second_name}
           p Телефон: #{number}
+          if phone_confirmed==0
+            button Подтвердить номер телефона
+            input(type='text' placeholder='SMS Code')
+          if (type=='phys_type')
+            p Физ. лицо
+          if (type=='ur_type')
+            p Юр. лицо
+            if (org_info==1)
+              p #{info.status}
+            if (org_info==2)
+              p Статус: #{info.status}
+              p Название: #{info.org_name}
+              p Адрес: #{info.org_address}
+              p ИНН: #{info.owner_inn}
+              p Ваша должность: #{info.position}
+            if (org_info==0)
+              form(method='POST' action='/user')
+                input(type='text' name='org_name' required placeholder='Название организации' )
+                input(type='text' name='org_address' required placeholder='Адрес организации' )
+                input(type='text' name='inn' required placeholder='ИНН' )
+                select(name='position')
+                  option Владелец
+                  option Директор
+                  option Менеджер
+                  option Уборщик
+                input(type='button' id='redact' value='Загрузить фото документов')
+                input(type='submit' value='Создать заявку')

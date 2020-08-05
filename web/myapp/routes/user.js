@@ -40,27 +40,64 @@ user.route('/user')
   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
   pgPool.query(getUserData,[], function(err, response){
     if((response.rows[0].name==null)&&(response.rows[0].second_name==null)){
-      console.log(response.rows[0].number)
       res.render('user',{
         isRegistred: req.session.userId,
         user_name: 0,
         user_second_name: 0,
         number: response.rows[0].number
       })
-    }else{
-      res.render('user',{
-        isRegistred: req.session.userId,
-        user_name: response.rows[0].name,
-        user_second_name: response.rows[0].second_name,
-        number: response.rows[0].number
-      })
+    }else if(response.rows[0]){
+      var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+      var org_info = 0;
+      var status;
+      pgPool.query(get_org,[], function(err, resp){
+        if(resp.rows[0]){
+          if(resp.rows[0].org_confirmed == 0){org_info=1; var status = 'Организация ожидает подтверждения модератором.'}else{org_info=2; var status = 'Организация подтверждена.'}
+          var info = {};
+          info.org_name = resp.rows[0].org_name;
+          info.org_address = resp.rows[0].org_address;
+          info.owner_inn = resp.rows[0].owner_inn;
+          info.position = resp.rows[0].owner_position;
+          info.status = status;
+        }
+        res.render('user',{
+          isRegistred: req.session.userId,
+          user_name: response.rows[0].name,
+          user_second_name: response.rows[0].second_name,
+          number: response.rows[0].number,
+          phone_confirmed: response.rows[0].phone_confirmed,
+          type: response.rows[0].client_type,
+          org_info: org_info,
+          info: info
+        })
+      });
     }
-    console.log(response.rows)
   });
 }).post(function(req,res){
-    console.log(req.body.name);
-    var add_name_and_sname = `UPDATE users SET name='`+req.body.name+`', second_name='`+req.body.sname+`' WHERE id='`+req.session.userId+`'`;
-    pgPool.query(add_name_and_sname,[], function(err, response){});
+    var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
+    if((req.body.name)&&(req.body.sname)){
+      pgPool.query(getUserData,[], function(err, response){
+        if((!response.rows[0].name)&&(!response.rows[0].second_name)){
+          var add_name_and_sname = `UPDATE users SET name='`+req.body.name+`', second_name='`+req.body.sname+`' WHERE id='`+req.session.userId+`'`;
+          pgPool.query(add_name_and_sname,[], function(err, response){});
+        }
+      });
+    }else if(true){
+      console.log(req.body)
+      var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+      pgPool.query(get_org,[], function(err, response){
+          if(!response.rows[0]){
+            db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position})',  {
+              org_name: req.body.org_name,
+              org_address: req.body.org_address,
+              owner_inn: req.body.inn,
+              owner_id: req.session.userId,
+              org_confirmed: 0,
+              owner_position: req.body.position
+            });
+          }
+      });
+    }
     res.redirect('/user');
 });
 
