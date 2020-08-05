@@ -4,4 +4,13 @@ block content
   .container(class='card card-content')
     .row
       .col-sm
-        p 
+      form(method='POST' action='/user')
+        if ((user_name==0)&&(user_second_name==0))
+          p Необходимо заполнить профиль!
+          input(type='text' name='name' required placeholder='Name' )
+          input(type='text' name='sname' required placeholder='Second name' )
+          input(type='submit' id='redact' value='Сохранить изменения')
+        else
+          p Имя: #{user_name}
+          p Фамилия: #{user_second_name}
+          p Телефон: #{number}
