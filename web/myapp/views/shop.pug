@@ -73,13 +73,13 @@ block content
 										input(type='checkbox' name='black')
 										label Черный
 										.options
-											input(type='checkbox' name='black_1')
+											input(type='checkbox' name='black_1' onclick="check_black()")
 											label с добавками
 									.tea_type
 										input(type='checkbox' name='green')
 										label Зеленый
 										.options
-											input(type='checkbox' name='green_1')
+											input(type='checkbox' name='green_1' onclick="check_green()")
 											label с добавками
 									.tea_type
 										input(type='checkbox' name='herbal')
@@ -165,7 +165,7 @@ block content
 										input(type='checkbox' name='milled')
 										label Молотый 
 										.options
-											input(type='checkbox' name='milled_2')
+											input(type='checkbox' name='milled_2' onclick="check_milled()")
 											label  c ароматом
 									.submenu
 										input(type='checkbox' name='cereal')
@@ -264,6 +264,24 @@ block content
 			if((cereal_2.checked == false)&&(cereal_3.checked == false)&&(cereal_4.checked == false)){
 				cereal.checked = 0;
 			}
+		}
+		
+		function check_milled(){
+			var milled = document.getElementsByName('milled')[0];
+			var milled_2 = document.getElementsByName('milled_2')[0];
+				milled.checked = !0;
+		}
+		
+		function check_black(){
+			var black = document.getElementsByName('black')[0];
+			var black_1 = document.getElementsByName('black_1')[0];
+				black.checked = !0;
+		}
+		
+		function check_green(){
+			var green = document.getElementsByName('green')[0];
+			var green_1 = document.getElementsByName('green_1')[0];
+				green.checked = !0;
 		}
 		
 		$('.minus').on('click', function(){
