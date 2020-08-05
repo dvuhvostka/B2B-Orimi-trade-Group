@@ -171,13 +171,13 @@ block content
 										input(type='checkbox' name='cereal')
 										label Зерновой
 										.options
-											input(type='checkbox' name='cereal_2')
+											input(type='checkbox' name='cereal_2' onclick="check_cereal()")
 											label светлая обжарка
 										.options
-											input(type='checkbox' name='cereal_3')
+											input(type='checkbox' name='cereal_3' onclick="check_cereal()")
 											label средняя обжарка
 										.options
-											input(type='checkbox' name='cereal_4')
+											input(type='checkbox' name='cereal_4' onclick="check_cereal()")
 											label тёмная обжарка
 							li
 								a(class='filters_tags') Растворимый
@@ -251,6 +251,19 @@ block content
 				if (key=="weight"){input.value = params[key]; var input3 = document.getElementById('input_range_weight'); input3.value = params[key];}
 			input.checked = !0;
 			console.log(input);
+		}
+		
+		function check_cereal(){
+			var cereal = document.getElementsByName('cereal')[0];
+			var cereal_2 = document.getElementsByName('cereal_2')[0];
+			var cereal_3 = document.getElementsByName('cereal_3')[0];
+			var cereal_4 = document.getElementsByName('cereal_4')[0];
+			if((cereal_2.checked == true)||(cereal_3.checked == true)||(cereal_4.checked == true)){
+				cereal.checked = !0;
+			}
+			if((cereal_2.checked == false)&&(cereal_3.checked == false)&&(cereal_4.checked == false)){
+				cereal.checked = 0;
+			}
 		}
 		
 		$('.minus').on('click', function(){
