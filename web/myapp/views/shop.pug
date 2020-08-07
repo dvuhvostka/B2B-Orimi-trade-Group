@@ -4,7 +4,7 @@ block content
 	- var q = prod_count
 	- var Type = type;
 	script(src="../jquery-3.5.1.js")
-
+	
 	.grid-container
 		.carousel(class='slide' id='slider' data-rede='carousel')
 			.carousel-inner
@@ -17,14 +17,21 @@ block content
 					a(href='#' class='item_name') #{products[i].item_name}
 					p(class='item_price') #{products[i].item_price} р.
 					div.footer_item
-						button.btn.btn-primary Купить
+						button(class='btn btn-primary addtocart' type=products[i].type data-id=products[i].id) Купить
 						div Кол-во
 							.range_items
-								button.btn.btn-secondary.minus
+								button(class='btn btn-secondary minus')
 									i.fas.fa-minus.controls
-								input(type='text' value='1' class='input')
-								button.btn.btn-secondary.plus
+								input(type='text' value='1' class='input' data-id=products[i].id)
+								button(class='btn btn-secondary plus')
 									i.fas.fa-plus.controls
+		div(aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 200px;")
+			div(class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000")
+				div(class="toast-header")
+					strong(class="mr-auto") Уведомление
+					small(class="text-muted") Just now
+					button(type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close") &times;
+				div(class="toast-body")  Товар успешно добавлен в корзину.
 		.sidebar
 			case Type
 				when 'tea'
@@ -297,3 +304,27 @@ block content
 			var item = $(this);
 			item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
 		})
+		
+
+		
+		if(!localStorage.getItem('cart')){
+			var cart = {
+				coffee: {},
+				tea: {}
+			};
+		} else cart = JSON.parse(localStorage.getItem('cart'));
+	
+		
+		$('.addtocart').on('click', function(){
+			var item = $(this);
+			var data_id = item.attr('data-id');
+			var data_type = item.attr('type');
+			var input =  $('input[data-id|="'+data_id+'"]');
+			var articul = data_type+data_id;
+			
+			cart[articul] = input.val();
+			localStorage.setItem('cart', JSON.stringify(cart));
+			$('.toast').toast('show');
+			console.log(cart);
+		})
+	

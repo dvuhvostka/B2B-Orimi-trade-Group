@@ -1,5 +1,16 @@
 extends layout2
 
 block content
-  script(src="jquery-3.5.1.js")
+  script(src="../jquery-3.5.1.js")
   .container
+  
+  
+  script.
+    var cart;
+    if(localStorage.getItem('cart')){
+      var cart = JSON.parse(localStorage.getItem('cart'));
+      $.post("/cart", cart).done(function(data){
+        console.log(data);
+      });
+    }else {cart = 'Корзина пуста';}
+    console.log('cart.pug loaded')

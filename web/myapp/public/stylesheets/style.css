@@ -524,3 +524,8 @@ ul {
   .navbar-brand {
     font-size: 0.83em;
   }
+
+input.cart_href {
+  background-color: black;
+  margin-left: -200px;
+}
