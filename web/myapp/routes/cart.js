@@ -52,7 +52,7 @@ var products_data = {
 }
 
   if ((sql_coffee.length == 0)&&(sql_tea.length == 0)){
-    res.send('null');
+    res.send("POST");
   }else if((sql_coffee.length != 0)&&(sql_tea.length != 0)){
     db_cart.any(sql_coffee_result).then(function (data) {
       db_cart.any(sql_tea_result).then(function (data_2) {

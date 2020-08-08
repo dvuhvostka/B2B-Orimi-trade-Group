@@ -3,14 +3,36 @@ extends layout2
 block content
   script(src="../jquery-3.5.1.js")
   .container
-  
+    div.coffee
+    div.tea
   
   script.
     var cart;
     if(localStorage.getItem('cart')){
-      var cart = JSON.parse(localStorage.getItem('cart'));
+      var cart = 'hello';
+      cart = JSON.parse(localStorage.getItem('cart'));
       $.post("/cart", cart).done(function(data){
-        console.log(data);
+          switch(undefined) {
+            case data.coffee.length:
+              for(var i = 0; i<data.tea.length; i++){
+                console.log(data.tea[i]); 
+              }
+              break;
+            case data.tea.length: 
+              for(var i = 0; i<data.coffee.length; i++){
+                console.log(data.coffee[i]); 
+              }
+              break;
+            default: 
+              console.log("TEA: ")
+              for(var i = 0; i<data.tea.length; i++){
+                console.log(data.tea[i]); 
+              }
+              console.log("COFFEE:")
+              for(var i = 0; i<data.coffee.length; i++){
+                console.log(data.coffee[i]); 
+              }
+              break;
+          }
       });
-    }else {cart = 'Корзина пуста';}
-    console.log('cart.pug loaded')
+    }else {console.log('cart in null')}
