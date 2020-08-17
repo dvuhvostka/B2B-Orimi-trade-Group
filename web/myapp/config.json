@@ -2,7 +2,7 @@
   "SESS_SECRET": "ssh!quiet,it\"dexat0randz0rax!",
   "ENVIRONMENT": "development",
   "SESS_NAME": "sid",
-  "DB_USER": "postgres",
+  "DB_USER": "z0rax",
   "DB_PASSWORD": "12345",
   "DB_HOST": "localhost",
   "DB_NAME": "mydb",

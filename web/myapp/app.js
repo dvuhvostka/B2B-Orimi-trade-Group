@@ -38,13 +38,14 @@ const {
   HOST = config.DB_HOST,
   DBNAME = config.DB_NAME
 } = process.env
+
 //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
 const IN_PROD = ENVIRONMENT === 'production';
 //coneccting to database config
 var pgPool = new Pool({
   host: HOST,
-  user: USER,
-  password: PASSWORD,
+  user: "z0rax",
+  password: "12345",
   database: DBNAME
 });
 

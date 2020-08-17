@@ -19,10 +19,10 @@ const {
 } = process.env
 
 var pgPool = new Pool({
-  host: HOST,
-  user: USER,
-  password: PASSWORD,
-  database: DBNAME
+  host: "localhost",
+  user: "z0rax",
+  password: "12345",
+  database: "mydb"
 });
 
 function checkFilters (data){
