@@ -9,7 +9,7 @@ block content
           p Необходимо заполнить профиль!
           input(type='text' name='name' required placeholder='Name' )
           input(type='text' name='sname' required placeholder='Second name' )
-          input(type='submit' id='redact' value='Сохранить изменения')
+          input(type='submit' id='redact' value='Сохранить изменения' onclick="document.location.href='/user'")
         else
           p Имя: #{user_name}
           p Фамилия: #{user_second_name}
@@ -51,15 +51,15 @@ block content
                   option Менеджер
                   option Уборщик
                 input(type='button' id='redact' value='Загрузить фото документов')
-                input(type='submit' value='Создать заявку')
+                input(type='submit' value='Создать заявку' onclick="document.location.href='/user'")
           if (deals == 0)
             p
-             b У вас нет совершенных сделок!
+              b У вас нет совершенных сделок!
           else 
             p 
               b Ваши сделки (#{deals.length} шт.):
               -for (var i=0; i<deals.length; i++)
                 p 
                   b - Сделка #{i+1} (id: #{deals[i].id})
-                -for (var x=0; x<deals[i].length; x++)
-                  p #{deals[i][x]}
+                  -for (var x=0; x<deals[i].length; x++)
+                    p #{deals[i][x]}

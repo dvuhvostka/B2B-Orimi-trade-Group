@@ -68,7 +68,7 @@ router.route('/register')
             //нужно сообщить клиенту, что этот email уже занят.
           } else {
             userinfo.user_id = uuidv4();
-            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type, number, id) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, $(id))',  {
+            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type, number, id, phone_confirmed) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, ${id}, ${phone_confirmed})',  {
                 username: req.body.name,
                 email: req.body.email,
                 password: md5(req.body.password),
@@ -77,7 +77,8 @@ router.route('/register')
                 permissions: 'user',
                 client_type: req.body.customRadioInline1,
                 number: req.body.phone_number,
-                id: userinfo.user_id
+                id: userinfo.user_id,
+                phone_confirmed: "0"
             });
           }
       })
