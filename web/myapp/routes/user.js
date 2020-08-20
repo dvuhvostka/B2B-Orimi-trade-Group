@@ -22,8 +22,8 @@ const {
 
 var pgPool = new Pool({
   host: HOST,
-  user: USER,
-  password: PASSWORD,
+  user: "z0rax",
+  password: "12345",
   database: DBNAME
 });
 
@@ -38,6 +38,7 @@ const redirectLogin = function(req,res,next){
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
+  var getUserDeals = `SELECT * FROM deals WHERE deal_owner='`+req.session.userId+`'`;
   pgPool.query(getUserData,[], function(err, response){
     if((response.rows[0].name==null)&&(response.rows[0].second_name==null)){
       res.render('user',{
@@ -60,16 +61,35 @@ user.route('/user')
           info.position = resp.rows[0].owner_position;
           info.status = status;
         }
-        res.render('user',{
-          isRegistred: req.session.userId,
-          user_name: response.rows[0].name,
-          user_second_name: response.rows[0].second_name,
-          number: response.rows[0].number,
-          phone_confirmed: response.rows[0].phone_confirmed,
-          type: response.rows[0].client_type,
-          org_info: org_info,
-          info: info
-        })
+        var deals = 0;
+        db.any(getUserDeals).then(function(data) {
+          if(data){deals = data;}
+          var dealsdata = {};
+          var d_data = [];
+          for (var x = 0; x<data.length; x++){
+            if(!dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id] = []; dealsdata[data[x].deal_id].id = data[x].deal_id;}
+            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+" "+data[x].count+" шт.")}
+          }
+          var deals_count = Object.keys(dealsdata).length;
+          console.log("You have: ",deals_count," deals");
+          for(key in dealsdata){
+            d_data.push(dealsdata[key]);
+          }
+          console.log(d_data);
+          res.render('user',{
+            isRegistred: req.session.userId,
+            user_name: response.rows[0].name,
+            user_second_name: response.rows[0].second_name,
+            number: response.rows[0].number,
+            phone_confirmed: response.rows[0].phone_confirmed,
+            type: response.rows[0].client_type,
+            org_info: org_info,
+            info: info,
+            deals: d_data
+          });
+        }).catch(error => {
+          console.log('ERROR:', error);
+        });
       });
     }
   });

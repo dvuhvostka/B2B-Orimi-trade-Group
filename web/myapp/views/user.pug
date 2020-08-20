@@ -19,6 +19,17 @@ block content
             input(type='text' placeholder='SMS Code')
           if (type=='phys_type')
             p Физ. лицо
+            if (deals == 0)
+              p
+               b У вас нет совершенных сделок!
+            else 
+              p 
+                b Ваши сделки (#{deals.length} шт.):
+                -for (var i=0; i<deals.length; i++)
+                  p 
+                    b - Сделка #{i+1} (id: #{deals[i].id})
+                  -for (var x=0; x<deals[i].length; x++)
+                    p #{deals[i][x]}
           if (type=='ur_type')
             p Юр. лицо
             if (org_info==1)
@@ -41,3 +52,14 @@ block content
                   option Уборщик
                 input(type='button' id='redact' value='Загрузить фото документов')
                 input(type='submit' value='Создать заявку')
+          if (deals == 0)
+            p
+             b У вас нет совершенных сделок!
+          else 
+            p 
+              b Ваши сделки (#{deals.length} шт.):
+              -for (var i=0; i<deals.length; i++)
+                p 
+                  b - Сделка #{i+1} (id: #{deals[i].id})
+                -for (var x=0; x<deals[i].length; x++)
+                  p #{deals[i][x]}
