@@ -486,8 +486,12 @@ ul {
 .card#user_page {
   width: 40%;
   margin-top: 20px;
-  min-width: 280px;
-  max-height: 550px;
+  min-width: 587px;
+  max-height: 500px;
+}
+
+#nav-profile {
+  margin: 30px 15% 0;
 }
 
 #nav_panel{
@@ -497,16 +501,49 @@ ul {
 }
 
 #profile {
-  margin-left: 10px;
+
+}
+
+#phone {
+  margin-right:20px;
+}
+
+#phone_input {
+  min-width: 45px;
+  max-width:70px;
+  text-align: center;
+  height: 30px;
+  margin-left: 20px;
+}
+
+#phone_button {
+  height: 30px;
+  font-size: 13px;
+  vertical-align: middle;
+  margin-left: 20px;
 }
 
 .in {
   display: flex;
 }
+#name {
+  margin-right: 20px;
+}
 
+#surname {
+  margin-right: 20px;
+}
 .in > p:nth-child(1){
   color: rgb(108, 112, 112);
-  text-align: right;
+  margin-right:10px;
+}
+
+.p-danger {
+  font-size: 12px;
+  vertical-align: middle;
+  margin: 3px 0 0 20px;
+  font-weight: bold;
+  color: rgb(238, 61, 61);
 }
 /* ----------- */
 

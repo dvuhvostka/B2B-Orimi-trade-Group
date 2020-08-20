@@ -7,7 +7,6 @@ var session = require('express-session');
 var config = require('../config');
 var {Pool, Client} = require('pg');
 var pgp = require("pg-promise")(/*options*/);
-var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -20,6 +19,7 @@ const {
   DBNAME = config.DB_NAME
 } = process.env
 
+var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
 var pgPool = new Pool({
   host: HOST,
   user: "z0rax",

@@ -6,7 +6,6 @@ var bodyParser = require('body-parser')
 var config = require('../config');
 //var {Pool, Client} = require('pg');
 var request = require('request');
-<<<<<<< HEAD
 var pgp = require("pg-promise")(/*options*/);
 
 const {
@@ -21,10 +20,6 @@ const {
 } = process.env
 var db_cart = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
 
-=======
-var pgp = require("pg-promise")( /*options*/ );
-var db_cart = pgp("postgres://" + config.DB_USER + ":" + config.DB_PASSWORD + "@" + config.DB_HOST + ":5432/" + config.DB_NAME);
->>>>>>> d2b88e47f0f7d4ab31b87ec427d0a49289b6236e
 
 var serverCart = [];
 
