@@ -1,107 +1,70 @@
-// Example starter JavaScript for disabling form submissions if there are invalid fields
-// (function() {
-//   'use strict';
-//   window.addEventListener('load', function() {
-//     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-//     var forms = document.getElementsByClassName('needs-validation');
-//     var pass = document.getElementById('validationCustom03');
-//     console.log(pass);
-//     pass.classList.add('is-invalid')
-//     var validation = Array.prototype.filter.call(forms, function(form) {
-//       form.addEventListener('submit', function(event) {
-//         if (form.checkValidity() === false  ) {
-//            event.preventDefault();
-//            event.stopPropagation();
-//          }
-//          form.classList.add('was-validated');
-//
-//        }, false);
-//     });
-//
-//   }, false);
-// })();
-function emailIsValid (email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
-function nameIsValid(name){
-  return /^([а-яё]{1,23}|[a-z]{1,23})$/gm.test(name)
-}
-function xss_check(replace){
-  var pattern = /script|javascript|src|onerror|%|<|>/g;
-  if(replace.name.search(pattern)<0 && replace.email.search(pattern)<0) return false; else return true;
-}
-function validateInput(email, name, pass, conf, phone){
-  flag = true;
-  if (!nameIsValid(name.value)){
-    name.classList.remove('is-valid');
-    name.classList.add('is-invalid');
-  }else {
-    name.classList.remove('is-invalid');
-    name.classList.add('is-valid');
-    flag = false;
-  }
-  if (phone.value.length == 0){
-    phone.classList.remove('is-valid');
-    phone.classList.add('is-invalid');
-    flag = true;
-  } else{
-    phone.classList.remove('is-invalid');
-    phone.classList.add('is-valid');
-    flag = false;
-  }
-  if (email.value.length == 0){
-    email.classList.remove('is-valid');
-    email.classList.add('is-invalid');
-    flag = true;
-  } else if (!emailIsValid(email.value) || !xss_check(email.value)){
-    email.classList.remove('is-valid');
-    email.classList.add('is-invalid');
-    flag = true;
-  }else {
-    email.classList.remove('is-invalid');
-    email.classList.add('is-valid');
-    flag = false;
-  }
-  if (pass.value.length <= 7){
-    pass.classList.remove('is-valid');
-    pass.classList.add('is-invalid');
-    flag = true;
-  } else{
-    pass.classList.remove('is-invalid');
-    pass.classList.add('is-valid');
-    flag = false;
-    if(pass.value != conf.value){
-      pass.classList.remove('is-valid');
-      conf.classList.add('is-invalid');
-      flag = true;
-    } else{
-      conf.classList.remove('is-invalid');
-      conf.classList.add('is-valid');
-      flag = false;
-    }
-  }
-
-  return flag;
-}
-
-
-(function(){
-  window.addEventListener('load', function(){
-    var form = document.querySelector('.needs-validation');
-    var validatebtn = document.querySelector('.validate-btn');
-    var email = document.querySelector('.email');
-    var name = document.querySelector('.name');
-    var pass = document.querySelector('.pass');
-    var conf_pass = document.querySelector('.conf_pass');
-    var phys = document.querySelector('.phys');
-    var ur = document.querySelector('.ur');
-    var phone = document.querySelector('.phone');
-    form.addEventListener('submit', function(event){
-      if (validateInput(email, name, pass, conf_pass, phone)){
-        event.preventDefault();
-        event.stopPropagation();
+document.addEventListener('DOMContentLoaded', function() {
+  let inputs = document.querySelectorAll('input[data-rule]');
+  console.log(inputs);
+  for (let input of inputs){
+    input.addEventListener('blur', function(){
+      let rule = this.dataset.rule;
+      let value = this.value;
+      let check;
+      let pass;
+      console.log(value);
+      console.log(rule);
+      switch (rule) {
+        case 'email':
+          check = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W\d])$/gm.test(value);
+        break;
+        case 'name':
+          check = value.match(/(^[А-Я]?[а-я]+|^[A-Z]?[a-z]+)|(^[А-Я]+[а-я]*|^[A-Z]+[a-z]*)+$/gm);
+        break;
+        case 'phone':
+          if(value.length - 4 > 0)
+            check = true;
+          else
+            check = false;
+        break;
+        case 'second_name':
+          check = value.match(/(^[А-Я]?[а-я]+|^[A-Z]?[a-z]+)|(^[А-Я]+[а-я]*|^[A-Z]+[a-z]*)+$/gm);
+        break;
+        case 'third_name':
+          check = value.match(/(^[А-Я]?[а-я]+|^[A-Z]?[a-z]+)|(^[А-Я]+[а-я]*|^[A-Z]+[a-z]*)+$/gm);
+        break;
+        case 'password':
+          pass = value;
+          if (value.length <= 64 && value.match(/[\d*\w*][^\W]{8,64}$/)){
+            check = true;
+          }
+          else
+            check = false;
+        break;
+        case 'conf_pass':
+          let password = document.querySelector('[data-rule="password"]');
+          if (password.value == value)
+            check = true;
+          else
+            check = false;
+        break;
       }
-      console.log(phone.value);
-    })
+      console.log(check);
+      if (check){
+        this.classList.remove('is-invalid');
+        this.classList.add('is-valid');
+      } else {
+        this.classList.remove('is-valid');
+        this.classList.add('is-invalid');
+      }
+    });
+  }
+  let btn = document.querySelector('.validate-btn');
+  btn.addEventListener('click', function(e){
+    let checked = false;
+    for (let input of inputs){
+      if (input.classList.contains('is-valid'))
+        checked = true;
+      else
+        checked = false;
+    }
+    if (!checked) {
+      e.preventDefault();
+    }
   });
-})();
+});

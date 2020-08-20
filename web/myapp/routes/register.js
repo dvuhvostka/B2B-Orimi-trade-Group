@@ -82,8 +82,10 @@ router.route('/register')
             //нужно сообщить клиенту, что этот email уже занят.
           } else {
             userinfo.user_id = uuidv4();
-            db.none('INSERT INTO users(username, email, password, ip_addr, balance, permissions, client_type, number, id, phone_confirmed) VALUES(${username}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, ${id}, ${phone_confirmed})',  {
+            db.none('INSERT INTO users(username, second_name , third_name, email, password, ip_addr, balance, permissions, client_type, number, id, phone_confirmed) VALUES(${username}, ${second_name}, ${third_name}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, ${id}, ${phone_confirmed})',  {
                 username: req.body.name,
+                second_name: req.body.second_name,
+                third_name: req.body.third_name,
                 email: req.body.email,
                 password: md5(req.body.password),
                 ip_addr: ip_result,

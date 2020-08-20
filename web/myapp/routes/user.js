@@ -20,6 +20,7 @@ const {
 } = process.env
 
 var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
+
 var pgPool = new Pool({
   host: HOST,
   user: "z0rax",
@@ -35,21 +36,13 @@ const redirectLogin = function(req,res,next){
   }
 }
 
+
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
   var getUserDeals = `SELECT * FROM deals WHERE deal_owner='`+req.session.userId+`'`;
   pgPool.query(getUserData,[], function(err, response){
-    if((response.rows[0].name==null)&&(response.rows[0].second_name==null)){
-      res.render('user',{
-        isRegistred: req.session.userId,
-        user_name: 0,
-        user_second_name: 0,
-        number: response.rows[0].number,
-        balance:response.rows[0].balance,
-        title: 'Профиль'
-      })
-    }else if(response.rows[0]){
+    if(response.rows[0]){
       var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
       var org_info = 0;
       var status;
@@ -70,7 +63,7 @@ user.route('/user')
           var d_data = [];
           for (var x = 0; x<data.length; x++){
             if(!dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id] = []; dealsdata[data[x].deal_id].id = data[x].deal_id;}
-            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+" "+data[x].count+" шт.")}
+            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].product_id+":"+data[x].sort+":"+data[x].type)}
           }
           var deals_count = Object.keys(dealsdata).length;
           console.log("You have: ",deals_count," deals");
@@ -80,13 +73,14 @@ user.route('/user')
           console.log(d_data);
           res.render('user',{
             isRegistred: req.session.userId,
-            user_name: response.rows[0].name,
+            user_name: response.rows[0].username,
             user_second_name: response.rows[0].second_name,
+            user_third_name: response.rows[0].third_name,
             number: response.rows[0].number,
             phone_confirmed: response.rows[0].phone_confirmed,
             type: response.rows[0].client_type,
+            balance: response.rows[0].balance,
             org_info: org_info,
-            balance:response.rows[0].balance,
             info: info,
             deals: d_data
           });

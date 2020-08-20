@@ -17,7 +17,6 @@ html, body {
 }
 
 main {
-  min-height: 100%;
   height: auto;
   font-family: 'Roboto', sans-serif;
 }
@@ -26,6 +25,9 @@ nav {
   font-family: 'Roboto Slab', serif;
 }
 
+footer {
+  max-height: 20vh;
+}
 
 li {
   list-style: none;
@@ -67,11 +69,6 @@ ul {
   .navbar-brand {
     font-size: 0.8em;
   }
-}
-
-#main-wrap {
-  height: auto;
-  min-height: 100vh;
 }
 
 /* shop styles */
@@ -435,16 +432,14 @@ ul {
 /* login and register styles */
 .card#log_page {
   width: 40%;
-  margin-top: 20px;
+  margin: 20px 0;
   min-width: 280px;
-  max-height: 550px;
 }
 
 .card#reg_page {
   width: 40%;
-  margin-top: 20px;
+  margin: 20px 0;
   min-width: 280px;
-  max-height: 850px;
 }
 
 
@@ -486,8 +481,7 @@ ul {
 .card#user_page {
   width: 40%;
   margin-top: 20px;
-  min-width: 587px;
-  max-height: 500px;
+  min-width: 750px;
 }
 
 #nav-profile {
@@ -500,12 +494,14 @@ ul {
   padding: 0 10px 0 10px;
 }
 
-#profile {
-
+#type {
+  font-style: italic;
+  min-width: 80px;
 }
 
-#phone {
+#phone > p:nth-child(2){
   margin-right:20px;
+  margin-bottom: 0;
 }
 
 #phone_input {
@@ -513,7 +509,17 @@ ul {
   max-width:70px;
   text-align: center;
   height: 30px;
-  margin-left: 20px;
+  margin-top: 1px;
+}
+
+#phone_confirm {
+  min-width:340px;
+}
+#sms_button {
+  height: 30px;
+  font-size: 13px;
+  vertical-align: middle;
+  margin-right: 20px;
 }
 
 #phone_button {
@@ -526,24 +532,79 @@ ul {
 .in {
   display: flex;
 }
-#name {
+#name, #surname, #third_name {
   margin-right: 20px;
 }
 
 #surname {
   margin-right: 20px;
 }
+
 .in > p:nth-child(1){
   color: rgb(108, 112, 112);
   margin-right:10px;
 }
 
+#profile p {
+  font-size: 15px;
+}
+
 .p-danger {
-  font-size: 12px;
+  font-size: 14px;
   vertical-align: middle;
-  margin: 3px 0 0 20px;
+  margin: 3px 0 0;
   font-weight: bold;
-  color: rgb(238, 61, 61);
+  color: rgb(238, 61, 61) !important;
+}
+
+#org_info {
+  margin-top:5px;
+  margin-bottom: 50px;
+}
+
+#org_form {
+  display: flex;
+  flex-direction: column;
+  margin-top:10px;
+}
+
+#org_form input {
+  margin-bottom: 10px;
+}
+
+#org_form select {
+  margin-bottom: 10px;
+  height:30px;
+}
+
+.spinner-border {
+  margin: 5rem 47.4%;
+}
+
+#docs {
+  position: absolute;
+  width:0.1px;
+  height:0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+#deals{
+  margin-left:10px;
+  text-align: center;
+  margin: 30px 0;
+}
+.deal {
+  margin: 0 0 10px 10px;
+}
+.deal img {
+  width: 70px;
+  height: 70px;
+}
+
+.deal p {
+  margin-bottom: 0;
 }
 /* ----------- */
 

@@ -1,75 +1,98 @@
 extends layout2
-
+block scripts
+  script(src='user_js.js')
 block content
   #user_page(class='card card-content shadow-lg mx-auto')
     nav#nav_panel
       .nav.nav-tabs.nav-fill#nav-tab(role='tablist')
-        a(class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true") Профиль
-        a(class="nav-item nav-link " id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Заказы
-        a(class="nav-item nav-link " id="nav-balance-tab" data-toggle="tab" href="#nav-balance" role="tab" aria-controls="nav-balance" aria-selected="false") Баланс
+        a(class="nav-item nav-link " id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true") Профиль
+        a(class="nav-item nav-link active" id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Заказы
+        a(class="nav-item nav-link" id="nav-balance-tab" data-toggle="tab" href="#nav-balance" role="tab" aria-controls="nav-balance" aria-selected="false") Баланс
     .tab-content
       .tab-pane.fade.show.active#nav-profile.panel(role='tabpanel' area-labelledby='nav-profile-tab')
-        if ((user_name==0)&&(user_second_name==0))
-          form#profile(method='POST' action='/user')
-            p Необходимо заполнить профиль!
-            input(type='text' name='name' required placeholder='Name' )
-            input(type='text' name='sname' required placeholder='Second name' )
-            input(type='submit' id='redact' value='Сохранить изменения')
-        else
-          #profile
-            .in
-              #name.in
-                p Имя: 
-                p #{user_name}
-              #surname.in  
-                p Фамилия:
-                p #{user_second_name}
-              if (type=='phys_type')
-                p#type Физ. лицо
-              if (type=='ur_type')
-                p#type Юридическое лицо
-            #phone.in  
-              p Телефон:
-              p #{number}
-              if phone_confirmed==0
-                p.p-danger Необходимо подтверждение!
+        #profile
+          .in
+            #name.in
+              p Имя: 
+              p #{user_name}
+            #surname.in  
+              p Фамилия:
+              p #{user_second_name}
+            #third_name.in
+              p Отчество:
+              p #{user_third_name}
+            if (type=='phys_type')
+              p#type Физ. лицо
+            if (type=='ur_type')
+              p#type Юридическое лицо
+          #phone.in  
+            p Телефон:
+            p #{number}
             if phone_confirmed==0
-              form(method="POST" action='#')
-                input#phone_input(type='text' placeholder='_ _ _ _')
-                button#phone_button.btn.btn-success Подтвердить
+              a(data-toggle='collapse' href='#phone_confirm' aria-expanded="false" aria-controls="phone_confirm").p-danger Необходимо подтверждение!
+          if phone_confirmed==0
+            #phone_confirm.collapse
+              button#sms_button.btn.btn-primary Отправить СМС
+              input#phone_input(type='text' placeholder='_ _ _ _')
+              button(disabled)#phone_button.btn.btn-success Подтвердить
+          #org_info
             if (org_info==1)
-              p #{info.status}
+              .in
+                p Статус:
+                p.text-info #{info.status}
             if (org_info==2)
-              p Статус: #{info.status}
-              p Название: #{info.org_name}
-              p Адрес: #{info.org_address}
-              p ИНН: #{info.owner_inn}
-              p Ваша должность: #{info.position}
-            if (org_info==0)
-              form(method='POST' action='/user')
-                input(type='text' name='org_name' required placeholder='Название организации' )
-                input(type='text' name='org_address' required placeholder='Адрес организации' )
-                input(type='text' name='inn' required placeholder='ИНН' )
-                select(name='position')
-                  option Владелец
-                  option Директор
-                  option Менеджер
-                  option Уборщик
-                input(type='button' id='redact' value='Загрузить фото документов')
-                input(type='submit' value='Создать заявку')
+              .in
+                p Статус: 
+                p.text-success #{info.status}
+              .in
+                p Название:
+                p #{info.org_name}
+              .in
+                p Адрес: 
+                p #{info.org_address}
+              .in
+                p ИНН: 
+                p #{info.owner_inn}
+              .in
+                p Ваша должность:
+                p #{info.position}
+            if (org_info==0 && type=='ur_type')
+              a(data-toggle='collapse' href='#org_confirm' aria-expanded="false" aria-controls="org_confirm").p-danger Вы не закончили регистрацию!
+              #org_confirm.collapse
+                form(method='POST' action='/user')#org_form
+                  input(type='text' name='org_name' required placeholder='Название организации' id='org_name' )
+                  input(type='text' name='org_address' required placeholder='Адрес организации' id='org_address')
+                  input(type='text' name='inn' required placeholder='ИНН' pattern='[0-9]{10,}' id='inn')
+                  select(name='position' placeholder='Должность')
+                    option(disabled selected) Должность
+                    option Владелец
+                    option Директор
+                    option Менеджер
+                  input(type='file' id='docs' multiple data-multiple-caption='{count} файлов выбрано')
+                  label.btn.btn-outline-info(type='button' id='redact' for='docs')
+                    span Загрузить фото документов
+                  input.btn.btn-outline-success(type='submit' value='Создать заявку')
       .tab-pane.fade#nav-orders.panel(role='tabpanel' area-labelledby='nav-orders-tab')
-        if (deals == 0)
-          p
-           b У вас нет совершенных сделок!
-        else 
-          p 
-            b Ваши сделки (#{deals.length} шт.):
-            -for (var i=0; i<deals.length; i++)
-              p 
-                b - Сделка #{i+1} (id: #{deals[i].id})
-              -for (var x=0; x<deals[i].length; x++)
-                p #{deals[i][x]}
+        .spinner-border(role='status')
+          span.sr-only Loading...
+        #deals.d-none
+          if (deals == 0)
+            p
+             b У вас нет совершенных сделок!
+          else 
+            p 
+              b Ваши сделки (#{deals.length} шт.):
+              -for (var i=0; i<deals.length; i++)
+                p 
+                  b Сделка #{i+1} (id: #{deals[i].id})
+                -for (var x=0; x<deals[i].length; x++)
+                  .in.deal
+                    img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
+                    p(style='margin-top:8px; margin-left:10px;') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1]}  шт.
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
         p Ваш баланс составляет: #{balance}
-        
+  script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
+
+    
+    
         

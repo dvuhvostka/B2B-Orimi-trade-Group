@@ -1,6 +1,7 @@
 extends layout2
 
-  
+block scripts
+  script(src='validate_form_register.js')
 block content
   div#reg_page(class='card shadow-lg card-content mx-auto')
     ul
@@ -14,36 +15,42 @@ block content
         .row(class='justify-content-center')
           div(class='col-lg-6 mb-3')
             label(for="validationCustom01") Электронная почта
-            input(type='email' class='form-control email' id='validationCustom01' required placeholder='ivanov@yandex.ru' name='email')
-            .valid-feedback Awesome email!
+            input(type='email' data-rule='email' class='form-control email' id='validationCustom01' required placeholder='ivanov@yandex.ru' name='email')
             .invalid-feedback Некорректный email!
         .row(class='justify-content-center')
           div(class='col-lg-6 mb-3')
             label(for="validationCustom02") Имя
-            input(type='text' class='form-control name' id='validationCustom02' required placeholder='Иван' name='name')
-            .valid-feedback Awesome name!
-            .invalid-feedback Некорректное имя!
+            input(type='text' data-rule='name' class='form-control name' id='validationCustom02' required placeholder='Иван' name='name' pattern='^[А-Яа-яЁё]+$')
+            .invalid-feedback Некорректное заполнено поле!
+        .row(class='justify-content-center')
+          div(class='col-lg-6 mb-3')
+            label(for="validationCustom03") Фамилия
+            input(type='text' data-rule='second_name' class='form-control second_name' id='validationCustom05' required placeholder='Иванов' name='second_name' pattern='^[А-Яа-яЁё]+$')
+            .invalid-feedback Некорректное заполнено поле!
+        .row(class='justify-content-center')
+          div(class='col-lg-6 mb-3')
+            label(for="validationCustom04") Отчество
+            input(type='text' data-rule='third_name' class='form-control third_name' id='validationCustom06' required placeholder='Иванович' name='third_name' pattern='^[А-Яа-яЁё]+$')
+            .invalid-feedback Некорректное заполнено поле!
         .row(class='justify-content-center')
           div(class='col-lg-6 mb-3')
             label(for="telephone") Номер телефона
-            input(type='text' class='phone form-control' id='phone' required placeholder='+7 (___) ___-__-__' name='phone_number' pattern='[0-9]{,10}')
-            .valid-feedback Awesome phone number!
+            input(type='text' data-rule='phone' class='phone form-control' id='phone' required placeholder='+7 (___) ___-__-__' name='phone_number')
             .invalid-feedback Некорректный номер телефона!
         script.
           $(function($){
-            $("#phone").mask("+7 (999) 999-99-99");
+            $("#phone").mask("+7 999 9999999",{placeholder: ''});
           });
         .row(class='justify-content-center')
           div(class='col-lg-6 mb-3')
             label(for="validationCustom03") Пароль
-            input(type='password' class='form-control pass' id='validationCustom03' required  name='password')
+            input(type='password' data-rule='password' class='form-control pass' id='validationCustom03' required  name='password')
             small(class='form-text text-muted') Ваш пароль должен иметь более 8 символов
-            .invalid-feedback Слишком короткий пароль!
-            .valid-feedback Крутой пароль!
+            .invalid-feedback Некорректное заполнено поле!
         .row(class='justify-content-center')
           div(class='col-lg-6 mb-3')
             label(for="validationCustom04") Подтвердите пароль
-            input(type='password' class='form-control conf_pass' id='validationCustom04' required  name='confirm_password')
+            input(type='password' data-rule='conf_pass' class='form-control conf_pass' id='validationCustom04' required  name='confirm_password')
             .invalid-feedback Пароли не совпадают!
             .valid-feedback Пароли совпадают!
         .row
@@ -55,5 +62,5 @@ block content
               input(type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input ur" value='ur_type')
               label(class="custom-control-label" for="customRadioInline2") Юридическое лицо
         .row(class='justify-content-center mt-3')
-          button(class="btn btn-primary validate-btn" type="submit" onclick="document.location.href='/user'") Зарегистрироваться
+          button(class="btn btn-primary validate-btn" type="submit") Зарегистрироваться
     script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")

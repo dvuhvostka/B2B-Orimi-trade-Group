@@ -81,6 +81,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public/images'));
 app.use(express.static('public/stylesheets'));
+app.use(express.static('public/javascripts'));
 app.use(bodyParser.json());
 
 app.use(function(req, res, next) {

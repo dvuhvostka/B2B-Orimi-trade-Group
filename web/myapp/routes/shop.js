@@ -149,6 +149,7 @@ router.route('/shop/:type?')
         products: prods,
         prod_count: prods.length,
         title: 'Фирменный магазин Орими-трэйд',
+        needFooter: true
         });
       });
     }else if(type == 'tea'){
@@ -166,6 +167,7 @@ router.route('/shop/:type?')
         prod_count: prods.length,
         title: 'Фирменный магазин Орими-трэйд',
         type: 'tea',
+        needFooter: true
         });
       });
   }
@@ -184,6 +186,7 @@ router.route('/shop/:type?')
         prod_count: prods.length,
         title: 'Фирменный магазин Орими-трэйд',
         type: 'coffee',
+        needFooter: true
         });
       });
     }
