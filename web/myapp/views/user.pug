@@ -62,4 +62,5 @@ block content
                 p 
                   b - Сделка #{i+1} (id: #{deals[i].id})
                   -for (var x=0; x<deals[i].length; x++)
-                    p #{deals[i][x]}
+                    p #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1]} шт
+                    img(style="weight: 250px; height: 250px;" src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
