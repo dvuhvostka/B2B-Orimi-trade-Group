@@ -1,43 +1,61 @@
 extends layout2
 
 block content
-  .container(class='card card-content')
-    .row
-      .col-sm
-      form(method='POST' action='/user')
-        if ((user_name==0)&&(user_second_name==0))
-          p Необходимо заполнить профиль!
-          input(type='text' name='name' required placeholder='Name' )
-          input(type='text' name='sname' required placeholder='Second name' )
-          input(type='submit' id='redact' value='Сохранить изменения')
-        else
-          p Имя: #{user_name}
-          p Фамилия: #{user_second_name}
-          p Телефон: #{number}
-          if phone_confirmed==0
-            button Подтвердить номер телефона
-            input(type='text' placeholder='SMS Code')
-          if (type=='phys_type')
-            p Физ. лицо
-          if (type=='ur_type')
-            p Юр. лицо
-            if (org_info==1)
-              p #{info.status}
-            if (org_info==2)
-              p Статус: #{info.status}
-              p Название: #{info.org_name}
-              p Адрес: #{info.org_address}
-              p ИНН: #{info.owner_inn}
-              p Ваша должность: #{info.position}
-            if (org_info==0)
-              form(method='POST' action='/user')
-                input(type='text' name='org_name' required placeholder='Название организации' )
-                input(type='text' name='org_address' required placeholder='Адрес организации' )
-                input(type='text' name='inn' required placeholder='ИНН' )
-                select(name='position')
-                  option Владелец
-                  option Директор
-                  option Менеджер
-                  option Уборщик
-                input(type='button' id='redact' value='Загрузить фото документов')
-                input(type='submit' value='Создать заявку')
+  #user_page(class='card card-content shadow-lg mx-auto')
+    nav#nav_panel
+      .nav.nav-tabs.nav-fill#nav-tab(role='tablist')
+        a(class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true") Профиль
+        a(class="nav-item nav-link " id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Заказы
+        a(class="nav-item nav-link " id="nav-balance-tab" data-toggle="tab" href="#nav-balance" role="tab" aria-controls="nav-balance" aria-selected="false") Баланс
+    .tab-content
+      .tab-pane.fade.show.active#nav-profile.panel(role='tabpanel' area-labelledby='nav-profile-tab')
+        form(method='POST' action='/user')
+          if ((user_name==0)&&(user_second_name==0))
+            #profile
+              p Необходимо заполнить профиль!
+              input(type='text' name='name' required placeholder='Name' )
+              input(type='text' name='sname' required placeholder='Second name' )
+              input(type='submit' id='redact' value='Сохранить изменения')
+          else
+            #profile
+              #name.in
+                p Имя: 
+                p #{user_name}
+              #surname.in  
+                p Фамилия:
+                p #{user_second_name}
+              #phone.in  
+                p Телефон:
+                p #{number}
+              if phone_confirmed==0
+                button Подтвердить номер телефона
+                input(type='text' placeholder='SMS Code')
+              if (type=='phys_type')
+                p#type Физ. лицо
+              if (type=='ur_type')
+                p#type Юр. лицо
+                if (org_info==1)
+                  p #{info.status}
+                if (org_info==2)
+                  p Статус: #{info.status}
+                  p Название: #{info.org_name}
+                  p Адрес: #{info.org_address}
+                  p ИНН: #{info.owner_inn}
+                  p Ваша должность: #{info.position}
+                if (org_info==0)
+                  form(method='POST' action='/user')
+                    input(type='text' name='org_name' required placeholder='Название организации' )
+                    input(type='text' name='org_address' required placeholder='Адрес организации' )
+                    input(type='text' name='inn' required placeholder='ИНН' )
+                    select(name='position')
+                      option Владелец
+                      option Директор
+                      option Менеджер
+                      option Уборщик
+                    input(type='button' id='redact' value='Загрузить фото документов')
+                    input(type='submit' value='Создать заявку')
+      .tab-pane.fade#nav-orders.panel(role='tabpanel' area-labelledby='nav-orders-tab')
+      .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
+        p Ваш баланс составляет: #{balance}
+        
+        

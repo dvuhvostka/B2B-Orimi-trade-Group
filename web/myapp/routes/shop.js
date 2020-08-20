@@ -19,10 +19,10 @@ const {
 } = process.env
 
 var pgPool = new Pool({
-  host: "localhost",
-  user: "z0rax",
+  host: HOST,
+  user: "postgres",
   password: "12345",
-  database: "mydb"
+  database: DBNAME
 });
 
 function checkFilters (data){
@@ -189,6 +189,12 @@ router.route('/shop/:type?')
     }
   }).post(function(req,res){
     res.send("POST");
+  });
+
+
+router.route('/shop/products')
+  .get(function(req,res){
+    res.send('FUCK YOU');
   });
 
 module.exports = router;

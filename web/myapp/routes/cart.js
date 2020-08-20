@@ -7,7 +7,19 @@ var config = require('../config');
 //var {Pool, Client} = require('pg');
 var request = require('request');
 var pgp = require("pg-promise")(/*options*/);
-var db_cart = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
+
+const {
+  SESS_LIFETIME = config.SESS_TIME,
+  ENVIRONMENT = config.ENVIRONMENT,
+  SESS_NAME = config.SESS_NAME,
+  SESS_SECRET = config.SESS_SECRET,
+  USER = config.DB_USER,
+  PASSWORD = config.DB_PASSWORD,
+  HOST = config.DB_HOST,
+  DBNAME = config.DB_NAME
+} = process.env
+var db_cart = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
+
 
 var serverCart = [];
 

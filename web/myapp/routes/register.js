@@ -7,10 +7,24 @@ var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var pgp = require("pg-promise")(/*options*/);
 var config = require('../config');
-var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
 var app = require('../app');
 const { v4: uuidv4 } = require('uuid');
 
+//var for sessions and connecting to databse
+const {
+  SESS_LIFETIME = config.SESS_TIME,
+  ENVIRONMENT = config.ENVIRONMENT,
+  SESS_NAME = config.SESS_NAME,
+  SESS_SECRET = config.SESS_SECRET,
+  USER = config.DB_USER,
+  PASSWORD = config.DB_PASSWORD,
+  HOST = config.DB_HOST,
+  DBNAME = config.DB_NAME
+} = process.env
+//while we develop the web site ENVIRONMENT = development and IN_PROD = false.
+const IN_PROD = ENVIRONMENT === 'production';
+
+var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
 
 
 function xss_check(replace){

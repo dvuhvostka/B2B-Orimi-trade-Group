@@ -44,7 +44,9 @@ user.route('/user')
         isRegistred: req.session.userId,
         user_name: 0,
         user_second_name: 0,
-        number: response.rows[0].number
+        number: response.rows[0].number,
+        balance:response.rows[0].balance,
+        title: 'Профиль'
       })
     }else if(response.rows[0]){
       var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
@@ -67,8 +69,10 @@ user.route('/user')
           number: response.rows[0].number,
           phone_confirmed: response.rows[0].phone_confirmed,
           type: response.rows[0].client_type,
+          balance:response.rows[0].balance,
           org_info: org_info,
-          info: info
+          info: info,
+          title: 'Профиль'
         })
       });
     }

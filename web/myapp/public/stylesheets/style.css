@@ -481,6 +481,36 @@ ul {
 }
 
 /* ------------------------- */
+
+/* user styles */
+.card#user_page {
+  width: 40%;
+  margin-top: 20px;
+  min-width: 280px;
+  max-height: 550px;
+}
+
+#nav_panel{
+  margin:10px auto;
+  width:100%;
+  padding: 0 10px 0 10px;
+}
+
+#profile {
+  margin-left: 10px;
+}
+
+.in {
+  display: flex;
+}
+
+.in > p:nth-child(1){
+  color: rgb(108, 112, 112);
+  text-align: right;
+}
+/* ----------- */
+
+
 /* media */
 @media (max-width: 768px) {
   nav {

@@ -44,9 +44,9 @@ const IN_PROD = ENVIRONMENT === 'production';
 //coneccting to database config
 var pgPool = new Pool({
   host: HOST,
-  user: "z0rax",
+  user: "postgres",
   password: "12345",
-  database: DBNAME
+  database: 'mydb'
 });
 
 
