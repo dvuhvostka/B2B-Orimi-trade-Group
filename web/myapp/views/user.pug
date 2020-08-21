@@ -21,7 +21,7 @@ block content
               p Фамилия:
               p #{user_second_name}
             #third_name.in
-              p Статус:
+              p Отчество:
               p #{user_third_name}
             if (type=='phys_type')
               p#type Физ. лицо
@@ -61,16 +61,16 @@ block content
             if (org_info==0 && type=='ur_type')
               a(data-toggle='collapse' href='#org_confirm' aria-expanded="false" aria-controls="org_confirm").p-danger Вы не закончили регистрацию!
               #org_confirm.collapse
-                form(method='POST' action='/user')#org_form
+                form(method='POST' action='/user' enctype='multipart/form-data')#org_form
                   input(type='text' name='org_name' required placeholder='Название организации' id='org_name' )
                   input(type='text' name='org_address' required placeholder='Адрес организации' id='org_address')
                   input(type='text' name='inn' required placeholder='ИНН' pattern='[0-9]{10,}' id='inn')
-                  select(name='position' placeholder='Должность')
-                    option(disabled selected) Должность
-                    option Владелец
-                    option Директор
-                    option Менеджер
-                  input(type='file' id='docs' multiple data-multiple-caption='{count} файлов выбрано')
+                  select(name='position' placeholder='Должность' required)
+                    option(value="" selected disabled) Должность
+                    option(value="Владелец") Владелец
+                    option(value="Директор") Директор
+                    option(value="Менеджер") Менеджер
+                  input(type='file' name='docs' id='docs' multiple data-multiple-caption='{count} файлов выбрано')
                   label.btn.btn-outline-info(type='button' id='redact' for='docs')
                     span Загрузить фото документов
                   input.btn.btn-outline-success(type='submit' value='Создать заявку')

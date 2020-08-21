@@ -7,6 +7,11 @@ var session = require('express-session');
 var config = require('../config');
 var {Pool, Client} = require('pg');
 var pgp = require("pg-promise")(/*options*/);
+var multer = require('multer');
+var fs = require('fs');
+
+var upload = multer({ dest: './public/images/uploads/' });
+
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -36,6 +41,17 @@ const redirectLogin = function(req,res,next){
   }
 }
 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    fs.mkdir('./public/images/uploads/'+req.session.userId, err=>{});
+    cb(null, './public/images/uploads/'+req.session.userId);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+})
+
+var upload = multer({ storage: storage })
 
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
@@ -112,7 +128,7 @@ user.route('/user')
       });
     }
   });
-}).post(function(req,res){
+}).post(upload.any(), function(req,res,next){
     if(req.body.post_type=="delete_org"){
       db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'");
       console.log("org_deleted");
@@ -120,7 +136,8 @@ user.route('/user')
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
       console.log("org_confirmed");
     }else{
-      var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
+        console.log(req.files);
+        var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
         console.log(req.body)
         var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
         pgPool.query(get_org,[], function(err, response){
