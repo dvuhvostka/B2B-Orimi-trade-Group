@@ -1,16 +1,15 @@
-var express = require('express');
-var user = express.Router();
-var path = require('path');
-var app = require('../app');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var config = require('../config');
-var {Pool, Client} = require('pg');
-var pgp = require("pg-promise")(/*options*/);
-var multer = require('multer');
-var fs = require('fs');
-
-var upload = multer({ dest: './public/images/uploads/' });
+const express = require('express');
+const user = express.Router();
+const path = require('path');
+const app = require('../app');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const config = require('../config');
+const {Pool, Client} = require('pg');
+const pgp = require("pg-promise")(/*options*/);
+const multer = require('multer');
+const fs = require('fs');
+const rimraf = require('rimraf');
 
 
 const {
@@ -51,7 +50,19 @@ var storage = multer.diskStorage({
   }
 })
 
-var upload = multer({ storage: storage })
+var upload = multer({
+  storage: storage,
+  limits: {fileSize: 5 * 1024 * 1024},
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    if (ext!='.jpg'&&ext!='.jpeg'&&ext!='.png'){
+      const err = new Error('Extension');
+      err.code = "EXTENSION";
+      return cb(err);
+    }
+    cb(null, true);
+  }
+}).any();
 
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
@@ -130,38 +141,61 @@ user.route('/user')
       });
     }
   });
-}).post(upload.any(), function(req,res,next){
+}).post(function(req,res,next){
+    var error;
     if(req.body.post_type=="delete_org"){
       db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'");
-      console.log("org_deleted");
+      rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('done'); });
+      console.log("Organiztion deleted from user: "+req.session.userId);
     }else if(req.body.post_type=="confirm_org"){
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
       console.log("org_confirmed");
     }else{
-        console.log(req.files);
-        var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
-        console.log(req.body)
-        var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
-        pgPool.query(get_org,[], function(err, response){
-          pgPool.query(getUserData,[], function(error, resp){
-              console.log(resp.rows[0]);
-              if(!response.rows[0]){
-                db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname})',  {
-                  org_name: req.body.org_name,
-                  org_address: req.body.org_address,
-                  owner_inn: req.body.inn,
-                  owner_id: req.session.userId,
-                  org_confirmed: 0,
-                  owner_position: req.body.position,
-                  owner_name: resp.rows[0].username,
-                  owner_sname: resp.rows[0].second_name,
-                  owner_tname: resp.rows[0].third_name
-                });
-              }
-          });
+        upload(req, res, err => {
+          if (err == undefined){
+            console.log(req.files);
+            var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
+            console.log(req.body)
+            var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+            pgPool.query(get_org,[], function(err, response){
+              pgPool.query(getUserData,[], function(error, resp){
+                  console.log(resp.rows[0]);
+                  if(!response.rows[0]){
+                    db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname})',  {
+                      org_name: req.body.org_name,
+                      org_address: req.body.org_address,
+                      owner_inn: req.body.inn,
+                      owner_id: req.session.userId,
+                      org_confirmed: 0,
+                      owner_position: req.body.position,
+                      owner_name: resp.rows[0].username,
+                      owner_sname: resp.rows[0].second_name,
+                      owner_tname: resp.rows[0].third_name
+                    });
+                  }
+              });
+            });
+            res.json({
+              ok: !error,
+              error
+            });
+          }else if(err.code == 'EXTENSION'){
+            error = 'Неверный формат файла. (Только JPG и PNG)';
+            console.log(error);
+            res.json({
+              ok: !error,
+              error
+            });
+          }else if(err.code == 'LIMIT_FILE_SIZE'){
+            error = 'Слишком большой файл. Допустимо не более 5 м/байт.';
+            console.log(error);
+            res.json({
+              ok: !error,
+              error
+            });
+          }
         });
     }
-    res.redirect('/user');
 });
 
 module.exports = user;

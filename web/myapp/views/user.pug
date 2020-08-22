@@ -61,7 +61,7 @@ block content
             if (org_info==0 && type=='ur_type')
               a(data-toggle='collapse' href='#org_confirm' aria-expanded="false" aria-controls="org_confirm").p-danger Вы не закончили регистрацию!
               #org_confirm.collapse
-                form(method='POST' action='/user' enctype='multipart/form-data')#org_form
+                form(method='POST' enctype='multipart/form-data')#org_form
                   input(type='text' name='org_name' required placeholder='Название организации' id='org_name' )
                   input(type='text' name='org_address' required placeholder='Адрес организации' id='org_address')
                   input(type='text' name='inn' required placeholder='ИНН' pattern='[0-9]{10,}' id='inn')
@@ -70,7 +70,7 @@ block content
                     option(value="Владелец") Владелец
                     option(value="Директор") Директор
                     option(value="Менеджер") Менеджер
-                  input(type='file' name='docs' id='docs' multiple data-multiple-caption='{count} файлов выбрано')
+                  input(type='file' name='docs' id='docs' multiple data-multiple-caption='{count} файлов выбрано' required)
                   label.btn.btn-outline-info(type='button' id='redact' for='docs')
                     span Загрузить фото документов
                   input.btn.btn-outline-success(type='submit' value='Создать заявку')
@@ -110,6 +110,25 @@ block content
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
   if (permissions=='mod')
     script.
+      $('#org_form').on('submit', function(e) {
+          e.preventDefault();
+          var formData = new FormData(this);
+          $.ajax({
+              type: "POST",
+              url: "/user",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(r){
+                if(r.ok == false){
+                  $('#redact').find('span').html(r.error);
+                  console.log(r.error);
+                }else{
+                  location.href=location.href;
+                }
+              }
+            })
+        })
       function delete_org(owner_id){
         var del = confirm("Вы действительно хотите УДАЛИТЬ организацию?\n"+owner_id);
         if(del){
