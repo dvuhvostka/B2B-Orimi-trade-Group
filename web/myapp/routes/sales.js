@@ -19,8 +19,8 @@ const {
 
 var pgPool = new Pool({
   host: HOST,
-  user: USER,
-  password: PASSWORD,
+  user: 'z0rax',
+  password: '12345',
   database: DBNAME
 });
 

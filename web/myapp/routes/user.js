@@ -89,6 +89,7 @@ user.route('/user')
           if (response.rows[0].permissions=='mod'){
             db.any(`SELECT * FROM organizations WHERE org_confirmed=0`).then(function(uncorgs){
               res.render('user',{
+                title: "Аккаунт",
                 isRegistred: req.session.userId,
                 user_name: response.rows[0].username,
                 user_second_name: response.rows[0].second_name,
@@ -108,6 +109,7 @@ user.route('/user')
             });
           }else{
             res.render('user',{
+              title: "Аккаунт",
               isRegistred: req.session.userId,
               user_name: response.rows[0].username,
               user_second_name: response.rows[0].second_name,

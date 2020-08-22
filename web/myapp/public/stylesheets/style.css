@@ -598,13 +598,56 @@ ul {
 .deal {
   margin: 0 0 10px 10px;
 }
+
+.deal_wrap {
+  margin: 1rem 0 20px 0;
+  padding-top: 10px;
+  border-bottom: 1px solid #cbcbcb;
+  border-top: 1px solid #cbcbcb;
+
+}
+
+.deal_wrap > p {
+  text-align: right;
+  margin-right: 40px;
+  font-weight: bolder;
+  font-style: oblique;
+  margin-bottom: 10px;
+}
 .deal img {
   width: 70px;
   height: 70px;
 }
 
-.deal p {
-  margin-bottom: 0;
+.deal > a {
+  margin: 22px 0 0 30px;
+  color: black;
+}
+
+.title {
+  font-weight: bold;
+}
+a.title {
+  color:black;
+}
+
+p.title {
+  margin-bottom: 35px;
+}
+
+#balance_wrap {
+  margin: 10px 0 0 25px;
+  display: flex;
+}
+
+#balance_wrap p:nth-child(1){
+  font-style: italic;
+  margin-right: 10px;
+}
+
+.rub{
+  margin-left: 4px;
+  font-size: 15px;
 }
 /* ----------- */
 

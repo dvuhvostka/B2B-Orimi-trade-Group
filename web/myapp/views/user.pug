@@ -5,8 +5,8 @@ block content
   #user_page(class='card card-content shadow-lg mx-auto')
     nav#nav_panel
       .nav.nav-tabs.nav-fill#nav-tab(role='tablist')
-        a(class="nav-item nav-link " id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true") Профиль
-        a(class="nav-item nav-link active" id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Заказы
+        a(class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true") Профиль
+        a(class="nav-item nav-link " id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Заказы
         a(class="nav-item nav-link" id="nav-balance-tab" data-toggle="tab" href="#nav-balance" role="tab" aria-controls="nav-balance" aria-selected="false") Баланс
         if (permissions=='mod')
           a(class="nav-item nav-link" id="nav-mod-tab" data-toggle="tab" href="#nav-mod" role="tab" aria-controls="nav-mod" aria-selected="false") Модерация*
@@ -79,20 +79,22 @@ block content
           span.sr-only Loading...
         #deals.d-none
           if (deals == 0)
-            p
-             b У вас нет совершенных сделок!
+            p.title У вас нет совершенных сделок!
           else 
-            p 
-              b Ваши сделки (#{deals.length} шт.):
-              -for (var i=0; i<deals.length; i++)
-                p 
-                  b Сделка #{i+1} (id: #{deals[i].id})
+            p.title Ваши сделки (#{deals.length} шт.)
+            -for (var i=0; i<deals.length; i++)
+              a(href='#').title Сделка #{i+1} (id: #{deals[i].id})
+              .deal_wrap
                 -for (var x=0; x<deals[i].length; x++)
                   .in.deal
                     img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
-                    p(style='margin-top:8px; margin-left:10px;') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1]}  шт.
+                    a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1]}  шт.
+                p Итоговая стоимость:
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
-        p Ваш баланс составляет: #{balance}
+        #balance_wrap
+          p Ваш баланс составляет: 
+          p #{balance}
+            i.fas.fa-ruble-sign.rub
       if (permissions=='mod')
         .tab-pane.fade#nav-mod.panel(role='tabpanel' area-labelledby='nav-mod-tab')
           p В списке #{uncorgs.length} фирм(а).
