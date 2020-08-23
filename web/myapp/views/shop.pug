@@ -9,6 +9,7 @@ block content
 		.carousel(class='slide' id='slider' data-rede='carousel')
 			.carousel-inner
 				img(src='../welcome_to_orimi.gif')
+			a#sales_link(href='/sales') Все акции...
 		.main-content(class='item_list')
 			- for(var i=0; i<q; i++) 
 				div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
@@ -25,13 +26,6 @@ block content
 								input(type='text' value='1' class='input' data-id=products[i].id)
 								button(class='btn btn-secondary plus')
 									i.fas.fa-plus.controls
-		div(aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 200px;")
-			div(class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000")
-				div(class="toast-header")
-					strong(class="mr-auto") Уведомление
-					small(class="text-muted") Just now
-					button(type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close") &times;
-				div(class="toast-body")  Товар успешно добавлен в корзину.
 		.sidebar
 			case Type
 				when 'tea'
@@ -229,6 +223,13 @@ block content
 								.price_opt
 									p до
 									input(type='text' value='1000' id='input_range_price')
+	.alert_t(aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 200px;")
+		div(class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="1000")
+			div(class="toast-header")
+				strong(class="mr-auto") Уведомление
+				small(class="text-muted") Just now
+				button(type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close") &times;
+			div(class="toast-body")  Товар успешно добавлен в корзину.
 	script.
 		
 		window.onload = function(){

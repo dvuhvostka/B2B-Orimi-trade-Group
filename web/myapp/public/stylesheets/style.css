@@ -54,47 +54,28 @@ ul {
 }
 
 /* shop styles */
-.carousel-v {
-  grid-area: cv;
-  height: auto;
-}
-
-@media (max-width:425px) {
-  .navbar-brand {
-    font-size: 1em;
-  }
-}
-
-@media (max-width: 320px) {
-  .navbar-brand {
-    font-size: 0.8em;
-  }
-}
-
-/* shop styles */
-.tea {
-  background-color: #2bcb12;
-}
-
-.coffee {
-
-}
-
 .grid-container {
   display: grid;
-  grid-gap: 1em;
+  grid-column-gap: 1em;
+  grid-row-gap: 2em;
   min-width: 100%;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 200px auto;
   grid-template-areas:
     ". c c c ."
-    "s m m m ."
+    "s m m m a"
   ;
 }
 
 .carousel-inner {
   min-width: 100%;
   display: flex;
+}
+
+.alert_t {
+  position: fixed;
+  bottom: 20%;
+  left:20px;
 }
 
 .carousel-inner>img {
@@ -107,6 +88,14 @@ ul {
 .carousel {
   grid-area: c;
   margin-top: 30px;
+}
+
+#sales_link {
+  color:red;
+  font-size: 20px;
+  float: right;
+  margin: 10px 0 10px 0;
+  font-style: italic;
 }
 
 .main-content {
@@ -651,7 +640,53 @@ p.title {
 }
 /* ----------- */
 
+/* cart styles */
 
+#cart_page {
+  margin-top: 20px;
+  min-width: 700px;
+}
+
+.img_good_cart {
+  height: 70px;
+  width:70px;
+  margin: 10px 0 0 10px;
+}
+
+.good_cart {
+  display: flex;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #cbcbcb;
+}
+
+.item_name_cart {
+  margin: 30px 5px 0 10px;
+  vertical-align: middle;
+  min-width:40%;
+}
+
+
+.submit_cart {
+  margin-left:37%;
+  margin-bottom: 10px;
+}
+
+.del_btn {
+  height: 38px;
+  margin:3% 10px;
+}
+
+#cart_page p {
+  min-width: 90px;
+  margin: 30px 10px 0 0;
+}
+.null_cart {
+  text-align: center;
+  margin:30px 0 !important;
+  font-weight: bold;
+}
+/* ----------- */
 /* media */
 @media (max-width: 768px) {
   nav {
@@ -664,7 +699,10 @@ p.title {
       "s m m m ."
     ;
   }
+  .alert_t {
+    position: fixed;
 
+  }
   .carousel-inner {
     width: 85%;
   }
@@ -696,6 +734,13 @@ p.title {
     font-size: 0.83em;
   }
 
+  .alert_t {
+    position: fixed;
+    top: calc(100vh - 200px);
+    right:20px;
+    z-index: 100;
+  }
+}
 input.cart_href {
   background-color: black;
   margin-left: -200px;
