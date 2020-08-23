@@ -83,7 +83,7 @@ block content
           else 
             p.title Ваши сделки (#{deals.length} шт.)
             -for (var i=0; i<deals.length; i++)
-              a(href='#').title Сделка #{i+1} (id: #{deals[i].id})
+              a(href='#').title № #{deals[i].id}
               .deal_wrap
                 -for (var x=0; x<deals[i].length; x++)
                   .in.deal
@@ -105,6 +105,8 @@ block content
             p #{uncorgs[u].owner_id}
             p #{uncorgs[u].owner_position} #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
             p Сканы документов:
+            - for(var z=0; z<uncorgs[u].docs.length; z++)
+                img(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
             button(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
             button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
@@ -138,8 +140,8 @@ block content
         }
       }
       function confirm_org(owner_id){
-        var confirm = confirm("Вы действительно хотите ПОДТВЕРДИТЬ организацию?\n"+owner_id);
-        if(confirm){
+        var conf = confirm("Вы действительно хотите ПОДТВЕРДИТЬ организацию?\n"+owner_id);
+        if(conf){
           $.post("/user",{post_type: "confirm_org", org_owner_id: owner_id});
           alert("Организация успешно подтверждена.\n"+owner_id);
           window.location.reload();

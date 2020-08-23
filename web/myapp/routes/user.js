@@ -10,6 +10,7 @@ const pgp = require("pg-promise")(/*options*/);
 const multer = require('multer');
 const fs = require('fs');
 const rimraf = require('rimraf');
+const ncp = require('ncp').ncp;
 
 
 const {
@@ -99,6 +100,10 @@ user.route('/user')
 
           if (response.rows[0].permissions=='mod'){
             db.any(`SELECT * FROM organizations WHERE org_confirmed=0`).then(function(uncorgs){
+              for(var i=0; i<uncorgs.length; i++){
+                var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
+                uncorgs[i].docs = fls;
+              }
               res.render('user',{
                 title: "Аккаунт",
                 isRegistred: req.session.userId,
@@ -149,7 +154,19 @@ user.route('/user')
       console.log("Organiztion deleted from user: "+req.session.userId);
     }else if(req.body.post_type=="confirm_org"){
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
-      console.log("org_confirmed");
+      ncp.limit = 16;
+      var srcPath = './public/images/uploads/'+req.session.userId; //current folder
+      fs.mkdir('./public/images/confirmed_uploads/'+req.session.userId, err=>{});
+      console.log('confirmed_uploads created: done');
+      var destPath = './public/images/confirmed_uploads/'+req.session.userId; //Any destination folder
+      ncp(srcPath, destPath, function (err) {
+        if (err) {
+          return console.error(err);
+        }
+        console.log('Copying files: done');
+        rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('uploads deleted: done'); });
+      });
+      console.log("org confirmed: "+req.session.userId+" done");
     }else{
         upload(req, res, err => {
           if (err == undefined){
