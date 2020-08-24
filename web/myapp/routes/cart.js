@@ -26,7 +26,8 @@ var serverCart = [];
 router.route('/cart')
   .get(function(req, res) {
     res.render('cart.pug', {
-      isRegistred: req.session.userId
+      isRegistred: req.session.userId,
+      title: 'Корзина'
     })
   }).post(function(req, res) {
 

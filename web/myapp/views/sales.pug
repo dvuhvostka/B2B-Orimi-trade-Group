@@ -5,6 +5,7 @@ block append scripts
 
 block content
   - var q_n = news_q
+  .container
     input(placeholder="Название статьи")#newsTitle
     input(placeholder="Описание")#newsDescription
     input(placeholder="Текст статьи")#newsBody
@@ -27,20 +28,15 @@ block content
                   span( aria-hidden="true") &times;
                 a(href='#' onclick='return false' class='link-news text-right' id='link-n' + i) Читать далее...
                 p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
-              .card-footer
-                p(class="text-muted" style='font-size: 0.7rem;') Дата написания: #{pnews[i].date} 
   script.
     $.fx.off = false;
     $(document).ready(function(){
       $('.link-news').on('click', function(){
         var link_open = $(this);
-        link_open.parents('.card').removeClass('h-100');
-        setTimeout(function(){
           link_open.siblings('.card-text').show(600);
           link_open.siblings('.card-subtitle').hide(20);
           link_open.siblings('.close').show(600);
           link_open.hide(20);
-        },300);
       });
       $('.close').on('click', function(){
         var link_close = $(this);
@@ -48,9 +44,7 @@ block content
         link_close.siblings('.card-subtitle').show(20);
         link_close.siblings('.link-news').show(20);
         link_close.hide(20);
-        setTimeout(function(){
-          link_close.parents('.card').addClass('h-100');
-        },600);
+      
       });
     });
                     

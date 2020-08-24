@@ -137,7 +137,8 @@ user.route('/user')
               balance: response.rows[0].balance,
               org_info: org_info,
               info: info,
-              deals: d_data
+              deals: d_data,
+              link_code: response.rows[0].link_code
             });
           }
         }).catch(error => {

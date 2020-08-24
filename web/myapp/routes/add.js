@@ -19,8 +19,8 @@ const {
 
 var pgPool = new Pool({
   host: HOST,
-  user: USER,
-  password: PASSWORD,
+  user: 'z0rax',
+  password: '12345',
   database: DBNAME
 });
 
@@ -48,7 +48,7 @@ router.route('/add')
     pgPool.query(delQ, [], function(err, response){
       if(err) return console.error(err);
     });
-    res.send("<script>document.location.href='/news'</script>");
+    res.send("<script>document.location.href='/sales'</script>");
   }).post(urlencodedParser, function(req,res){
     createNews(req.body.title, req.body.desc, req.body.body, req.body.img);
     res.send("ok");

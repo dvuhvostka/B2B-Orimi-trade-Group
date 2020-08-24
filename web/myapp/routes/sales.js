@@ -35,7 +35,8 @@ router.get('/sales', function(req, res, next) {
     res.render('sales.pug',{
     	isRegistred: req.session.userId,
       pnews: sales,
-      news_q: sales.length
+      news_q: sales.length,
+      title: "Акции"
     })
   });
 });
