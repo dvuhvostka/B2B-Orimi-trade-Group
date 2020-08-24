@@ -29,6 +29,10 @@ footer {
   max-height: 20vh;
 }
 
+footer p {
+  text-align: center;
+}
+
 li {
   list-style: none;
 }
