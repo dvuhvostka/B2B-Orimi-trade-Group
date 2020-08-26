@@ -1,0 +1,9 @@
+if (products==0)
+  p Такого товара нет
+else
+  p id #{products[0].id}
+  p Название #{products[0].item_name}
+  p Цена #{products[0].item_price}
+  p Тип товара #{products[0].type}
+  p Брэнд #{products[0].sort}
+  img(src='/store_prods/'+products[0].type+'/'+products[0].sort+'/'+products[0].id+'.jpg')
