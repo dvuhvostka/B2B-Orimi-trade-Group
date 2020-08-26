@@ -257,9 +257,14 @@ router.route('/shop/:type?')
         melissa: /мелиса|мелисса|melissa|melisa/gi
       }
 
-      let xss_pattern = /`/gim;
+      let xss_pattern = /`|'|"/gim;
 
       let find = undefined;
+
+      if(req.body.search.match(xss_pattern)){
+          console.log('!XSS! from: '+req.ip);
+          req.body.search = req.body.search.replace(xss_pattern, " ");
+      }
 
       if(req.body.search.match(pattern.greenfield)){
           console.log(1);
