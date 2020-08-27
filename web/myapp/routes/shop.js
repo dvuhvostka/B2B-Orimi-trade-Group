@@ -243,7 +243,7 @@ router.route('/shop/:type?')
     }else if(req.body.search){
       let pattern = {
         greenfield: /greenfield|гринфилд/gi,
-        tess: /tess|тэс|tes/gi,
+        tess: /\btess|тэс|tes|тес/gi,
         java: /java|ява|Принцесса ява/gi,
         nuri: /nuri|нури|Принцесса нури/gi,
         candy: /candy|канди|кэнди|Принцесса канди/gi,
@@ -254,7 +254,8 @@ router.route('/shop/:type?')
         ceylon: /цейлон|ceylon/gi,
         arabica: /arabica|арабика/gi,
         milky: /молочный|с молоком|milky/gi,
-        melissa: /мелиса|мелисса|melissa|melisa/gi
+        melissa: /мелиса|мелисса|melissa|melisa/gi,
+        tea: /чай/gi
       }
 
       let xss_pattern = /`|'|"/gim;
@@ -318,6 +319,10 @@ router.route('/shop/:type?')
 
       if(req.body.search.match(pattern.melissa)){
         req.body.search = req.body.search.replace(pattern.melissa, "Melissa");
+      }
+
+      if(req.body.search.match(pattern.tea)){
+        req.body.search = req.body.search.replace(pattern.tea, "Чай");
       }
 
       console.log(req.body.search);
