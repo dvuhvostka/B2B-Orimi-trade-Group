@@ -230,7 +230,7 @@ router.route('/shop/:type?')
           products: prods,
           prod_count: prods.length,
           title: 'Фирменный магазин Орими-трэйд',
-          type: 'tea',
+          type: 'coffee',
           needFooter: true
           });
       });

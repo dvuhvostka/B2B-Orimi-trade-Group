@@ -1,0 +1,6 @@
+extends layout2
+
+block content
+  - for (var i = 0; i < prod_count;i++)
+    .in
+      p #{products[i].type}
