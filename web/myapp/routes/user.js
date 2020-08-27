@@ -11,7 +11,7 @@ const multer = require('multer');
 const fs = require('fs');
 const rimraf = require('rimraf');
 const ncp = require('ncp').ncp;
-
+var crypto = require("crypto");
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -83,6 +83,7 @@ user.route('/user')
           info.owner_inn = resp.rows[0].owner_inn;
           info.position = resp.rows[0].owner_position;
           info.status = status;
+          info.link_code = resp.rows[0].link_code;
         }
         var deals = 0;
         db.any(getUserDeals).then(function(data) {
@@ -97,13 +98,43 @@ user.route('/user')
             d_data.push(dealsdata[key]);
           }
 
-
-          if (response.rows[0].permissions=='mod'){
-            db.any(`SELECT * FROM organizations WHERE org_confirmed=0`).then(function(uncorgs){
-              for(var i=0; i<uncorgs.length; i++){
-                var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
-                uncorgs[i].docs = fls;
-              }
+          let getUserorg = `SELECT * FROM organizations WHERE link_code LIKE '`+response.rows[0].link_code+`'`;
+          db.any(getUserorg).then(function(userorgdata){
+            let attachedorg;
+            if(userorgdata.length==0){
+              attachedorg = 0;
+              db.none("UPDATE users SET link_code='' WHERE id='"+req.session.userId+"'");
+            }else{
+              attachedorg = userorgdata[0];
+            }
+            if (response.rows[0].permissions=='mod'){
+              db.any(`SELECT * FROM organizations WHERE org_confirmed=0`).then(function(uncorgs){
+                for(var i=0; i<uncorgs.length; i++){
+                  var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
+                  uncorgs[i].docs = fls;
+                }
+                res.render('user',{
+                  title: "Аккаунт",
+                  isRegistred: req.session.userId,
+                  user_name: response.rows[0].username,
+                  user_second_name: response.rows[0].second_name,
+                  user_third_name: response.rows[0].third_name,
+                  number: response.rows[0].number,
+                  phone_confirmed: response.rows[0].phone_confirmed,
+                  type: response.rows[0].client_type,
+                  permissions: response.rows[0].permissions,
+                  balance: response.rows[0].balance,
+                  org_info: org_info,
+                  info: info,
+                  deals: d_data,
+                  uncorgs: uncorgs,
+                  link_code: response.rows[0].link_code,
+                  attached_org: attachedorg
+                });
+              }).catch(error => {
+                console.log('ERROR:', error);
+              });
+            }else{
               res.render('user',{
                 title: "Аккаунт",
                 isRegistred: req.session.userId,
@@ -118,29 +149,11 @@ user.route('/user')
                 org_info: org_info,
                 info: info,
                 deals: d_data,
-                uncorgs: uncorgs
+                link_code: response.rows[0].link_code,
+                attached_org: attachedorg
               });
-            }).catch(error => {
-              console.log('ERROR:', error);
-            });
-          }else{
-            res.render('user',{
-              title: "Аккаунт",
-              isRegistred: req.session.userId,
-              user_name: response.rows[0].username,
-              user_second_name: response.rows[0].second_name,
-              user_third_name: response.rows[0].third_name,
-              number: response.rows[0].number,
-              phone_confirmed: response.rows[0].phone_confirmed,
-              type: response.rows[0].client_type,
-              permissions: response.rows[0].permissions,
-              balance: response.rows[0].balance,
-              org_info: org_info,
-              info: info,
-              deals: d_data,
-              link_code: response.rows[0].link_code
-            });
-          }
+            }
+          });
         }).catch(error => {
           console.log('ERROR:', error);
         });
@@ -149,11 +162,49 @@ user.route('/user')
   });
 }).post(function(req,res,next){
     var error;
-    if(req.body.post_type=="delete_org"){
+    if(req.body.post_type=='leave_org'){
+      if(req.session.userId){
+        db.none("UPDATE users SET link_code='' WHERE id='"+req.session.userId+"'");
+      }
+      let res_ok = "Вы успешно покинули организацию.";
+      res.json({
+        ok: true,
+        res_ok
+      });
+    }else if(req.body.post_type=='add_code'){
+      console.log(req.body.post_data);
+      let xss_pattern = /`|'|"/gim;
+      if(req.body.post_data.match(xss_pattern)){
+          console.log('!XSS! from: '+req.ip);
+          let error = "Введен неверный пригласительный код";
+          res.json({
+            ok: false,
+            error
+          });
+      }else{
+        let getUserorg = `SELECT * FROM organizations WHERE link_code LIKE '`+req.body.post_data+`'`;
+        db.any(getUserorg).then(function(userorgdata){
+          if(userorgdata.length!=1){
+            let error = "Введен неверный пригласительный код";
+            res.json({
+              ok: false,
+              error
+            });
+          }else if(userorgdata.length==1){
+            db.none("UPDATE users SET link_code='"+req.body.post_data+"' WHERE id='"+req.session.userId+"'");
+            let confirmed_code_status = "Вы успешно добавлены в список сотрудников организации."
+            res.json({
+              ok: true,
+              confirmed_code_status
+            });
+          }
+        });
+      }
+    }else if(req.body.post_type=="delete_org_skdjfgh213asRQadSKSFD3123244"){
       db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'");
       rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('done'); });
       console.log("Organiztion deleted from user: "+req.session.userId);
-    }else if(req.body.post_type=="confirm_org"){
+    }else if(req.body.post_type=="confirm_org_askdjfhl123123kaGFDGdfhFsdf3123"){
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
       ncp.limit = 16;
       var srcPath = './public/images/uploads/'+req.session.userId; //current folder
@@ -168,16 +219,16 @@ user.route('/user')
         rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('uploads deleted: done'); });
       });
       console.log("org confirmed: "+req.session.userId+" done");
+      var link_code = crypto.randomBytes(20).toString('hex');
+      console.log("link code generated: " +link_code);
+      db.none("UPDATE organizations SET link_code='"+link_code+"' WHERE owner_id='"+req.body.org_owner_id+"'");
     }else{
         upload(req, res, err => {
           if (err == undefined){
-            console.log(req.files);
             var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
-            console.log(req.body)
             var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
             pgPool.query(get_org,[], function(err, response){
               pgPool.query(getUserData,[], function(error, resp){
-                  console.log(resp.rows[0]);
                   if(!response.rows[0]){
                     db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname})',  {
                       org_name: req.body.org_name,
