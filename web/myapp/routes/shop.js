@@ -237,7 +237,112 @@ router.route('/shop/:type?')
       }
     }
   }).post(function(req,res){
-    res.send("POST");
+    console.log(req.body);
+    if(!req.body.search){
+      res.redirect('/shop');
+    }else if(req.body.search){
+      let pattern = {
+        greenfield: /greenfield|гринфилд/gi,
+        tess: /tess|тэс|tes/gi,
+        java: /java|ява|Принцесса ява/gi,
+        nuri: /nuri|нури|Принцесса нури/gi,
+        candy: /candy|канди|кэнди|Принцесса канди/gi,
+        shah: /шах/gi,
+        jockey: /жакей|жокей|jockey|jokey/gi,
+        jardin: /жардин|jardin/gi,
+        piazza: /пиаза|piazza/g,
+        ceylon: /цейлон|ceylon/gi,
+        arabica: /arabica|арабика/gi,
+        milky: /молочный|с молоком|milky/gi,
+        melissa: /мелиса|мелисса|melissa|melisa/gi
+      }
+
+      let xss_pattern = /`|'|"/gim;
+
+      let find = undefined;
+
+      if(req.body.search.match(xss_pattern)){
+          console.log('!XSS! from: '+req.ip);
+          req.body.search = req.body.search.replace(xss_pattern, " ");
+      }
+
+      if(req.body.search.match(pattern.greenfield)){
+          console.log(1);
+          req.body.search = req.body.search.replace(pattern.greenfield, "Greenfield");
+      }
+
+      if(req.body.search.match(pattern.tess)){
+          console.log(2);
+          req.body.search = req.body.search.replace(pattern.tess, "Tess");
+      }
+
+      if(req.body.search.match(pattern.java)){
+          console.log(3);
+          req.body.search = req.body.search.replace(pattern.java, "Ява");
+      }
+
+      if(req.body.search.match(pattern.nuri)){
+          console.log(4);
+          req.body.search = req.body.search.replace(pattern.nuri, "Нури");
+      }
+
+      if(req.body.search.match(pattern.candy)){
+          console.log(5);
+          req.body.search = req.body.search.replace(pattern.candy, "Канди");
+      }
+
+      if(req.body.search.match(pattern.jockey)){
+          console.log(6);
+          req.body.search = req.body.search.replace(pattern.jockey, "Жокей");
+      }
+
+      if(req.body.search.match(pattern.jadrin)){
+          req.body.search = req.body.search.replace(pattern.jardin, "Jardin");
+      }
+
+      if(req.body.search.match(pattern.piazza)){
+        req.body.search = req.body.search.replace(pattern.piazza, "Piazza del Caffe");
+      }
+
+      if(req.body.search.match(pattern.ceylon)){
+        req.body.search = req.body.search.replace(pattern.ceylon, "Ceylon");
+      }
+
+      if(req.body.search.match(pattern.arabica)){
+        req.body.search = req.body.search.replace(pattern.arabica, "Arabica");
+      }
+
+      if(req.body.search.match(pattern.milky)){
+        req.body.search = req.body.search.replace(pattern.milky, "Milky");
+      }
+
+      if(req.body.search.match(pattern.melissa)){
+        req.body.search = req.body.search.replace(pattern.melissa, "Melissa");
+      }
+
+      console.log(req.body.search);
+
+      let getTea = `SELECT * FROM tea WHERE item_name LIKE '%`+req.body.search+`%' ORDER BY id DESC`;
+      let getCoffee = `SELECT * FROM coffee WHERE item_name LIKE '%`+req.body.search+`%' AND type='coffee' ORDER BY id DESC`;
+
+
+      pgPool.query(getTea,[], function(err, response){
+        pgPool.query(getCoffee,[], function(error, responses){
+          if (err) return console.error(err);
+          var prods_tea = response.rows;
+          var prods_coffee = responses.rows;
+          var prods = prods_tea.concat(prods_coffee);
+          console.log(prods);
+          res.render('shop.pug', {
+            isRegistred: userinfo.user_id,
+            products: prods,
+            prod_count: prods.length,
+            title: 'Фирменный магазин Орими-трэйд',
+            needFooter: true
+            });
+        });
+      });
+    }
   });
 
 

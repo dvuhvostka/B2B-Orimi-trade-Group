@@ -10,6 +10,9 @@ block content
 			.carousel-inner
 				img(src='../welcome_to_orimi.gif')
 			a#sales_link(href='/sales') Все акции...
+			form(method="POST" action="/shop" id="search_form")
+				input(type="text" name="search" placeholder="Введите ключевое слово")
+				input(type="submit" value="Найти")
 		.main-content(class='item_list')
 			- for(var i=0; i<q; i++) 
 				div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
