@@ -1,18 +1,106 @@
-<<<<<<< HEAD
 extends layout2
 
+block scripts
+  link(rel='shortcut icon' href='../favicon.ico' type='image/x-icon')
 block content
-  - for (var i = 0; i < prod_count;i++)
-    .in
-      p #{products[i].type}
-=======
-if (products==0)
-  p Такого товара нет
-else
-  p id #{products[0].id}
-  p Название #{products[0].item_name}
-  p Цена #{products[0].item_price}
-  p Тип товара #{products[0].type}
-  p Брэнд #{products[0].sort}
-  img(src='/store_prods/'+products[0].type+'/'+products[0].sort+'/'+products[0].id+'.jpg')
->>>>>>> 3aa51413f6b3343874f866ec35e52ed12fca610e
+  #product_wrap
+    #top_bar
+      h1#title_product #{products[0].item_name}
+      nav(aria-label='breadcrumb')#breadcrumb
+        ol.breadcrumb
+          li.breadcrumb-item
+            a(href="/shop/") Магазин
+          li.breadcrumb-item
+            if products[0].type == 'tea'
+              a(href="/shop/"+products[0].type) Чай
+            else
+              a(href="/shop/"+products[0].type) Кофе
+          li.breadcrumb-item
+            case products[0].sort
+              when  'tess'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Tess
+              when  'greenfield'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Grienfield
+              when  'nuri'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Принцесса Нури
+              when  'java'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Принцесса Ява
+              when  'candy'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Принцесса Канди
+              when 'shah'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Шах
+              when 'Jardin'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Jardin
+          li.breadcrumb-item.active(aria-current='page')  #{products[0].item_name}
+      hr
+    #photo_area
+      img(src="../store_prods/"+products[0].type+"/"+products[0].sort+"/"+products[0].id+".jpg")
+    #info_wrap
+      if products[0].type == 'tea'
+        .in.p
+          p Тип 
+          p Чай
+        .in.p
+          p Вид чая
+          case products[0].about
+            when 'black'
+              p Черный 
+            when 'black_1'
+              p Черный с добавками
+            when 'green'
+              p Зеленый
+            when "green_1"
+              p Зеленый с добавками
+        .in.p
+          p Число пакетиков
+          p #{products[0].tea_bags}
+        .in.p
+          p Вес
+          p #{products[0].weight}г.
+        .in.p
+          p Тип упаковки
+          case products[0].packaging
+            when 'box'
+              p Коробка
+            when 'package'
+              p Пакет
+            when 'present'
+              p Подарочная упаковка
+    #price_product
+      #price_wrap
+        span #{products[0].item_price}
+          i.fas.fa-ruble-sign
+        .range_items
+          button(class='btn btn-secondary ')
+            i.fas.fa-minus.controls
+          input(type='text' value='1' class='input')
+          button(class='btn btn-secondary ')
+            i.fas.fa-plus.controls
+        button.btn.btn-primary Добавить в корзину
+    div#hr
+    #logo
+      case products[0].sort
+        when  'tess'
+          a(href="https://www.tesstea.co.uk/ru/" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+        when  'greenfield'
+          a(href="http://greenfieldtea.co.uk" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+        when  'nuri'
+          a(href="https://noori-tea.ru/" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+        when  'java'
+          a(href="http://www.java-tea.ru/" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+        when  'candy'
+          a(href="http://www.orimi.com/products/#princess_kandi/" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+        when 'shah'
+          a(href="http://shahtea.ru/" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+        when 'Jardin'
+          a(href="https://jardincoffee.com/views/home" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+    #sen
+      h4 Описание
+>>>>>>> a4127f9f4e564102feaead1795e808655adfcb71
