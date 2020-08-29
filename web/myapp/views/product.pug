@@ -20,7 +20,7 @@ block content
               when  'tess'
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Tess
               when  'greenfield'
-                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Grienfield
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Greenfield
               when  'nuri'
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Принцесса Нури
               when  'java'
@@ -68,13 +68,14 @@ block content
               p Подарочная упаковка
     #price_product
       #price_wrap
-        span #{products[0].item_price}
+        span
+          span #{products[0].item_price}
           i.fas.fa-ruble-sign
         .range_items
-          button(class='btn btn-secondary ')
+          button(class='btn btn-secondary minus')
             i.fas.fa-minus.controls
           input(type='text' value='1' class='input')
-          button(class='btn btn-secondary ')
+          button(class='btn btn-secondary plus')
             i.fas.fa-plus.controls
         button.btn.btn-primary Добавить в корзину
     div#hr
@@ -103,3 +104,32 @@ block content
             img(src="../logos/"+products[0].sort+".png")
     #sen
       h4 Описание
+  script.
+    $(document).ready(function(){
+      let price = document.querySelector('#price_wrap span span');
+      let start_price = price.innerHTML;
+      $('.minus').on('click', function(){
+        var item = $(this);
+        if (item.siblings('.input').val() > 1){
+          item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
+          price.innerHTML = $('.input').val()*start_price;
+        } else {
+          return 0;
+        }
+      })
+      
+      $('.plus').on('click', function(){
+        var item = $(this);
+        item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+        price.innerHTML = $('.input').val()*start_price;
+        console.log(start_price);
+      })
+      
+      $('.input').on('change',function(){
+        if($(this).val() == '0')
+          $(this).val(1);
+        price.innerHTML = $('.input').val()*start_price;        
+      });
+    });
+    
+    
