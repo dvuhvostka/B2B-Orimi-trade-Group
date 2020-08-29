@@ -92,7 +92,7 @@ user.route('/user')
           var d_data = [];
           for (var x = 0; x<data.length; x++){
             if(!dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id] = []; dealsdata[data[x].deal_id].id = data[x].deal_id;}
-            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].product_id+":"+data[x].sort+":"+data[x].type)}
+            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].product_id+":"+data[x].sort+":"+data[x].type+":"+data[x].price_of_one+":"+data[x].full_price)}
           }
           for(key in dealsdata){
             d_data.push(dealsdata[key]);

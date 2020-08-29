@@ -88,11 +88,13 @@ block content
             -for (var i=0; i<deals.length; i++)
               a(href='#').title № #{deals[i].id}
               .deal_wrap
+                -var final_sum = Number(0)
                 -for (var x=0; x<deals[i].length; x++)
+                  - final_sum = Number(final_sum) + Number(deals[i][x].split(':')[6])
                   .in.deal
                     img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
-                    a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1]}  шт.
-                p Итоговая стоимость:
+                    a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1] } шт. -  (#{deals[i][x].split(':')[6]}р.)
+                p Итоговая стоимость: #{final_sum}
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
         #balance_wrap
           .in
