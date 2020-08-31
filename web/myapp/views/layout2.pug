@@ -10,9 +10,20 @@ html
 		script(src="https://use.fontawesome.com/releases/v5.0.8/js/all.js")
 		block scripts
 	body
+		.modal.fade#modal(role='dialog' tabindex='-1' )
+			.modal-dialog
+				.modal-content
+					.modal-header
+						h5.modal-title Ошибка
+						button.close(type='button' data-dismiss='modal')
+							span(aria-hidden='true') &times;
+					.modal-body
+						p#error_msg
+					.modal-footer
+						button.btn.btn-secondary(data-dismiss='modal') Закрыть
 		nav(class='navbar navbar-expand-md navbar-dark bg-dark sticky-top')
 			.container-fluid
-				a(href='/' class='navbar-brand') Фирменный магазин Орими-трэйд
+				a(href='/shop' class='navbar-brand') Фирменный магазин Орими-трэйд
 				button(class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarContent')
 					span(class='navbar-toggler-icon')
 				div(class='collapse navbar-collapse' id='navbarContent')
@@ -44,8 +55,22 @@ html
 							p
 						.col-4
 							p  2020 © Группа компаний Орими Трэйд
+							.socials
+								a(href='https://vk.com/orimitrade')
+									i.fab.fa-vk
+								a(href='https://www.facebook.com/OrimiTrade')
+									i.fab.fa-facebook-square
+								a(href='https://twitter.com/OrimiTrade')
+									i.fab.fa-twitter
 						.col-4
 							p
-					hr
+	script.
+		var modal = $("#modal");
+		var error_msg=$("#error_msg");
+		
+		function showModal(msg){
+			error_msg.html(msg);       
+			modal.modal('show');
+		}
 	script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous")
 	script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous")

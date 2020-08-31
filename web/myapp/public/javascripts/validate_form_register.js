@@ -1,3 +1,10 @@
+function showModal(msg){
+  var modal = $("#modal");
+  var error_msg=$("#error_msg");
+  error_msg.html(msg);
+  modal.modal('show');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   let inputs = document.querySelectorAll('input[data-rule]');
   console.log(inputs);
@@ -65,6 +72,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (!checked) {
       e.preventDefault();
+    } else {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url:  "/register",
+        data: {
+          email: $(".email").val(),
+          name: $(".name").val(),
+          second_name: $(".second_name").val(),
+          third_name: $(".third_name").val(),
+          phone_number: $(".phone").val(),
+          password: $(".pass").val(),
+          confirm_password: $(".conf_pass").val(),
+          customRadioInline1: $(".phys").val(),
+        },
+        success: function(r){
+          if(!r.ok){
+            showModal(r.error);
+          }
+          else{
+            document.location.href='/shop';
+          }
+        }
+      })
     }
   });
 });

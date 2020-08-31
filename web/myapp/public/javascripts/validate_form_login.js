@@ -41,5 +41,23 @@ function validateInput(email, pass){
         event.stopPropagation();
       }
     })
+    var button = document.querySelector('button[type="submit"]');
+    button.addEventListener('click',function(e){
+      e.preventDefault();
+      $.ajax({
+        url: "/login",
+        type:"POST",
+        data: {
+          email: $(".email").val(),
+          password: $(".password").val()
+        },
+        success: function(r){
+          if(!r.ok)
+            showModal(r.error);
+          else
+            document.location.href='/shop';
+        }
+      })
+    });
   });
 })();

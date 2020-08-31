@@ -12,14 +12,15 @@ block content
 			a#sales_link(href='/sales') Все акции...
 			form(id='search' method="POST" action="/shop")
 				input(type="text" name="search" placeholder="Поиск")
-				input.btn.btn-info(type="submit" value="Найти")
+				input.btn.btn-primary(type="submit" value="Найти")
 		.main-content(class='item_list')
 			- for(var i=0; i<q; i++) 
 				div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
 					div(class='carousel_img')
 						img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
 					a(href='/shop/'+products[i].type+'?id='+products[i].id class='item_name') #{products[i].item_name}
-					p(class='item_price') #{products[i].item_price} р.
+					p(class='item_price') #{products[i].item_price} 
+						i.fas.fa-ruble-sign
 					div.footer_item
 						button(class='btn btn-primary addtocart' type=products[i].type data-id=products[i].id) Купить
 						div Кол-во
@@ -29,6 +30,8 @@ block content
 								input(type='text' value='1' class='input' data-id=products[i].id)
 								button(class='btn btn-secondary plus')
 									i.fas.fa-plus.controls
+			if q == 0
+				div.noitems По данному запросу нет товаров
 		.sidebar
 			case Type
 				when 'tea'
@@ -119,6 +122,9 @@ block content
 									.submenu
 										input(type='checkbox' name='teabag_100')
 										label 100
+									.submenu
+										input(type='checkbox' name='teabag_120')
+										label 120
 							li
 								a(class='filters_tags') Вид упаковки
 								.submenu_wrap
@@ -210,27 +216,29 @@ block content
 							input.btn.btn-primary(type="submit" value="Найти")
 										
 				default
-					ul(class='filters')
-						li 
-							a(class='filters_tags') Категория
-							.categories
-								a.link(href='/shop/tea') Чай
-									i.fas.fa-angle-right
-								a.link(href='/shop/coffee') Кофе
-									i.fas.fa-angle-right
-						li 
-							a(class='filters_tags') Цена
-							div.price
-								p 0р. 
-								input(type='range' min='0' max='1000' id='range_price' value='1000' step='1')
-								.price_opt
-									p до
-									input(type='text' value='1000' id='input_range_price')
-	.alert_t(aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 200px;")
+					form(method="GET" action="/shop")
+						ul(class='filters')
+							li 
+								a(class='filters_tags') Категория
+								.categories
+									a.link(href='/shop/tea') Чай
+										i.fas.fa-angle-right
+									a.link(href='/shop/coffee') Кофе
+										i.fas.fa-angle-right
+							li 
+								a(class='filters_tags') Цена
+								div.price
+									p 0р. 
+									input(type='range' min='0' max='1000' id='range_price' value='1000' step='1' name='range_of_price')
+									.price_opt
+										p до
+										input(type='text' value='1000' id='input_range_price')
+							input.btn.btn-primary(type="submit" value="Найти")
+	.alert_t(aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 200px; z-index:-1;")
 		div(class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="1000")
 			div(class="toast-header")
 				strong(class="mr-auto") Уведомление
-				small(class="text-muted") Just now
+				small(	class="text-muted") Just now
 				button(type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close") &times;
 			div(class="toast-body")  Товар успешно добавлен в корзину.
 	script.

@@ -18,14 +18,14 @@ block content
             case data.coffee.length:
               for(var i = 0; i<data.tea.length; i++){
                 console.log()
-                out += '<div type='+data.tea[i].type+' class = "'+data.tea[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/'+data.tea[i].type+'/'+data.tea[i].sort+'/'+data.tea[i].id+'.jpg><a href="#" class="item_name_cart"> '+data.tea[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.tea[i].type+data.tea[i].id]+'</p><p> Цена: '+data.tea[i].item_price*cart[data.tea[i].type+data.tea[i].id]+'</p><button onclick=delfromcart("'+data.tea[i].type+data.tea[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
+                out += '<div type='+data.tea[i].type+' class = "'+data.tea[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/'+data.tea[i].type+'/'+data.tea[i].sort+'/'+data.tea[i].id+'.jpg><a href="/shop/tea?id='+data.tea[i].id+'" class="item_name_cart"> '+data.tea[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.tea[i].type+data.tea[i].id]+'</p><p> Цена: '+data.tea[i].item_price*cart[data.tea[i].type+data.tea[i].id]+'</p><button onclick=delfromcart("'+data.tea[i].type+data.tea[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
                 $('.tea_li').html(out+"<button class='btn btn-success submit_cart '>Перейти к оплате</button>");
                 console.log(data.tea[i]); 
               }
               break;
             case data.tea.length: 
               for(var i = 0; i<data.coffee.length; i++){
-                out += '<div type='+data.coffee[i].type+' class = "'+data.coffee[i].id+' good_cart"t><img class="img_good_cart" src=/store_prods/'+data.coffee[i].type+'/'+data.coffee[i].sort+'/'+data.coffee[i].id+'.jpg><a href="#" class="item_name_cart">'+data.coffee[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.coffee[i].type+data.coffee[i].id]+'</p><p> Цена: '+data.coffee[i].item_price*cart[data.coffee[i].type+data.coffee[i].id]+'</p><button onclick=delfromcart("'+data.coffee[i].type+data.coffee[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
+                out += '<div type='+data.coffee[i].type+' class = "'+data.coffee[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/'+data.coffee[i].type+'/'+data.coffee[i].sort+'/'+data.coffee[i].id+'.jpg><a href="/shop/coffee?id='+data.coffee[i].id+'" class="item_name_cart">'+data.coffee[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.coffee[i].type+data.coffee[i].id]+'</p><p> Цена: '+data.coffee[i].item_price*cart[data.coffee[i].type+data.coffee[i].id]+'</p><button onclick=delfromcart("'+data.coffee[i].type+data.coffee[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
                 $('.coffee_li').html(out+"<button class='btn btn-success submit_cart '>Перейти к оплате</button>");
                 console.log(data.coffee[i]); 
               }
@@ -33,12 +33,12 @@ block content
             default: 
               console.log("TEA: ")
               for(var i = 0; i<data.tea.length; i++){
-                out += '<div type='+data.tea[i].type+' class = "'+data.tea[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/'+data.tea[i].type+'/'+data.tea[i].sort+'/'+data.tea[i].id+'.jpg><a href="#" class="item_name_cart">'+data.tea[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.tea[i].type+data.tea[i].id]+'</p><p > Цена: '+data.tea[i].item_price*cart[data.tea[i].type+data.tea[i].id]+'</p><button onclick=delfromcart("'+data.tea[i].type+data.tea[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
+                out += '<div type='+data.tea[i].type+' class = "'+data.tea[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/'+data.tea[i].type+'/'+data.tea[i].sort+'/'+data.tea[i].id+'.jpg><a href="/shop/tea?id='+data.tea[i].id+'" class="item_name_cart">'+data.tea[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.tea[i].type+data.tea[i].id]+'</p><p > Цена: '+data.tea[i].item_price*cart[data.tea[i].type+data.tea[i].id]+'</p><button onclick=delfromcart("'+data.tea[i].type+data.tea[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
                 console.log(data.tea[i]); 
               }
               console.log("COFFEE:")
               for(var i = 0; i<data.coffee.length; i++){
-                out += '<div type='+data.coffee[i].type+' class = "'+data.coffee[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/'+data.coffee[i].type+'/'+data.coffee[i].sort+'/'+data.coffee[i].id+'.jpg><a href="#" class="item_name_cart"> '+data.coffee[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.coffee[i].type+data.coffee[i].id]+'</p><p > Цена: '+data.coffee[i].item_price*cart[data.coffee[i].type+data.coffee[i].id]+'</p><button onclick=delfromcart("'+data.coffee[i].type+data.coffee[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
+                out += '<div type='+data.coffee[i].type+' class = "'+data.coffee[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/'+data.coffee[i].type+'/'+data.coffee[i].sort+'/'+data.coffee[i].id+'.jpg><a href="/shop/coffee?id='+data.coffee[i].id+'" class="item_name_cart"> '+data.coffee[i].item_name+'</a><p class="item_count"> Кол-во: '+cart[data.coffee[i].type+data.coffee[i].id]+'</p><p > Цена: '+data.coffee[i].item_price*cart[data.coffee[i].type+data.coffee[i].id]+'</p><button onclick=delfromcart("'+data.coffee[i].type+data.coffee[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
                 $('.all_li').html(out+"<button class='btn btn-success submit_cart '>Перейти к оплате</button>");
                 console.log(data.coffee[i]); 
               }

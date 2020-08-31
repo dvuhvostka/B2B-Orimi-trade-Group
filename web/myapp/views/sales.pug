@@ -6,23 +6,24 @@ block append scripts
 block content
   - var q_n = news_q
   .container
-    input(placeholder="Название статьи")#newsTitle
-    input(placeholder="Описание")#newsDescription
-    input(placeholder="Текст статьи")#newsBody
-    input(placeholder="Ссылка на изображение к статье", value="https://via.placeholder.com/600")#newsImg
-    button(onclick="addNews();location.reload();")#add Добавить статью
-    button(onclick="document.location.href='/add';")#delete Удалить все 
+    div(style='display:none')
+      input(placeholder="Название статьи")#newsTitle
+      input(placeholder="Описание")#newsDescription
+      input(placeholder="Текст статьи")#newsBody
+      input(placeholder="Ссылка на изображение к статье", value="https://via.placeholder.com/600")#newsImg
+      button(onclick="addNews();location.reload();")#add Добавить статью
+      button(onclick="document.location.href='/add';")#delete Удалить все 
     script(src='/news.js')
-    div(class='news_wrap')
+    div(class='sales_wrap')
       .row
         - for(var i=0; i<q_n; i++) 
           .col-sm-4
-            .card(class='mx-auto mb-4 text-center shadow-lg')
-              .card-header
-                h3(class='card-title') #{pnews[i].header}            
-              .card-body
+            .card.s(class='mx-auto mb-4 text-center shadow-lg ')
+              .card-header.s
+                h4(class='card-title') #{pnews[i].header}            
+              .card-body.s
                 if pnews[i].img_url                  
-                  img(src=pnews[i].img_url class='card-img-top mb-3 img-thumbnail shadow' alt='...')
+                  img(src=pnews[i].img_url class='card-img-top' alt='...')
                 h5(class='card-subtitle' id='subtitle-text' + i) #{pnews[i].intro}
                 button(type='button' class='close' aria-label='close' style='display:none;')
                   span( aria-hidden="true") &times;
@@ -33,9 +34,9 @@ block content
     $(document).ready(function(){
       $('.link-news').on('click', function(){
         var link_open = $(this);
-          link_open.siblings('.card-text').show(600);
+          link_open.siblings('.card-text').show(400);
           link_open.siblings('.card-subtitle').hide(20);
-          link_open.siblings('.close').show(600);
+          link_open.siblings('.close').show(20);
           link_open.hide(20);
       });
       $('.close').on('click', function(){

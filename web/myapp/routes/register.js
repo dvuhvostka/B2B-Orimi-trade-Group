@@ -55,6 +55,7 @@ function md5(pass) {
 /* GET users listing. */
 router.route('/register')
   .get(function(req, res) {
+    console.log("\n\nregister page\n\n")
     if(!userinfo.user_id){
     res.render('register.pug',{
       isRegister: req.session.userId,
@@ -71,15 +72,24 @@ router.route('/register')
     var ip = req.ip;
     var ip_result = ip.replace("::ffff:", "");
     //res.redirect('/register');
-    if (errCode!=0) {res.send("err"+errCode)} else {
+    if (errCode!=0) {
+      res.json({
+        ok:false,
+        error: "Ошибка регистрации. Повторите попытку позже или обратитесь к нашему техническому специалисту",
+      });
+    } else {
        //выводим код ошибки. Если ошибки нет, выводим true.
       // ЗАНОСИМ ДАННЫЕ В БД.
       db.any('SELECT * FROM users WHERE email = $1', req.body.email)
       .then(function (data) {
           if(data.length != 0){
-            console.log("Email already registred: "+data[0].email);
+          var  error = "Данный адрес электронной почты "+data[0].email+" уже зарегистрирован!";
             //res.render('/error_regiter.pug')
             //нужно сообщить клиенту, что этот email уже занят.
+            res.json({
+              ok:false,
+              error: error
+            });
           } else {
             userinfo.user_id = uuidv4();
             db.none('INSERT INTO users(username, second_name , third_name, email, password, ip_addr, balance, permissions, client_type, number, id, phone_confirmed) VALUES(${username}, ${second_name}, ${third_name}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, ${id}, ${phone_confirmed})',  {
@@ -96,13 +106,14 @@ router.route('/register')
                 id: userinfo.user_id,
                 phone_confirmed: "0"
             });
+            res.json({
+              ok:true,
+            })
           }
       })
       .catch(error => {
        console.log('ERROR:', error);
-   });
-   //session and coockies
-      setTimeout(res.redirect('/shop'),1000);
+      });
     }
   });
 

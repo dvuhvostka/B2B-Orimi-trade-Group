@@ -54,6 +54,7 @@ function md5(pass) {
 
 login.route('/login')
     .get(function(req,res){
+      console.log("\n\nlogin page\n\n");
       if(req.session.userId){
         res.redirect('/')
       }else {
@@ -63,19 +64,28 @@ login.route('/login')
     }
     })
     .post(function(req, res){
+      var error;
       const {email, password} = req.body;
       console.log(email + ' ' + password)
 try {
-  pgPool.query(query,[email,md5(password)], function(err, res){
-    console.log(res.rows);
-    if(res.rows.length!=0){
-      userinfo.user_id = res.rows[0].id;
-    } else console.log("Undefined ID")
+  pgPool.query(query,[email,md5(password)], function(err, resp){
+    console.log(resp.rows);
+    if(resp.rows.length!=0){
+      userinfo.user_id = resp.rows[0].id;
+      res.json({
+        ok:true,
+      })
+    } else {
+      error = "Неверное имя пользователя или пароль";
+      res.json({
+        ok:false,
+        error:error,
+      })
+    }
   });
 } catch (e) {
   console.log("error: "+e);
 }
-    res.redirect('/shop');
 });
 
 

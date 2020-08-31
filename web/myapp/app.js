@@ -92,8 +92,9 @@ app.use(function(req, res, next) {
 })
 
 app.get('/', function(req,res){
-  console.log('main page seeing id is ',userinfo.user_id);
+  console.log("\n\nMAIN ROOT\n\n");
   const { userId } = req.session;
+  console.log('main page seeing id is ',userinfo.user_id);
   console.log('main page coockie id is ', req.session.userId);
   if(req.session.userId){
     userinfo.user_id = req.session.userId;

@@ -14,6 +14,7 @@ logout.use(session({
 logout.route('/logout')
 .get(function(req, res) {
   //res.send('hello world');
+  console.log("\n\nlogged out\n\n");
   console.log('cookies: ' + JSON.stringify(req.session.id));
   req.session.destroy(function(err){
     if(err){

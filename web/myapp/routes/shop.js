@@ -98,7 +98,9 @@ function checkCoffeeFilters (data){
   }
   for (var each of coffee_type){
     for (var item of filters){
-      if (each == item) {
+      if (item == 'cereal'){
+        coffee_type_sql+=`or category = 'cereal_2' or category = 'cereal_3' or category = 'cereal_4' `;
+      }else if (each == item) {
         coffee_type_sql+=`or category = '${item}' `;
       }
     }
@@ -139,6 +141,7 @@ var getCoffee = `SELECT * FROM coffee WHERE type='coffee' ORDER BY id DESC`;
 
 router.route('/shop/:type?')
   .get(function(req,res){
+    console.log("\n\nshop\n\n");
     var type = req.params.type;
     if (!type) {
       pgPool.query(getTea,[], function(err, response){
@@ -147,7 +150,7 @@ router.route('/shop/:type?')
           var prods_tea = response.rows;
           var prods_coffee = responses.rows;
           var prods = prods_tea.concat(prods_coffee);
-          console.log(prods);
+          // console.log(prods);
           res.render('shop.pug', {
             isRegistred: userinfo.user_id,
             products: prods,

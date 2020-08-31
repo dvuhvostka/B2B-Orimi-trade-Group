@@ -135,6 +135,8 @@ block content
             button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
   script.
+    
+    
     $('#code_btn').on('click', function(e) {
       e.preventDefault();
       var codeinput = $('#code_input').val();
@@ -147,9 +149,9 @@ block content
           },
           success: function(r){
             if(r.ok == false){
-              alert(r.error);
+              showModal(r.error);
             }else{
-              alert(r.confirmed_code_status);
+              showModal(r.confirmed_code_status)
               location.href=location.href;
             }
           }
@@ -164,7 +166,7 @@ block content
           },
           success: function(r){
             if(r.ok == true){
-              alert(r.res_ok);
+              showModal(r.res_ok);
               location.href=location.href;
             }
           }
@@ -198,7 +200,7 @@ block content
         var del = confirm("Вы действительно хотите УДАЛИТЬ организацию?\n"+owner_id);
         if(del){
           $.post("/user",{post_type: "delete_org_skdjfgh213asRQadSKSFD3123244", org_owner_id: owner_id});
-          alert("Организация успешно удалена.\n"+owner_id);
+          showModal("Организация успешно удалена.\n"+owner_id);
           window.location.reload();
         }
       }
@@ -206,7 +208,7 @@ block content
         var conf = confirm("Вы действительно хотите ПОДТВЕРДИТЬ организацию?\n"+owner_id);
         if(conf){
           $.post("/user",{post_type: "confirm_org_askdjfhl123123kaGFDGdfhFsdf3123", org_owner_id: owner_id});
-          alert("Организация успешно подтверждена.\n"+owner_id);
+          showModal("Организация успешно подтверждена.\n"+owner_id);
           window.location.reload();
         }
       }
