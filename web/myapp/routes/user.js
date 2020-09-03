@@ -239,7 +239,7 @@ user.route('/user')
                       owner_position: req.body.position,
                       owner_name: resp.rows[0].username,
                       owner_sname: resp.rows[0].second_name,
-                      owner_tname: resp.rows[0].third_name
+                      owner_tname: resp.rows[0].third_name,
                     });
                   }
               });

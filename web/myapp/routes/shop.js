@@ -28,8 +28,8 @@ var pgPool = new Pool({
 function checkFilters (data){
   var brand_tea = ['greenfield','nuri','tess','java','candy','shah'];
   var tea_type = ['black','black_1','green','green_1','herbal'];
-  var teabag = ['20','25','30','50','100'];
-  var tea_pack = ['box','package','present'];
+  var teabag = ['20','25','30','50','100','120'];
+  var tea_pack = ['box','package','present','capsule'];
   var collection = 'in_one_collection';
   var filters = Object.keys(data);
   var brand_sql = '';
@@ -81,7 +81,7 @@ function checkFilters (data){
 }
 
 function checkCoffeeFilters (data){
-  var coffee_brand = ['Jardin','Jokey','Piazza'];
+  var coffee_brand = ['Jardin','Jockey','Piazza'];
   var coffee_type = ['milled','milled_2','cereal','cereal_2','cereal_3', 'cereal_4', 'sublem', 'granul'];
   var coffee_pack = ['glass_jar','can','soft_pack', 'capsule'];
   var filters = Object.keys(data);
@@ -136,57 +136,105 @@ function addProduct() {
 
 var getTea = `SELECT * FROM tea ORDER BY id DESC`;
 var getCoffee = `SELECT * FROM coffee WHERE type='coffee' ORDER BY id DESC`;
-
+var getSales = `SELECT * FROM sales ORDER BY id DESC`;
 
 
 router.route('/shop/:type?')
   .get(function(req,res){
     console.log("\n\nshop\n\n");
-    var type = req.params.type;
-    if (!type) {
-      pgPool.query(getTea,[], function(err, response){
-        pgPool.query(getCoffee,[], function(error, responses){
-          if (err) return console.error(err);
-          var prods_tea = response.rows;
-          var prods_coffee = responses.rows;
-          var prods = prods_tea.concat(prods_coffee);
-          // console.log(prods);
+    pgPool.query(getSales,[],function(e,r){
+      var type = req.params.type;
+      if (!type) {
+        pgPool.query(getTea,[], function(err, response){
+          pgPool.query(getCoffee,[], function(error, responses){
+            if (err) return console.error(err);
+            var prods_tea = response.rows;
+            var prods_coffee = responses.rows;
+            var prods = prods_tea.concat(prods_coffee);
+            // console.log(prods);
+            res.render('shop.pug', {
+              isRegistred: userinfo.user_id,
+              products: prods,
+              prod_count: prods.length,
+              title: 'Фирменный магазин Орими-трэйд',
+              needFooter: true,
+              sales: r.rows,
+              sales_q: r.rows.length,
+              });
+          });
+        });
+      }else if(type == 'tea'){
+        if(req.query.id==undefined){
+          var sql = checkFilters(req.query);
+          console.log('here ', req.query);
+           var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? 'AND item_price <= ' + req.query.range_of_price : ' ') + (req.query.weight? ' AND weight <= '+ req.query.weight : ' ') + sql + ` ORDER BY id DESC`;
+           console.log(teaFilters);
+          pgPool.query(teaFilters,[], function(err, response){
+          if (err) return console.log(err);
+          var prods;
+          if(response.rows==undefined){
+            prods = 0;
+          }else{
+            prods = response.rows;
+          }
           res.render('shop.pug', {
-            isRegistred: userinfo.user_id,
+            isRegistred: req.session.userId,
             products: prods,
             prod_count: prods.length,
             title: 'Фирменный магазин Орими-трэйд',
-            needFooter: true
+            type: 'tea',
+            needFooter: true,
+            sales: r.rows,
+            sales_q: r.rows.length,
             });
-        });
-      });
-    }else if(type == 'tea'){
-      if(req.query.id==undefined){
-        var sql = checkFilters(req.query);
-        console.log('here ', req.query);
-         var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? 'AND item_price < ' + req.query.range_of_price : ' ') + (req.query.weight? ' AND weight < '+ req.query.weight : ' ') + sql + ` ORDER BY id DESC`;
-         console.log(teaFilters);
-        pgPool.query(teaFilters,[], function(err, response){
-        if (err) return console.log(err);
-        var prods;
-        if(response.rows==undefined){
-          prods = 0;
-        }else{
-          prods = response.rows;
+          });
+        }else if(req.query.id){
+          var gettea = `SELECT * FROM tea WHERE type='tea' AND id='`+req.query.id+`'`;
+          pgPool.query(gettea,[], function(err, response){
+            var prods = response.rows;
+            res.render('product.pug', {
+              isRegistred: req.session.userId,
+              products: prods,
+              prod_count: prods.length,
+              title: 'Фирменный магазин Орими-трэйд',
+              type: 'tea',
+              needFooter: false
+              });
+          });
         }
-        res.render('shop.pug', {
-          isRegistred: req.session.userId,
-          products: prods,
-          prod_count: prods.length,
-          title: 'Фирменный магазин Орими-трэйд',
-          type: 'tea',
-          needFooter: true
+    }
+      else if(type=='coffee'){
+        if(req.query.id==undefined){
+          var sql = checkCoffeeFilters(req.query);
+          console.log('here ', req.query);
+          var coffeeFilters = `SELECT * FROM coffee WHERE type='coffee' ` + (req.query.range_of_price? 'AND item_price <= ' + req.query.range_of_price : ' ') + (req.query.weight? ' AND weight <= '+ req.query.weight : ' ') + sql + ` ORDER BY id DESC`;
+          console.log(coffeeFilters);
+          pgPool.query(coffeeFilters,[], function(err, response){
+            if (err) return console.error(err);
+            var prods;
+            if(response.rows==undefined){
+              prods = 0;
+            }else{prods = response.rows;}
+          console.log(prods); //debug
+          res.render('shop.pug', {
+            isRegistred: req.session.userId,
+            products: prods,
+            prod_count: prods.length,
+            title: 'Фирменный магазин Орими-трэйд',
+            type: 'coffee',
+            needFooter: true,
+            sales: r.rows,
+            sales_q: r.rows.length,
           });
         });
       }else if(req.query.id){
-        var gettea = `SELECT * FROM tea WHERE type='tea' AND id='`+req.query.id+`'`;
-        pgPool.query(gettea,[], function(err, response){
-          var prods = response.rows;
+        console.log(req.query.id)
+        var getcoffee = `SELECT * FROM coffee WHERE type='coffee' AND id='`+req.query.id+`'`;
+        pgPool.query(getcoffee,[], function(err, response){
+          var prods;
+          if(response.rows==undefined){
+            prods = 0;
+          }else{prods = response.rows;}
           res.render('product.pug', {
             isRegistred: req.session.userId,
             products: prods,
@@ -196,49 +244,9 @@ router.route('/shop/:type?')
             needFooter: false
             });
         });
+        }
       }
-  }
-    else if(type=='coffee'){
-      if(req.query.id==undefined){
-        var sql = checkCoffeeFilters(req.query);
-        console.log('here ', req.query);
-        var coffeeFilters = `SELECT * FROM coffee WHERE type='coffee' ` + (req.query.range_of_price? 'AND item_price < ' + req.query.range_of_price : ' ') + sql + ` ORDER BY id DESC`;
-        console.log(coffeeFilters);
-        pgPool.query(coffeeFilters,[], function(err, response){
-          if (err) return console.error(err);
-          var prods;
-          if(response.rows==undefined){
-            prods = 0;
-          }else{prods = response.rows;}
-        console.log(prods); //debug
-        res.render('shop.pug', {
-          isRegistred: req.session.userId,
-          products: prods,
-          prod_count: prods.length,
-          title: 'Фирменный магазин Орими-трэйд',
-          type: 'coffee',
-          needFooter: true
-        });
-      });
-    }else if(req.query.id){
-      console.log(req.query.id)
-      var getcoffee = `SELECT * FROM coffee WHERE type='coffee' AND id='`+req.query.id+`'`;
-      pgPool.query(getcoffee,[], function(err, response){
-        var prods;
-        if(response.rows==undefined){
-          prods = 0;
-        }else{prods = response.rows;}
-        res.render('product.pug', {
-          isRegistred: req.session.userId,
-          products: prods,
-          prod_count: prods.length,
-          title: 'Фирменный магазин Орими-трэйд',
-          type: 'tea',
-          needFooter: false
-          });
-      });
-      }
-    }
+    });
   }).post(function(req,res){
     console.log(req.body);
     if(!req.body.search){
@@ -251,7 +259,7 @@ router.route('/shop/:type?')
         nuri: /nuri|нури|Принцесса нури/gi,
         candy: /candy|канди|кэнди|Принцесса канди/gi,
         shah: /шах/gi,
-        jockey: /жакей|жокей|jockey|jokey/gi,
+        jockey: /жакей|жокей|jockey|jockey/gi,
         jardin: /жардин|jardin/gi,
         piazza: /пиаза|piazza/g,
         ceylon: /цейлон|ceylon/gi,
@@ -333,7 +341,7 @@ router.route('/shop/:type?')
       let getTea = `SELECT * FROM tea WHERE item_name LIKE '%`+req.body.search+`%' ORDER BY id DESC`;
       let getCoffee = `SELECT * FROM coffee WHERE item_name LIKE '%`+req.body.search+`%' AND type='coffee' ORDER BY id DESC`;
 
-
+      pgPool.query(getSales,[],function(e,r){
       pgPool.query(getTea,[], function(err, response){
         pgPool.query(getCoffee,[], function(error, responses){
           if (err) return console.error(err);
@@ -346,17 +354,14 @@ router.route('/shop/:type?')
             products: prods,
             prod_count: prods.length,
             title: 'Фирменный магазин Орими-трэйд',
-            needFooter: true
+            needFooter: true,
+            sales: r.rows,
+            sales_q: r.rows.length,
             });
         });
       });
+    });
     }
-  });
-
-
-router.route('/shop/products')
-  .get(function(req,res){
-    res.send('FUCK YOU');
   });
 
 module.exports = router;

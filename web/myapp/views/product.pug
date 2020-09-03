@@ -33,6 +33,10 @@ block content
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Шах
               when 'Jardin'
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Jardin
+              when 'Jockey'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Jockey
+              when 'Piazza'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Piazza del Caffe
           li.breadcrumb-item.active(aria-current='page')  #{products[0].item_name}
       hr
     #photo_area
@@ -116,6 +120,7 @@ block content
         button.btn.btn-primary Добавить в корзину
     div#hr
     #logo
+      p Перейти на сайт бренда
       case products[0].sort
         when  'tess'
           a(href="https://www.tesstea.co.uk/ru/" target='_blank')
@@ -138,6 +143,13 @@ block content
         when 'Jardin'
           a(href="https://jardincoffee.com/views/home" target='_blank')
             img(src="../logos/"+products[0].sort+".png")
+        when 'Jockey'
+          a(href="http://coffeejockey.ru/" target='_blank')
+            img(src="../logos/"+products[0].sort+".webp")
+        when 'Piazza'
+          a(href="#" target='_blank')
+            img(src="../logos/"+products[0].sort+".png")
+    
     #sen
       h4 Описание      
   script(src='../thumbelina.js')

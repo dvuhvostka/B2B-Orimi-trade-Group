@@ -8,7 +8,7 @@ block content
 	script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
 	
 	.grid-container
-		.carousel(class='slide' id='slider' data-rede='carousel')
+		.carousel
 			.carousel-inner
 				img(src='../welcome_to_orimi.gif')
 			a#sales_link(href='/sales') Все акции...
@@ -24,8 +24,15 @@ block content
 					p(class='item_price') #{products[i].item_price} 
 						i.fas.fa-ruble-sign
 					div.footer_item
-						button(class='btn btn-primary addtocart' type=products[i].type data-id=products[i].id) Купить
-						div Кол-во
+						button.b(class='btn btn-primary addtocart' type=products[i].type data-id=products[i].id) Купить
+						div.sht Кол-во в шт
+							.range_items
+								button(class='btn btn-secondary minus')
+									i.fas.fa-minus.controls
+								input(type='text' value='1' class='input' data-id=products[i].id)
+								button(class='btn btn-secondary plus')
+									i.fas.fa-plus.controls
+						div.kor Кол-во в коробках
 							.range_items
 								button(class='btn btn-secondary minus')
 									i.fas.fa-minus.controls
@@ -41,11 +48,13 @@ block content
 						ul(class='filters')
 							li 
 								a(class='filters_tags') Категория
-									.categories
-										a.active_type.link(href='/shop/tea') Чай
-											i.fas.fa-angle-right
-										a.link(href='/shop/coffee') Кофе
-											i.fas.fa-angle-right
+								.categories
+									a.active_type.link(href='/shop/tea') Чай
+										i.fas.fa-angle-right
+									a.link(href='/shop/coffee') Кофе
+										i.fas.fa-angle-right
+									a.link(href='/shop/coffee') Сопутствующие товары
+										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
 								.price
@@ -75,6 +84,12 @@ block content
 									.submenu
 										input(type='checkbox' name='shah')
 										label Шах
+									.submenu
+										input(type='checkbox' name='gita')
+										label Гита
+									.submenu
+										input(type='checkbox' name='nila')
+										label Жемчужина Нила
 							li
 								a(class='filters_tags') Вид чая
 								.tea_type_wrap
@@ -93,11 +108,6 @@ block content
 									.tea_type
 										input(type='checkbox' name='herbal')
 										label Гербальный
-							li
-								a(class='filters_tags') В одной коллекции
-								#one_collection
-									input(type='checkbox' name='in_one_collection')
-									label Да
 							li
 								a(class='filters_tags') Вес
 								.weight_wrap
@@ -138,18 +148,23 @@ block content
 										label Пакет
 									.submenu
 										input(type='checkbox' name='present')
-										label Подарочная упакаовка
+										label Подарочная упаковка
+									.submenu
+										input(type='checkbox' name='capsule')
+										label Капсулы
 							input.btn.btn-primary(type="submit" value="Найти")
 				when 'coffee'
 					form(method="GET" action="/shop/coffee")
 						ul(class='filters')
 							li 
 								a(class='filters_tags') Категория
-									.categories
-										a.link(href='/shop/tea') Чай
-											i.fas.fa-angle-right
-										a.active_type.link(href='/shop/coffee') Кофе
-											i.fas.fa-angle-right
+								.categories
+									a.link(href='/shop/tea') Чай
+										i.fas.fa-angle-right
+									a.active_type.link(href='/shop/coffee') Кофе
+										i.fas.fa-angle-right
+									a.link(href='/shop/coffee') Сопутствующие товары
+										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
 								div.price
@@ -165,7 +180,7 @@ block content
 										input(type='checkbox' name='Jardin')
 										label Jardin
 									.submenu
-										input(type='checkbox' name='Jokey')
+										input(type='checkbox' name='Jockey')
 										label Жокей
 									.submenu
 										input(type='checkbox' name='Piazza')
@@ -201,6 +216,14 @@ block content
 										input(type='checkbox' name='granul')
 										label Гранулированный
 							li
+								a(class='filters_tags') Вес
+								.weight_wrap
+									p 36г.
+									input(type='range' min='36' max='1000' id='range_weight' value='1000' name='weight')
+									.weight_opt
+										p до
+										input(type='text' value='1000' id='input_range_weight')
+							li
 								a(class='filters_tags') Вид упаковки
 								.submenu_wrap
 									.submenu
@@ -227,6 +250,8 @@ block content
 										i.fas.fa-angle-right
 									a.link(href='/shop/coffee') Кофе
 										i.fas.fa-angle-right
+									a.link(href='/shop/coffee') Сопутствующие товары
+										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
 								div.price
@@ -244,8 +269,7 @@ block content
 				button(type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close") &times;
 			div(class="toast-body")  Товар успешно добавлен в корзину.
 	script.
-		
-		window.onload = function(){
+			window.onload = function(){
 			var range_price = document.getElementById('range_price');
 			var input_range_price = document.getElementById('input_range_price');
 			var range_weight = document.getElementById('range_weight');
@@ -313,13 +337,17 @@ block content
 				return 0;
 			}
 		})
-		
 		$('.plus').on('click', function(){
 			var item = $(this);
 			item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
 		})
 		
-
+		$('.kor .range_items .input').on('change',function(){
+			var item = $(this);
+			var input_sht = item.parentsUntil('.footer_item').siblings('.sht').children('.range_items').children('.input');
+			
+			
+		})
 		
 		if(!localStorage.getItem('cart')){
 			var cart = {};
