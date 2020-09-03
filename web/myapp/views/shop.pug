@@ -10,7 +10,7 @@ block content
 			.carousel-inner
 				img(src='../welcome_to_orimi.gif')
 			a#sales_link(href='/sales') Все акции...
-			select#select_city			
+			select#select_city
 			form(id='search' method="POST" action="/shop")
 				input(type="text" name="search" placeholder="Поиск")
 				input.btn.btn-primary(type="submit" value="Найти")
@@ -271,6 +271,7 @@ block content
 	script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
 	script.
 			window.onload = function(){
+				getRegion();
 			$("#select_city").select2({
 				data: array,
 			})
@@ -370,4 +371,10 @@ block content
 			$('.toast').toast('show');
 			console.log(cart);
 		})
+		function getRegion() {
+			$.get( "https://freegeoip.app/json/", function( data ) {
+				console.log(data);
+				alert(data.region_name+"\n"+data.ip);
+			});
+		}
 	
