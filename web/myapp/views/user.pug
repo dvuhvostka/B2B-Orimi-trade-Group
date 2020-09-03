@@ -1,6 +1,9 @@
 extends layout2
 block scripts
   script(src='user_js.js')
+  link(href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet")
+  script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
+  script(src="https://unpkg.com/@popperjs/core@2")
 block content
   #user_page(class='card card-content shadow-lg mx-auto')
     nav#nav_panel
@@ -58,9 +61,6 @@ block content
               .in
                 p Ваша должность:
                 p #{info.position}
-              .in
-                input(type="text" id="link_code" value=""+info.link_code+"")
-                button(onclick="copylinkcode()") Копировать
             if (org_info==0 && type=='ur_type')
               a(data-toggle='collapse' href='#org_confirm' aria-expanded="false" aria-controls="org_confirm").p-danger Вы не закончили регистрацию!
               #org_confirm.collapse
@@ -73,8 +73,14 @@ block content
                     option(value="Владелец") Владелец
                     option(value="Директор") Директор
                     option(value="Менеджер") Менеджер
+                  select(name='type' placeholder='Тип организации' required class='type_of_org')
+                    option(value="" selected disabled) Тип организации
+                    option(value="Продуктовый магазин") Продуктовый магазин
+                    option(value="Кафе") Кафе
+                    option(value="Офис") Офис
+                    option(value="Другое") Другое
                   input(type='file' name='docs' id='docs' multiple data-multiple-caption='{count} файлов выбрано' required)
-                  label.btn.btn-outline-info(type='button' id='redact' for='docs')
+                  label.btn.btn-outline-info(type='button' id='redact' for='docs' data-toggle='tooltip' data-placement="top" title="ИНН, св-во о регистрации, договор аренды помещения или владения")
                     span Загрузить фото документов
                   input.btn.btn-outline-success(type='submit' value='Создать заявку')
       .tab-pane.fade#nav-orders.panel(role='tabpanel' area-labelledby='nav-orders-tab')
@@ -101,6 +107,11 @@ block content
             p Ваш баланс составляет: 
             p #{balance}
               i.fas.fa-ruble-sign.rub
+          if (type=='ur_type' && org_info==2)
+            div#link_code_wrap Код для продавцов
+              .in
+                input(type="text" id="link_code" value=""+info.link_code+"" )
+                button.btn.btn-primary(onclick="copylinkcode()") Копировать
           if (type=='phys_type' && !link_code)
             a#code_link(data-toggle='collapse' href='#code' aria-expanded='false' aria-controls='code').btn.btn-info Участие в акции для продавцов
             #code.collapse.in
@@ -135,8 +146,9 @@ block content
             button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
   script.
-    
-    
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
     $('#code_btn').on('click', function(e) {
       e.preventDefault();
       var codeinput = $('#code_input').val();
@@ -182,9 +194,9 @@ block content
             contentType: false,
             success: function(r){
               if(r.ok == false){
-                console.log(r.error);
+                showModal(r.error);
               }else{
-                location.href=location.href;
+                location.href='/user';
               }
             }
           })

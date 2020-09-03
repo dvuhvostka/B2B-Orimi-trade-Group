@@ -25,7 +25,7 @@ var pgPool = new Pool({
 });
 
 
-var getNews = `SELECT * FROM news ORDER BY id DESC`;
+var getNews = `SELECT * FROM sales ORDER BY id DESC`;
 /* GET users listing. */
 router.get('/sales', function(req, res, next) {
   pgPool.query(getNews,[], function(err, response){
