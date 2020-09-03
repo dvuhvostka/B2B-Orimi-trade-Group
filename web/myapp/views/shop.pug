@@ -5,12 +5,12 @@ block content
 	- var q = prod_count
 	- var Type = type;
 	script(src="../jquery-3.5.1.js")
-	select#select_city
 	.grid-container
 		.carousel
 			.carousel-inner
 				img(src='../welcome_to_orimi.gif')
 			a#sales_link(href='/sales') Все акции...
+			select#select_city			
 			form(id='search' method="POST" action="/shop")
 				input(type="text" name="search" placeholder="Поиск")
 				input.btn.btn-primary(type="submit" value="Найти")
