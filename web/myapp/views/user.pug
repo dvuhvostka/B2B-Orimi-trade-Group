@@ -173,6 +173,7 @@ block content
         })
     });
     $('#org_form').on('submit', function(e) {
+        e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
             type: "POST",
@@ -183,6 +184,7 @@ block content
             success: function(r){
               if(r.ok == false){
                 console.log(r.error);
+                $('#redact').find('span').html('Неверный формат файла. (Только JPG и PNG)');
               }else{
                 location.href=location.href;
               }
