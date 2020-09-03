@@ -45,7 +45,10 @@ ul {
 .navbar-collapse>* {
   margin-top: 0;
 }
-
+#select_city {
+  width:300px;
+  position: absolute;
+}
 /* ----------------- */
 #main-wrap {
   display: flex;
