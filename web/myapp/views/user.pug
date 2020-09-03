@@ -196,7 +196,7 @@ block content
             success: function(r){
               if(r.ok == false){
                 console.log(r.error);
-                $('#redact').find('span').html('Неверный формат файла. (Только JPG и PNG)');
+                $('#redact').find('span').html(r.error);
               }else{
                 location.href='/user';
               }

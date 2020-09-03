@@ -206,6 +206,7 @@ user.route('/user')
       console.log("Organiztion deleted from user: "+req.session.userId);
     }else if(req.body.post_type=="confirm_org_askdjfhl123123kaGFDGdfhFsdf3123"){
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
+      db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'");
       ncp.limit = 16;
       var srcPath = './public/images/uploads/'+req.session.userId; //current folder
       fs.mkdir('./public/images/confirmed_uploads/'+req.session.userId, err=>{});
@@ -230,11 +231,12 @@ user.route('/user')
             pgPool.query(get_org,[], function(err, response){
               pgPool.query(getUserData,[], function(error, resp){
                   if(!response.rows[0]){
-                    db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname})',  {
+                    db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
                       org_name: req.body.org_name,
                       org_address: req.body.org_address,
                       owner_inn: req.body.inn,
                       owner_id: req.session.userId,
+                      type: req.body.type,
                       org_confirmed: 0,
                       owner_position: req.body.position,
                       owner_name: resp.rows[0].username,
