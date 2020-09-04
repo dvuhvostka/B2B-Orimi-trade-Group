@@ -33,9 +33,9 @@ block content
 									i.fas.fa-plus.controls
 						div.kor Кол-во в коробках
 							.range_items
-								button(class='btn btn-secondary minus')
+								button(class='btn btn-secondary minus' )
 									i.fas.fa-minus.controls
-								input(type='text' value='1' class='input' data-id=products[i].id)
+								input(type='text' id='count_box' value='0' box_count=products[i].box_count class='input' id_data=products[i].id)
 								button(class='btn btn-secondary plus')
 									i.fas.fa-plus.controls
 			if q == 0
@@ -52,7 +52,7 @@ block content
 										i.fas.fa-angle-right
 									a.link(href='/shop/coffee') Кофе
 										i.fas.fa-angle-right
-									a.link(href='/shop/coffee') Сопутствующие товары
+									a.link(href='/shop/other') Сопутствующие товары
 										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
@@ -162,7 +162,7 @@ block content
 										i.fas.fa-angle-right
 									a.active_type.link(href='/shop/coffee') Кофе
 										i.fas.fa-angle-right
-									a.link(href='/shop/coffee') Сопутствующие товары
+									a.link(href='/shop/other') Сопутствующие товары
 										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
@@ -238,7 +238,6 @@ block content
 										input(type='checkbox' name='capsule')
 										label Капсулы
 							input.btn.btn-primary(type="submit" value="Найти")
-										
 				default
 					form(method="GET" action="/shop")
 						ul(class='filters')
@@ -249,7 +248,7 @@ block content
 										i.fas.fa-angle-right
 									a.link(href='/shop/coffee') Кофе
 										i.fas.fa-angle-right
-									a.link(href='/shop/coffee') Сопутствующие товары
+									a.link(href='/shop/other') Сопутствующие товары
 										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
@@ -364,9 +363,11 @@ block content
 			var data_id = item.attr('data-id');
 			var data_type = item.attr('type');
 			var input =  $('input[data-id|="'+data_id+'"]');
+			var input2 =  $('input[id_data|="'+data_id+'"]');
 			var articul = data_type+data_id;
-			
-			cart[articul] = input.val();
+			console.log(input2.val());
+			var input_result = Number(input.val())+Number(input2.val())*Number(input2.attr('box_count'));
+			cart[articul] = input_result;
 			localStorage.setItem('cart', JSON.stringify(cart));
 			$('.toast').toast('show');
 			console.log(cart);

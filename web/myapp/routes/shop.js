@@ -137,6 +137,7 @@ function addProduct() {
 var getTea = `SELECT * FROM tea ORDER BY id DESC`;
 var getCoffee = `SELECT * FROM coffee WHERE type='coffee' ORDER BY id DESC`;
 var getSales = `SELECT * FROM sales ORDER BY id DESC`;
+var getOthers = `SELECT * FROM others ORDER BY id DESC`;
 
 
 router.route('/shop/:type?')
@@ -147,19 +148,23 @@ router.route('/shop/:type?')
       if (!type) {
         pgPool.query(getTea,[], function(err, response){
           pgPool.query(getCoffee,[], function(error, responses){
-            if (err) return console.error(err);
-            var prods_tea = response.rows;
-            var prods_coffee = responses.rows;
-            var prods = prods_tea.concat(prods_coffee);
-            // console.log(prods);
-            res.render('shop.pug', {
-              isRegistred: userinfo.user_id,
-              products: prods,
-              prod_count: prods.length,
-              title: 'Фирменный магазин Орими-трэйд',
-              needFooter: true,
-              sales: r.rows,
-              sales_q: r.rows.length,
+            pgPool.query(getOthers,[], function(error, responsess){
+              if (err) return console.error(err);
+              var prods_tea = response.rows;
+              var prods_coffee = responses.rows;
+              var prods_others = responsess.rows;
+              var prods_double = prods_tea.concat(prods_coffee);
+              var prods = prods_double.concat(prods_others);
+              // console.log(prods);
+              res.render('shop.pug', {
+                isRegistred: userinfo.user_id,
+                products: prods,
+                prod_count: prods.length,
+                title: 'Фирменный магазин Орими-трэйд',
+                needFooter: true,
+                sales: r.rows,
+                sales_q: r.rows.length,
+                });
               });
           });
         });
@@ -244,8 +249,48 @@ router.route('/shop/:type?')
             needFooter: false
             });
         });
-        }
       }
+    }else if(type=='other'){
+      if(req.query.id==undefined){
+        var coffeeFilters = `SELECT * FROM others ORDER BY id DESC`;
+        console.log(coffeeFilters);
+        pgPool.query(coffeeFilters,[], function(err, response){
+          if (err) return console.error(err);
+          var prods;
+          if(response.rows==undefined){
+            prods = 0;
+          }else{prods = response.rows;}
+        console.log(prods); //debug
+        res.render('shop.pug', {
+          isRegistred: req.session.userId,
+          products: prods,
+          prod_count: prods.length,
+          title: 'Фирменный магазин Орими-трэйд',
+          type: 'coffee',
+          needFooter: true,
+          sales: r.rows,
+          sales_q: r.rows.length,
+        });
+      });
+    }else if(req.query.id){
+      console.log(req.query.id)
+      var getcoffee = `SELECT * FROM others WHERE id='`+req.query.id+`'`;
+      pgPool.query(getcoffee,[], function(err, response){
+        var prods;
+        if(response.rows==undefined){
+          prods = 0;
+        }else{prods = response.rows;}
+        res.render('product.pug', {
+          isRegistred: req.session.userId,
+          products: prods,
+          prod_count: prods.length,
+          title: 'Фирменный магазин Орими-трэйд',
+          type: 'tea',
+          needFooter: false
+          });
+      });
+    }
+    }
     });
   }).post(function(req,res){
     console.log(req.body);
