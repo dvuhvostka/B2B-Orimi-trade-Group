@@ -287,7 +287,46 @@ router.route('/shop/:type?')
           });
       });
     }
-    }
+  }else if(type=='horeca'){
+    if(req.query.id==undefined){
+      var horecaFilters = `SELECT * FROM horeca ORDER BY id DESC`;;
+      pgPool.query(horecaFilters,[], function(err, response){
+        if (err) return console.error(err);
+        var prods;
+        if(response.rows==undefined){
+          prods = 0;
+        }else{prods = response.rows;}
+      console.log(prods); //debug
+      res.render('shop.pug', {
+        isRegistred: req.session.userId,
+        products: prods,
+        prod_count: prods.length,
+        title: 'Фирменный магазин Орими-трэйд',
+        type: 'horeca',
+        needFooter: true,
+        sales: r.rows,
+        sales_q: r.rows.length,
+      });
+    });
+  }else if(req.query.id){
+    console.log(req.query.id)
+    var gethoreca = `SELECT * FROM horeca WHERE id='`+req.query.id+`'`;
+    pgPool.query(gethoreca,[], function(err, response){
+      var prods;
+      if(response.rows==undefined){
+        prods = 0;
+      }else{prods = response.rows;}
+      res.render('product.pug', {
+        isRegistred: req.session.userId,
+        products: prods,
+        prod_count: prods.length,
+        title: 'Фирменный магазин Орими-трэйд',
+        type: 'horeca',
+        needFooter: false
+        });
+    });
+  }
+  }
     });
   }).post(function(req,res){
     console.log(req.body);
