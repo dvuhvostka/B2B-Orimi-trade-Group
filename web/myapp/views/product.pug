@@ -31,45 +31,103 @@ block content
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Шах
               when 'Jardin'
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Jardin
+              when 'Piazza'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Piazza del Caffe
+              when 'Jockey'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Jockey
+              when 'nila'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Жемчужина Нила
+              when 'gita'
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Принцесса Гита
+              when 'horeca'
+                a(href="/shop/"+products[0].type) HoReCa
+              default
+                a(href="/shop/"+products[0].type) Сопутствующие товары
           li.breadcrumb-item.active(aria-current='page')  #{products[0].item_name}
       hr
     #photo_area
       img(src="../store_prods/"+products[0].type+"/"+products[0].sort+"/"+products[0].id+".jpg")
     #info_wrap
-      if products[0].type == 'tea'
-        .in.p
-          p Тип 
-          p Чай
-        .in.p
-          p Вид чая
-          case products[0].about
-            when 'black'
-              p Черный 
-            when 'black_1'
-              p Черный с добавками
-            when 'green'
-              p Зеленый
-            when "green_1"
-              p Зеленый с добавками
-        .in.p
-          p Число пакетиков
-          p #{products[0].tea_bags}
-        .in.p
-          p Вес
-          p #{products[0].weight}г.
-        .in.p
-          p Тип упаковки
-          case products[0].packaging
-            when 'box'
-              p Коробка
-            when 'package'
-              p Пакет
-            when 'present'
-              p Подарочная упаковка
+      case products[0].type
+        when 'tea'
+          .in.p
+            p Тип 
+            p Чай
+          .in.p
+            p Вид чая
+            case products[0].about
+              when 'black'
+                p Черный 
+              when 'black_1'
+                p Черный с добавками
+              when 'green'
+                p Зеленый
+              when "green_1"
+                p Зеленый с добавками
+          .in.p
+            p Число пакетиков
+            p #{products[0].tea_bags}
+          .in.p
+            p Вес
+            p #{products[0].weight}г.
+          .in.p
+            p Тип упаковки
+            case products[0].packaging
+              when 'box'
+                p Коробка
+              when 'package'
+                p Пакет
+              when 'present'
+                p Подарочная упаковка
+              when 'capsule'
+                p Капсулы
+        when 'coffee'
+          .in.p
+            p Тип
+            p Коффе
+          .in.p
+            p Вид
+            case products[0].category
+              when 'milled'
+                p Натуральный молотый
+              when 'milled_2'
+                p Натуральынй молотый с ароматом
+              when 'cereal'
+                p Натуральный зерновой
+              when 'cereal_2'
+                p Натуральный зерновой, светлая обжарка
+              when 'cereal_3'
+                p Натуральный зерновой, средняя обжарка
+              when 'cereal_4'
+                p Натуральный зерновой, темная обжарка
+              when 'sublem'
+                p Растворимый сублимированный
+              when 'granul'
+                p Растворимый гранулированный
+          .in.p
+            p Вес
+            case products[0].weight
+              when 1000
+                p 1 кг.
+              default 
+                p #{products[0].weight} гр.
+          .in.p
+            p Тип упаковки
+            case products[0].packaging
+              when 'glass_jar'
+                p Стеклянная банка
+              when 'can'
+                p Жестяная банка
+              when 'soft_pack'
+                p Мягкая упакаовка
+              when 'capsule'
+                p Капсулы
     #price_product
       #price_wrap
-        span#span_change #{products[0].item_price}
-          i.fas.fa-ruble-sign
+        span.in
+          #span_change #{products[0].item_price}
+          span
+            i.fas.fa-ruble-sign
         .range_items
           button(class='btn btn-secondary minus')
             i.fas.fa-minus.controls
@@ -78,37 +136,47 @@ block content
             i.fas.fa-plus.controls
         button.btn.btn-primary Добавить в корзину
     div#hr
-    #logo
-      case products[0].sort
-        when  'tess'
-          a(href="https://www.tesstea.co.uk/ru/" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-        when  'greenfield'
-          a(href="http://greenfieldtea.co.uk" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-        when  'nuri'
-          a(href="https://noori-tea.ru/" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-        when  'java'
-          a(href="http://www.java-tea.ru/" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-        when  'candy'
-          a(href="http://www.orimi.com/products/#princess_kandi/" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-        when 'shah'
-          a(href="http://shahtea.ru/" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-        when 'Jardin'
-          a(href="https://jardincoffee.com/views/home" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-    #sen
-      h4 Описание
-      p 
+    if products[0].type != 'other'
+      #logo
+        span Перейти на сайт бренда
+        case products[0].sort
+          when  'tess'
+            a(href="https://www.tesstea.co.uk/ru/" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+          when  'greenfield'
+            a(href="http://greenfieldtea.co.uk" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+          when  'nuri'
+            a(href="https://noori-tea.ru/" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+          when  'java'
+            a(href="http://www.java-tea.ru/" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+          when  'candy'
+            a(href="http://www.orimi.com/products/#princess_kandi/" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+          when 'shah'
+            a(href="http://shahtea.ru/" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+          when 'Jardin'
+            a(href="https://jardincoffee.com/views/home" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+          when 'Jockey'
+            a(href="http://coffeejockey.ru/" target='_blank')
+              img(src="../logos/"+products[0].sort+".webp")
+          when 'Piazza'
+            a(href="https://jardincoffee.com/views/home" target='_blank')
+              img(src="../logos/"+products[0].sort+".png")
+      #sen
+        div
+          h5 Описание
+          p #{products[0].description}
   script.
     $('.minus').on('click', function(){
       var item = $(this);
       if (item.siblings('.input').val() > 1){
         item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
+        $("#span_change").html(item.siblings('.input').val()*start_price);
       } else {
         return 0;
       }
@@ -116,11 +184,24 @@ block content
     
     $('.plus').on('click', function(){
       var item = $(this);
-      item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
-      $("#span_change").
+      if (item.siblings('.input').val() < 100){
+        item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+        $("#span_change").html(item.siblings('.input').val()*start_price);
+      } else {
+        return 0;
+      }
     })
     var input = document.querySelector('.input');
     
-    input.addEventListener('change', function(){
-      
-    });
+    $('.input').on('change', function(){
+      if(parseInt($(this).val()) > 100){
+        $(this).val(100);
+      } else if (parseInt($(this).val()) < 1){
+        $(this).val(1);
+      }
+        $("#span_change").html($(this).val()*start_price);
+    })
+    window.onload = function() {
+      start_price = $('#span_change').html();
+      console.log(start_price);
+    }

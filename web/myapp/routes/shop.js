@@ -26,7 +26,7 @@ var pgPool = new Pool({
 });
 
 function checkFilters (data){
-  var brand_tea = ['greenfield','nuri','tess','java','candy','shah'];
+  var brand_tea = ['greenfield','nuri','tess','java','candy','shah','nila','gita'];
   var tea_type = ['black','black_1','green','green_1','herbal'];
   var teabag = ['20','25','30','50','100','120'];
   var tea_pack = ['box','package','present','capsule'];

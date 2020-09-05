@@ -244,7 +244,7 @@ block content
 										label Стеклянная банка 
 									.submenu
 										input(type='checkbox' name='can')
-										label Жестянная банка
+										label Жестяная банка
 									.submenu
 										input(type='checkbox' name='soft_pack')
 										label Мягкая упакаовка
@@ -302,7 +302,7 @@ block content
 			modal_city.modal('show');
 		}
 			window.onload = function(){
-				var ip_data = getRegion();
+				getRegion();
 			$("#select_city").select2({
 				data: array,
 			})
