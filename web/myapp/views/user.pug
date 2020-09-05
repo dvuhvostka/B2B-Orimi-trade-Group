@@ -82,6 +82,10 @@ block content
                   input(type='file' name='docs' id='docs' multiple data-multiple-caption='{count} файлов выбрано' required)
                   label.btn.btn-outline-info(type='button' id='redact' for='docs' data-toggle='tooltip' data-placement="top" title="ИНН, св-во о регистрации, договор аренды помещения или владения")
                     span Загрузить фото документов
+                  .in#dog
+                    input(type='checkbox' required)
+                    label Согласен с 
+                      a(href='docs/dogovor.doc' target='_blank') Договором Поставки 
                   input.btn.btn-outline-success(type='submit' value='Создать заявку')
       .tab-pane.fade#nav-orders.panel(role='tabpanel' area-labelledby='nav-orders-tab')
         .spinner-border(role='status')
@@ -198,7 +202,7 @@ block content
                 console.log(r.error);
                 $('#redact').find('span').html(r.error);
               }else{
-                location.href='/user';
+                document.location.href='/user';
               }
             }
           })

@@ -238,6 +238,17 @@ block content
 										input(type='checkbox' name='capsule')
 										label Капсулы
 							input.btn.btn-primary(type="submit" value="Найти")
+				when 'other'
+					ul(class='filters' )
+						li(style='min-width:270px;')
+							a(class='filters_tags') Категория
+							.categories
+								a.link(href='/shop/tea') Чай
+									i.fas.fa-angle-right
+								a.link(href='/shop/coffee') Кофе
+									i.fas.fa-angle-right
+								a.active_type.link(href='/shop/other') Сопутствующие товары
+									i.fas.fa-angle-right
 				default
 					form(method="GET" action="/shop")
 						ul(class='filters')
@@ -266,7 +277,7 @@ block content
 				small(	class="text-muted") Just now
 				button(type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close") &times;
 			div(class="toast-body")  Товар успешно добавлен в корзину.
-	script(src='cities.js')
+	script(src='../cities.js')
 	script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
 	script.
 			window.onload = function(){
