@@ -1,6 +1,7 @@
 extends layout2
 block scripts
 	link(href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet")
+	script(src='../slider.js')
 block content
 	- var q = prod_count
 	- var Type = type;
@@ -20,10 +21,22 @@ block content
 				.modal-footer
 					button.btn.btn-secondary(data-dismiss='modal') Закрыть
 					button.btn.btn-success(data-dismiss='modal')#accept_region Подтвердить
+	.carousel-inner
+		.carousel-wrap
+			- for(var i = 0;i<sales_q;i++)
+				.content
+					h5 #{sales[i].header}
+					a(href='/sales')
+						img(src=sales[i].img_url)
+	ul.controls_carousel
+		li.control-left
+			a(href='#')
+				i.fas.fa-angle-left.c
+		li.control-right
+			a(href='#')
+				i.fas.fa-angle-right.c
 	.grid-container
 		.carousel
-			.carousel-inner
-				img(src='../welcome_to_orimi.gif')
 			a#sales_link(href='/sales') Все акции...
 			form(id='search' method="POST" action="/shop")
 				input(type="text" name="search" placeholder="Поиск")
@@ -270,10 +283,12 @@ block content
 									i.fas.fa-angle-right
 								a.active_type.link(href='/shop/other') Сопутствующие товары
 									i.fas.fa-angle-right
+								a.link(href='/shop/horeca') HoReCa
+									i.fas.fa-angle-right
 				when 'horeca'
-					form(method="GET" action="/shop")
+					form(method="GET" action="/shop/horeca")
 						ul(class='filters')
-							li 
+							li(style='min-width:270px;')
 								a(class='filters_tags') Категория
 								.categories
 									a.link(href='/shop/tea') Чай
@@ -285,7 +300,7 @@ block content
 									a.link.active_type(href='/shop/horeca') HoReCa
 										i.fas.fa-angle-right
 							li
-								a.filters_tags Бренд
+								a.filters_tags Тип
 								.submenu_wrap
 									.submenu
 										input(type='checkbox' name='tea')
@@ -293,6 +308,7 @@ block content
 									.submenu
 										input(type='checkbox' name='coffee')
 										label Кофe
+							input.btn.btn-primary(type="submit" value="Найти")
 								
 				default
 					form(method="GET" action="/shop")
@@ -327,6 +343,7 @@ block content
 	script(src='../cities.js')
 	script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
 	script.
+		slider(#{sales_q});
 		var modal_city = $("#modal_city");
 		var msg=$("#city");
 		
@@ -336,7 +353,6 @@ block content
 		}
 			window.onload = function(){
 				getRegion();
-				
 			$("#select_city").select2({
 				data: array,
 			})

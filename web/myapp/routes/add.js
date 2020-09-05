@@ -35,7 +35,7 @@ function createNews(header, intro, body, img) {
     img_url: img,
     intro: intro
   }
-  var query = "INSERT INTO news(date, header, body, img_url, intro) VALUES($1,$2,$3,$4,$5)";
+  var query = "INSERT INTO sales(date, header, body, img_url, intro) VALUES($1,$2,$3,$4,$5)";
   pgPool.query(query, [data.date, data.header, data.body, data.img_url, data.intro], function(err, response){
     if(err) return console.error(err);
   });
@@ -44,7 +44,7 @@ function createNews(header, intro, body, img) {
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 router.route('/add')
   .get(function(req,res){
-    var delQ = "DELETE FROM news"
+    var delQ = "DELETE FROM sales"
     pgPool.query(delQ, [], function(err, response){
       if(err) return console.error(err);
     });
