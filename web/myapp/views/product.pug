@@ -2,8 +2,6 @@ extends layout2
 
 block scripts
   link(rel='shortcut icon' href='../favicon.ico' type='image/x-icon')
-  link(rel='stylesheet' href='../thumbelina.css')
-  script(type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js")
 block content
   #product_wrap
     #top_bar
@@ -22,7 +20,7 @@ block content
               when  'tess'
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Tess
               when  'greenfield'
-                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Greenfield
+                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Grienfield
               when  'nuri'
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Принцесса Нури
               when  'java'
@@ -33,10 +31,6 @@ block content
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Шах
               when 'Jardin'
                 a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Jardin
-              when 'Jockey'
-                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Jockey
-              when 'Piazza'
-                a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Piazza del Caffe
           li.breadcrumb-item.active(aria-current='page')  #{products[0].item_name}
       hr
     #photo_area
@@ -72,44 +66,9 @@ block content
               p Пакет
             when 'present'
               p Подарочная упаковка
-      else if products[0].type == 'coffee'
-        .in.p
-          p Тип
-          p Кофе
-        .in.p
-          p Вид кофе
-          case products[0].category
-            when 'milled'
-              p Натуральный, молотый
-            when 'milled_2'
-              p Натуральный, молотый с ароматом
-            when 'cereal'
-              p Натуральный, зерновой
-            when 'cereal_2'
-              p Натуральный, зерновой, светлая обжарка
-            when 'cereal_3'
-              p Натуральный, зерновой, средняя обжарка
-            when 'cereal_4'
-              p Натуральный, зерновой, темная обжарка
-            when 'sublem'
-              p Растворимый, сублимированный 
-            when 'granul'
-              p Растворимый, гранулированный
-        .in.p
-          p Тип упаковки
-          case products[0].packaging
-            when 'glass_jar'
-              p Стеклянная банка
-            when 'can'
-              p Жестяная банка
-            when 'soft_pack'
-              p Мягкая упаковка
-            when 'capsule'
-              p Капсулы
     #price_product
       #price_wrap
-        span
-          span #{products[0].item_price}
+        span#span_change #{products[0].item_price}
           i.fas.fa-ruble-sign
         .range_items
           button(class='btn btn-secondary minus')
@@ -120,7 +79,6 @@ block content
         button.btn.btn-primary Добавить в корзину
     div#hr
     #logo
-      p Перейти на сайт бренда
       case products[0].sort
         when  'tess'
           a(href="https://www.tesstea.co.uk/ru/" target='_blank')
@@ -143,47 +101,26 @@ block content
         when 'Jardin'
           a(href="https://jardincoffee.com/views/home" target='_blank')
             img(src="../logos/"+products[0].sort+".png")
-        when 'Jockey'
-          a(href="http://coffeejockey.ru/" target='_blank')
-            img(src="../logos/"+products[0].sort+".webp")
-        when 'Piazza'
-          a(href="#" target='_blank')
-            img(src="../logos/"+products[0].sort+".png")
-    
     #sen
-      h4 Описание      
-  script(src='../thumbelina.js')
+      h4 Описание
+      p 
   script.
-    $(document).ready(function(){
-      let price = document.querySelector('#price_wrap span span');
-      let start_price = price.innerHTML;
-      $('.minus').on('click', function(){
-        var item = $(this);
-        if (item.siblings('.input').val() > 1){
-          item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
-          price.innerHTML = $('.input').val()*start_price;
-        } else {
-          return 0;
-        }
-      })
+    $('.minus').on('click', function(){
+      var item = $(this);
+      if (item.siblings('.input').val() > 1){
+        item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
+      } else {
+        return 0;
+      }
+    })
+    
+    $('.plus').on('click', function(){
+      var item = $(this);
+      item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+      $("#span_change").
+    })
+    var input = document.querySelector('.input');
+    
+    input.addEventListener('change', function(){
       
-      $('.plus').on('click', function(){
-        var item = $(this);
-        if (item.siblings('.input').val() < 100){
-          item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
-          price.innerHTML = $('.input').val()*start_price;
-        } else {
-          return 0;
-        }
-      })
-      
-      $('.input').on('change',function(){
-        if($(this).val() == '0')
-          $(this).val(1);
-        if($(this).val() > '100')
-          $(this).val(100);
-        price.innerHTML = $('.input').val()*start_price;        
-      });
     });
-    
-    
