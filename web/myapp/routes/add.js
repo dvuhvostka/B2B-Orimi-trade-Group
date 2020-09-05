@@ -45,8 +45,15 @@ const urlencodedParser = bodyParser.urlencoded({extended: false});
 router.route('/add')
   .get(function(req,res){
     var delQ = "DELETE FROM sales"
-    pgPool.query(delQ, [], function(err, response){
-      if(err) return console.error(err);
+    var getUsers = "SELECT * FROM users WHERE id='"+req.session.userId+"'";
+    pgPool.query(getUsers, [], function(err, resp){
+      if(resp.rows[0].permissions=='mod'){
+          pgPool.query(delQ, [], function(err, response){
+            if(err) return console.error(err);
+        });
+      }else{
+        console.log('!! /add not allowed : '+resp.rows[0].ip_addr);
+      }
     });
     res.send("<script>document.location.href='/sales'</script>");
   }).post(urlencodedParser, function(req,res){

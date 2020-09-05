@@ -192,6 +192,14 @@ block content
               button#leave_org Покинуть организацию
       if (permissions=='mod')
         .tab-pane.fade#nav-mod.panel(role='tabpanel' area-labelledby='nav-mod-tab')
+          .container
+            div
+              input(placeholder="Название статьи")#newsTitle
+              input(placeholder="Описание")#newsDescription
+              input(placeholder="Текст статьи")#newsBody
+              input(placeholder="Ссылка на изображение к статье", value="https://via.placeholder.com/600")#newsImg
+              button(onclick="addNews();location.reload();")#add Добавить статью
+              button(onclick="document.location.href='/add';")#delete Удалить все 
           p В списке #{uncorgs.length} фирм(а).
             -for (var u=0; u<uncorgs.length; u++)
               p #{uncorgs[u].org_name}
@@ -285,6 +293,25 @@ block content
           showModal("Организация успешно подтверждена.\n"+owner_id);
           window.location.reload();
         }
+      }
+      function addNews() {
+        var newsTitle = document.getElementById("newsTitle");
+        var newsDescription = document.getElementById("newsDescription");
+        var newsBody = document.getElementById("newsBody");
+        var newsImg = document.getElementById("newsImg");
+
+        var data = JSON.stringify({
+          title: newsTitle.value,
+          desc: newsDescription.value,
+          body: newsBody.value,
+          img: newsImg.value
+        })
+        console.log(newsTitle.value);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', "/add", false);
+        xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+        xhr.send(data);
+        return xhr.responseText;
       }
     
     
