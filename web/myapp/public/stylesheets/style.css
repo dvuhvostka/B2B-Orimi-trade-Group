@@ -799,6 +799,32 @@ margin: 5px 0 0 0;
 #dog input {
   margin-right: 10px;
 }
+
+#question {
+  display: flex;
+  flex-direction: column;
+}
+.select_question {
+  margin: 10px 0;
+}
+
+.i {
+  font-size: 20px;
+  margin-right:10px;
+  line-height: 1;
+}
+
+#question button {
+  width:200px;
+  margin: 10px auto 0;
+}
+
+#question textarea {
+  min-height: 200px;
+  max-height:400px;
+  resize:vertical;
+  padding: 10px;
+}
 /* ----------- */
 
 /* cart styles */

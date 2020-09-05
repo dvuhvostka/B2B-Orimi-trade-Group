@@ -61,6 +61,54 @@ block content
               .in
                 p Ваша должность:
                 p #{info.position}
+              button.btn.btn-primary(data-toggle='collapse', href='#question_wrap' aria-expanded='false' aria-controls='question_wrap') Запрос к Орими
+              #question_wrap.collapse
+                #question
+                  .in.select_question
+                    i.far.fa-question-circle.i(data-toggle='tooltip' data-placement='bottom' title="Вы можете выбрать тип запроса в поле выбора ниже или написать вопрос самостоятельно")
+                    select(name='request' placeholder='Выберите тип запроса')
+                      option(selected disabled) Выберите тип запроса
+                      option(value='oborud') Заказ фирменного оборудования
+                      option(value='visit') Запрос визита торгового представителя
+                      option(value='docs') Запрос документов
+                      option(value='other') Другое (укажите самостоятельно)
+                  textarea
+                  button.btn.btn-success Отправить запрос
+                script.
+                  $('select[name="request"]').on('change', function(){
+                    var value = $(this).val();
+                    var textarea = $('textarea');
+                    switch(value){
+                      case 'oborud':
+                        textarea.val('В наше заведение требуется ваше фирменное оборудрвание');
+                      break;
+                      case 'visit':
+                        textarea.val('Нам требуется визит Вашего торгового представителя');
+                      break;
+                      case 'docs':
+                        textarea.val('Нам необходимы документы: (*укажите какие*)');
+                      break;
+                      case 'other':
+                        textarea.val('');
+                      break;
+                    }
+                  });
+                  $('#question button').on('click', function(e){
+                    $.ajax({
+                      type:"POST",
+                      url:"/user",
+                      data: {
+                        post_type: 'request',
+                        request: $('textarea').val(),
+                      },
+                      success: function(res) {
+                        if(res.ok)
+                          alert('ok');
+                        else 
+                          alert('bad');
+                      }
+                    })
+                  });
             if (org_info==0 && type=='ur_type')
               a(data-toggle='collapse' href='#org_confirm' aria-expanded="false" aria-controls="org_confirm").p-danger Вы не закончили регистрацию!
               #org_confirm.collapse

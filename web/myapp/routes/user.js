@@ -223,6 +223,23 @@ user.route('/user')
       var link_code = crypto.randomBytes(20).toString('hex');
       console.log("link code generated: " +link_code);
       db.none("UPDATE organizations SET link_code='"+link_code+"' WHERE owner_id='"+req.body.org_owner_id+"'");
+    }else if (req.body.post_type == 'request') {
+      console.log('add request')
+      db.none("INSERT INTO requests_from_organizations(request, org_id) VALUES (${request},${org_id})",{
+        request: req.body.request,
+        org_id: req.session.userId,
+      }).then(() =>{
+          console.log(123);
+          res.json({
+            ok: true
+          })
+        }
+      ).catch(error => {
+        console.log(error);
+        res.json({
+          ok:false
+        })
+      });
     }else{
         upload(req, res, err => {
           if (err == undefined){

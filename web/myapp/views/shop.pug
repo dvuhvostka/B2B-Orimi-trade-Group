@@ -5,12 +5,26 @@ block content
 	- var q = prod_count
 	- var Type = type;
 	script(src="../jquery-3.5.1.js")
+	.modal.fade#modal_city(role='dialog' tabindex='-1' )
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h5.modal-title Выберите город
+					button.close(type='button' data-dismiss='modal')
+						span(aria-hidden='true') &times;
+				.modal-body
+					span#city
+					a(data-toggle="collapse" aria-expanded='false' href='#select_city_wrap' aria-controls='select_city_wrap') Изменить
+					#select_city_wrap.collapse
+						select#select_city
+				.modal-footer
+					button.btn.btn-secondary(data-dismiss='modal') Закрыть
+					button.btn.btn-success(data-dismiss='modal') Подтвердить
 	.grid-container
 		.carousel
 			.carousel-inner
 				img(src='../welcome_to_orimi.gif')
 			a#sales_link(href='/sales') Все акции...
-			select#select_city
 			form(id='search' method="POST" action="/shop")
 				input(type="text" name="search" placeholder="Поиск")
 				input.btn.btn-primary(type="submit" value="Найти")
@@ -280,11 +294,19 @@ block content
 	script(src='../cities.js')
 	script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
 	script.
+		var modal_city = $("#modal_city");
+		var msg=$("#city");
+		
+		function showModalCity(mssg){
+			msg.html(mssg);       
+			modal_city.modal('show');
+		}
 			window.onload = function(){
-				getRegion();
+				var ip_data = getRegion();
 			$("#select_city").select2({
 				data: array,
 			})
+			
 			var range_price = document.getElementById('range_price');
 			var input_range_price = document.getElementById('input_range_price');
 			var range_weight = document.getElementById('range_weight');
@@ -387,6 +409,9 @@ block content
 			$.get( "https://freegeoip.app/json/", function( data ) {
 				console.log(data);
 				//alert(data.region_name+"\n"+data.ip);
+				showModalCity(
+					"Ваш город: "+data.region_name+"?"
+				);
 			});
 		}
 	
