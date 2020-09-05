@@ -32,7 +32,10 @@ block content
 			- for(var i=0; i<q; i++) 
 				div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
 					div(class='carousel_img')
-						img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
+						if(products[i].subtype)
+							img(src="../store_prods/horeca/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
+						else
+							img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
 					a(href='/shop/'+products[i].type+'?id='+products[i].id class='item_name') #{products[i].item_name}
 					p(class='item_price') #{products[i].item_price} 
 						i.fas.fa-ruble-sign
