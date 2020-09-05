@@ -64,12 +64,11 @@ router.route('/add')
         if(resp.rows[0]!=undefined){
           if(resp.rows[0].permissions=='mod'){
               createNews(req.body.title, req.body.desc, req.body.body, req.body.img);
-            });
+            };
           }else{
             console.log('!! /add not allowed : '+resp.rows[0].ip_addr);
           }
-        }
-      });
+        });
     res.send("ok");
   });
 
