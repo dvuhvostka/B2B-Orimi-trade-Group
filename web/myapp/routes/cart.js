@@ -30,73 +30,55 @@ router.route('/cart')
       title: 'Корзина'
     })
   }).post(function(req, res) {
+    console.log(req.body)
+    var sql_tea_result = "SELECT * FROM tea WHERE id=0 "
+    var sql_coffee_result = "SELECT * FROM coffee WHERE id=0"
+    var sql_others_result = "SELECT * FROM others WHERE id=0"
 
-    var sql_tea_result = "SELECT * FROM tea WHERE "
-    var sql_coffee_result = "SELECT * FROM coffee WHERE "
-
-    var pattern = /tea|coffee/g;
+    var pattern = /tea|coffee|other/g;
     var sql_tea = [];
     var sql_coffee = [];
+    var sql_others = [];
     for (key in req.body) {
       if (key.match(pattern)[0] == 'tea') {
         var id = key.replace(pattern, "");
-        if (sql_tea.length == 0) {
-          sql_tea.push("OR id='" + id + "' ");
-          sql_tea_result = sql_tea_result + "id='" + id + "' ";
-        } else {
           sql_tea.push("OR id='" + id + "' ");
           sql_tea_result = sql_tea_result + "OR id='" + id + "' ";
-        }
       } else if (key.match(pattern)[0] == 'coffee') {
         var id = key.replace(pattern, "");
-        if (sql_coffee.length == 0) {
-          sql_coffee.push("id='" + id + "' ");
-          sql_coffee_result = sql_coffee_result + "id='" + id + "' ";
-        } else {
           sql_coffee.push("OR id='" + id + "' ");
           sql_coffee_result = sql_coffee_result + "OR id='" + id + "' ";
-        }
+      }else if (key.match(pattern)[0] == 'other'){
+        var id = key.replace(pattern, "");
+          sql_others.push("OR id='" + id + "' ");
+          sql_others_result = sql_others_result + "OR id='" + id + "' ";
       }
     }
 
     var products_data = {
       tea: {},
-      coffee: {}
+      coffee: {},
+      other: {}
     }
 
-    if ((sql_coffee.length == 0) && (sql_tea.length == 0)) {
+    if ((sql_coffee.length == 0) && (sql_tea.length == 0) && (sql_others.length == 0)) {
       res.send("POST");
-    } else if ((sql_coffee.length != 0) && (sql_tea.length != 0)) {
+    } else if ((sql_coffee.length != 0) || (sql_tea.length != 0) || (sql_others.length!=0)) {
       db_cart.any(sql_coffee_result).then(function(data) {
-        db_cart.any(sql_tea_result).then(function(data_2) {
-          if (data) {
-            products_data.coffee = data;
-          }
-          if (data_2) {
-            products_data.tea = data_2;
-          }
-          res.send(products_data);
-        }).catch(error => {
-          console.log('ERROR:', error);
-        });
-      }).catch(error => {
-        console.log('ERROR:', error);
-      });
-    } else if (sql_coffee.length != 0) {
-      db_cart.any(sql_coffee_result).then(function(data) {
-        if (data) {
-          products_data.coffee = data;
-        }
-        res.send(products_data);
-      }).catch(error => {
-        console.log('ERROR:', error);
-      });
-    } else if (sql_tea.length != 0) {
-      db_cart.any(sql_tea_result).then(function(data) {
-        if (data) {
-          products_data.tea = data;
-        }
-        res.send(products_data);
+        db_cart.any(sql_tea_result).then(function(data2) {
+          db_cart.any(sql_others_result).then(function(data3) {
+            if (data) {
+              products_data.coffee = data;
+            }
+            if (data2) {
+              products_data.tea = data2;
+            }
+            if (data3) {
+              products_data.other = data3;
+            }
+            res.send(products_data);
+            });
+          });
       }).catch(error => {
         console.log('ERROR:', error);
       });
