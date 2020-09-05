@@ -68,10 +68,10 @@ var upload = multer({
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
-  var getUserDeals = `SELECT * FROM deals WHERE deal_owner='`+req.session.userId+`'`;
   pgPool.query(getUserData,[], function(err, response){
     if(response.rows[0]){
       var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+      var getUserDeals;
       var org_info = 0;
       var status;
       pgPool.query(get_org,[], function(err, resp){
@@ -86,12 +86,19 @@ user.route('/user')
           info.link_code = resp.rows[0].link_code;
         }
         var deals = 0;
+
+        if(response.rows[0].permissions == 'user'){
+          getUserDeals = `SELECT * FROM deals WHERE deal_owner='`+req.session.userId+`'`;
+        }else{
+          getUserDeals = `SELECT * FROM deals`;
+        }
+
         db.any(getUserDeals).then(function(data) {
           if(data){deals = data;}
           var dealsdata = {};
           var d_data = [];
           for (var x = 0; x<data.length; x++){
-            if(!dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id] = []; dealsdata[data[x].deal_id].id = data[x].deal_id;}
+            if(!dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id] = []; dealsdata[data[x].deal_id].id = data[x].deal_id; dealsdata[data[x].deal_id].deal_owner = data[x].deal_owner;}
             if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].product_id+":"+data[x].sort+":"+data[x].type+":"+data[x].price_of_one+":"+data[x].full_price)}
           }
           for(key in dealsdata){
@@ -135,6 +142,7 @@ user.route('/user')
                 console.log('ERROR:', error);
               });
             }else{
+              console.log(response.rows[0].permissions);
               res.render('user',{
                 title: "Аккаунт",
                 isRegistred: req.session.userId,

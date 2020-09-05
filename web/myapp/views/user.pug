@@ -9,10 +9,12 @@ block content
     nav#nav_panel
       .nav.nav-tabs.nav-fill#nav-tab(role='tablist')
         a(class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true") Профиль
-        a(class="nav-item nav-link " id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Заказы
         a(class="nav-item nav-link" id="nav-balance-tab" data-toggle="tab" href="#nav-balance" role="tab" aria-controls="nav-balance" aria-selected="false") Баланс
         if (permissions=='mod')
+          a(class="nav-item nav-link " id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Все заказы*
           a(class="nav-item nav-link" id="nav-mod-tab" data-toggle="tab" href="#nav-mod" role="tab" aria-controls="nav-mod" aria-selected="false") Модерация*
+        else
+          a(class="nav-item nav-link " id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="false") Заказы
     .tab-content
       .tab-pane.fade.show.active#nav-profile.panel(role='tabpanel' area-labelledby='nav-profile-tab')
         #profile
@@ -29,7 +31,10 @@ block content
             if (type=='phys_type')
               p#type Физ. лицо
             if (type=='ur_type')
-              p#type Юридическое лицо
+              if (permissions=='mod')
+                p#type Модератор
+              else
+                p#type Юридическое лицо
           #phone.in  
             p Телефон:
             p #{number}
@@ -153,6 +158,8 @@ block content
                   .in.deal
                     img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
                     a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1] } шт. -  (#{deals[i][x].split(':')[6]}р.)
+                if (permissions=='mod')
+                  p #{deals[i].deal_owner}
                 p Итоговая стоимость: #{final_sum}
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
         #balance_wrap
@@ -173,7 +180,7 @@ block content
               button.btn.btn-success#code_btn Подтвердить
           else if (link_code)
             .in
-              p.text-success Вы участвуету в акции для продавцов!
+              p.text-success Вы участвуете в акции для продавцов!
               a.text-info(href='/sales') Подробнее об акции
             .in
               p Ваш код:
@@ -186,17 +193,17 @@ block content
       if (permissions=='mod')
         .tab-pane.fade#nav-mod.panel(role='tabpanel' area-labelledby='nav-mod-tab')
           p В списке #{uncorgs.length} фирм(а).
-          -for (var u=0; u<uncorgs.length; u++)
-            p #{uncorgs[u].org_name}
-            p #{uncorgs[u].org_address}
-            p #{uncorgs[u].owner_inn}
-            p #{uncorgs[u].owner_id}
-            p #{uncorgs[u].owner_position} #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
-            p Сканы документов:
-            - for(var z=0; z<uncorgs[u].docs.length; z++)
-                img(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
-            button(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
-            button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
+            -for (var u=0; u<uncorgs.length; u++)
+              p #{uncorgs[u].org_name}
+              p #{uncorgs[u].org_address}
+              p #{uncorgs[u].owner_inn}
+              p #{uncorgs[u].owner_id}
+              p #{uncorgs[u].owner_position} #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
+              p Сканы документов:
+              - for(var z=0; z<uncorgs[u].docs.length; z++)
+                  img(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
+              button(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
+              button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
   script.
     $(function () {
