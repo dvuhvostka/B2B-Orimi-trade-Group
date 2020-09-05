@@ -42,15 +42,15 @@ block content
 							.range_items
 								button(class='btn btn-secondary minus')
 									i.fas.fa-minus.controls
-								input(type='text' value='1' class='input' data-id=products[i].id)
+								input(type='text' value='1' class='input count_input_pack' data-id=products[i].id)
 								button(class='btn btn-secondary plus')
 									i.fas.fa-plus.controls
 						div.kor Кол-во в коробках
 							.range_items
-								button(class='btn btn-secondary minus' )
+								button(class='btn btn-secondary box_count_minus' box_count=products[i].box_count)
 									i.fas.fa-minus.controls
-								input(type='text' id='count_box' value='0' box_count=products[i].box_count class='input' id_data=products[i].id)
-								button(class='btn btn-secondary plus')
+								input(type='text' value='0' box_count=products[i].box_count class='input' id_data=products[i].id)
+								button(class='btn btn-secondary box_count_plus' box_count=products[i].box_count)
 									i.fas.fa-plus.controls
 			if q == 0
 				div.noitems По данному запросу нет товаров
@@ -382,8 +382,7 @@ block content
 		$('.kor .range_items .input').on('change',function(){
 			var item = $(this);
 			var input_sht = item.parentsUntil('.footer_item').siblings('.sht').children('.range_items').children('.input');
-			
-			
+		  input_sht.val(item.attr('box_count')*item.val());
 		})
 		
 		if(!localStorage.getItem('cart')){
@@ -391,19 +390,47 @@ block content
 		} else cart = JSON.parse(localStorage.getItem('cart'));
 	
 		
+		$('.box_count_plus').on('click', function(){
+			var item = $(this);
+			item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+			var input_sht = item.parentsUntil('.footer_item').siblings('.sht').children('.range_items').children('.input');
+			input_sht.val(item.attr('box_count')*item.siblings('.input').val());
+		});
+		
+		$('.box_count_minus').on('click', function(){
+			var item = $(this);
+			if (item.siblings('.input').val() > 0){
+				item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
+				var input_sht = item.parentsUntil('.footer_item').siblings('.sht').children('.range_items').children('.input');
+				input_sht.val(item.attr('box_count')*item.siblings('.input').val());
+			} else {
+				return 0;
+			}
+		});
+		
+		var input_check = $('.input');
+			for(let each of input_check){
+				each.onkeypress=function(e){
+					e = e || event;
+					if (e.ctrlKey || e.altKey || e.metaKey) return;
+					var chr = String.fromCharCode(e.which);
+					if (chr == null) return;
+					if (chr < '0' || chr > '9') {
+						return false;
+					}
+				}
+			}
+
 		$('.addtocart').on('click', function(){
 			var item = $(this);
 			var data_id = item.attr('data-id');
 			var data_type = item.attr('type');
-			var input =  $('input[data-id|="'+data_id+'"]');
-			var input2 =  $('input[id_data|="'+data_id+'"]');
+			var input =  item.siblings('.sht').children('.range_items').children('.input');
 			var articul = data_type+data_id;
-			console.log(input2.val());
-			var input_result = Number(input.val())+Number(input2.val())*Number(input2.attr('box_count'));
-			cart[articul] = input_result;
-			localStorage.setItem('cart', JSON.stringify(cart));
-			$('.toast').toast('show');
-			console.log(cart);
+				cart[articul] = input.val();
+				localStorage.setItem('cart', JSON.stringify(cart));
+				$('.toast').toast('show');
+				console.log(cart);
 		})
 		function getRegion() {
 			$.get( "https://freegeoip.app/json/", function( data ) {
