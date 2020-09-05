@@ -47,17 +47,29 @@ router.route('/add')
     var delQ = "DELETE FROM sales"
     var getUsers = "SELECT * FROM users WHERE id='"+req.session.userId+"'";
     pgPool.query(getUsers, [], function(err, resp){
-      if(resp.rows[0].permissions=='mod'){
-          pgPool.query(delQ, [], function(err, response){
-            if(err) return console.error(err);
-        });
-      }else{
-        console.log('!! /add not allowed : '+resp.rows[0].ip_addr);
+      if(resp.rows[0]!=undefined){
+        if(resp.rows[0].permissions=='mod'){
+            pgPool.query(delQ, [], function(err, response){
+              if(err) return console.error(err);
+          });
+        }else{
+          console.log('!! /add not allowed : '+resp.rows[0].ip_addr);
+        }
       }
     });
     res.send("<script>document.location.href='/sales'</script>");
   }).post(urlencodedParser, function(req,res){
-    createNews(req.body.title, req.body.desc, req.body.body, req.body.img);
+    var getUsers = "SELECT * FROM users WHERE id='"+req.session.userId+"'";
+      pgPool.query(getUsers, [], function(err, resp){
+        if(resp.rows[0]!=undefined){
+          if(resp.rows[0].permissions=='mod'){
+              createNews(req.body.title, req.body.desc, req.body.body, req.body.img);
+            });
+          }else{
+            console.log('!! /add not allowed : '+resp.rows[0].ip_addr);
+          }
+        }
+      });
     res.send("ok");
   });
 
