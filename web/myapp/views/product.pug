@@ -46,7 +46,10 @@ block content
           li.breadcrumb-item.active(aria-current='page')  #{products[0].item_name}
       hr
     #photo_area
-      img(src="../store_prods/"+products[0].type+"/"+products[0].sort+"/"+products[0].id+".jpg")
+      if(products[0].subtype)
+        img(src="../store_prods/horeca/"+products[0].type+"/"+products[0].sort+"/"+products[0].id+".jpg")
+      else
+        img(src="../store_prods/"+products[0].type+"/"+products[0].sort+"/"+products[0].id+".jpg")
     #info_wrap
       case products[0].type
         when 'tea'
@@ -84,7 +87,7 @@ block content
         when 'coffee'
           .in.p
             p Тип
-            p Коффе
+            p Кофе
           .in.p
             p Вид
             case products[0].category
