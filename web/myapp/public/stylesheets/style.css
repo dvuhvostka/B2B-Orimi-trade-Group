@@ -788,6 +788,17 @@ p.title {
 #code > p {
 margin: 5px 0 0 0;
 }
+
+#dog {
+  line-height: 1;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+#dog input {
+  margin-right: 10px;
+}
 /* ----------- */
 
 /* cart styles */
