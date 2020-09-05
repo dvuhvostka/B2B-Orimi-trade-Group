@@ -36,11 +36,17 @@ block content
 							img(src="../store_prods/horeca/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
 						else
 							img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
-					a(href='/shop/'+products[i].type+'?id='+products[i].id class='item_name') #{products[i].item_name}
+					if(products[i].subtype)
+						a(href='/shop/'+products[i].subtype+'?id='+products[i].id class='item_name') #{products[i].item_name}
+					else
+						a(href='/shop/'+products[i].type+'?id='+products[i].id class='item_name') #{products[i].item_name}
 					p(class='item_price') #{products[i].item_price} 
 						i.fas.fa-ruble-sign
 					div.footer_item
-						button.b(class='btn btn-primary addtocart' type=products[i].type data-id=products[i].id) Купить
+						if(products[i].subtype)
+							button.b(class='btn btn-primary addtocart' type=products[i].subtype data-id=products[i].id) Купить
+						else
+							button.b(class='btn btn-primary addtocart' type=products[i].type data-id=products[i].id) Купить
 						div.sht Кол-во в шт
 							.range_items
 								button(class='btn btn-secondary minus')

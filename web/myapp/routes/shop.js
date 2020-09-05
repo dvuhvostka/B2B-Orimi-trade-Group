@@ -143,27 +143,32 @@ router.route('/shop/:type?')
       var getTea = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +`ORDER BY id DESC`;
       var getCoffee = `SELECT * FROM coffee WHERE type='coffee'` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +` ORDER BY id DESC`;
       var getOthers = `SELECT * FROM others WHERE type='other' ` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +`ORDER BY id DESC`;
+      var getHoreca = `SELECT * FROM horeca WHERE subtype='horeca'` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +`ORDER BY id DESC`;
       if (!type) {
         pgPool.query(getTea,[], function(err, response){
           pgPool.query(getCoffee,[], function(error, responses){
             pgPool.query(getOthers,[], function(error, responsess){
-              if (err) return console.error(err);
-              var prods_tea = response.rows;
-              var prods_coffee = responses.rows;
-              var prods_others = responsess.rows;
-              var prods_double = prods_tea.concat(prods_coffee);
-              var prods = prods_double.concat(prods_others);
-              // console.log(prods);
-              res.render('shop.pug', {
-                isRegistred: userinfo.user_id,
-                products: prods,
-                prod_count: prods.length,
-                title: 'Фирменный магазин Орими-трэйд',
-                needFooter: true,
-                sales: r.rows,
-                sales_q: r.rows.length,
-                });
+              pgPool.query(getHoreca,[], function(error, responsesss){
+                if (err) return console.error(err);
+                var prods_tea = response.rows;
+                var prods_coffee = responses.rows;
+                var prods_others = responsess.rows;
+                var prods_horeca = responsesss.rows;
+                var prods_double = prods_tea.concat(prods_coffee);
+                var prods_triple = prods_double.concat(prods_others);
+                var prods = prods_triple.concat(prods_horeca);
+                // console.log(prods);
+                res.render('shop.pug', {
+                  isRegistred: userinfo.user_id,
+                  products: prods,
+                  prod_count: prods.length,
+                  title: 'Фирменный магазин Орими-трэйд',
+                  needFooter: true,
+                  sales: r.rows,
+                  sales_q: r.rows.length,
+                  });
               });
+            });
           });
         });
       }else if(type == 'tea'){
