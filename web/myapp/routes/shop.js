@@ -294,8 +294,16 @@ router.route('/shop/:type?')
     }
   }else if(type=='horeca'){
     if(req.query.id==undefined){
-      var horecaFilters = `SELECT * FROM horeca ORDER BY id DESC`;;
-      pgPool.query(horecaFilters,[], function(err, response){
+      getHoreca = `SELECT * FROM horeca WHERE `;
+      switch('on'){
+        case req.query.tea: getHoreca+=`type='tea'`; break;
+        case req.query.coffee: getHoreca+=`type='coffee'`; break;
+        default: getHoreca = `SELECT * FROM horeca ORDER BY id DESC`; break;
+      }
+      if((req.query.tea=="on")&&(req.query.coffee=="on")){
+        getHoreca = `SELECT * FROM horeca ORDER BY id DESC`;
+      }
+      pgPool.query(getHoreca,[], function(err, response){
         if (err) return console.error(err);
         var prods;
         if(response.rows==undefined){

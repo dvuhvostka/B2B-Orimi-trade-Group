@@ -277,7 +277,7 @@ block content
 								a.active_type.link(href='/shop/other') Сопутствующие товары
 									i.fas.fa-angle-right
 				when 'horeca'
-					form(method="GET" action="/shop")
+					form(method="GET" action="/shop/horeca")
 						ul(class='filters')
 							li 
 								a(class='filters_tags') Категория
@@ -292,13 +292,14 @@ block content
 										i.fas.fa-angle-right
 							li
 								a.filters_tags Бренд
-								.submenu_wrap
+									.submenu_wrap
 									.submenu
-										input(type='checkbox' name='tea')
+										input(type='checkbox' name='tea' id="tea_checkbox")
 										label Чай
 									.submenu
-										input(type='checkbox' name='coffee')
+										input(type='checkbox' name='coffee' id="coffee_checkbox")
 										label Кофe
+									input.btn.btn-primary(type="submit" value="Найти")
 								
 				default
 					form(method="GET" action="/shop")
