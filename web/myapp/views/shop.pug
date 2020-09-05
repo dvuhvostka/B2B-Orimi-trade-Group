@@ -14,12 +14,12 @@ block content
 						span(aria-hidden='true') &times;
 				.modal-body
 					span#city
-					a(data-toggle="collapse" aria-expanded='false' href='#select_city_wrap' aria-controls='select_city_wrap') Изменить
+					a(data-toggle="collapse" id="region_edited" changed="0" aria-expanded='false' href='#select_city_wrap' aria-controls='select_city_wrap') Изменить
 					#select_city_wrap.collapse
 						select#select_city
 				.modal-footer
 					button.btn.btn-secondary(data-dismiss='modal') Закрыть
-					button.btn.btn-success(data-dismiss='modal') Подтвердить
+					button.btn.btn-success(data-dismiss='modal')#accept_region Подтвердить
 	.grid-container
 		.carousel
 			.carousel-inner
@@ -302,7 +302,8 @@ block content
 			modal_city.modal('show');
 		}
 			window.onload = function(){
-				var ip_data = getRegion();
+				getRegion();
+				
 			$("#select_city").select2({
 				data: array,
 			})
@@ -432,13 +433,76 @@ block content
 				$('.toast').toast('show');
 				console.log(cart);
 		})
+		var region_edited =0;
+		var region_selected;
 		function getRegion() {
-			$.get( "https://freegeoip.app/json/", function( data ) {
-				console.log(data);
-				//alert(data.region_name+"\n"+data.ip);
-				showModalCity(
-					"Ваш город: "+data.region_name+"?"
-				);
-			});
+			let region = localStorage.getItem('reg');
+			if(region==undefined){
+				$.get( "https://freegeoip.app/json/", function( data ) {
+					//console.log(data);
+					//alert(data.region_name+"\n"+data.ip);
+					switch(data.region_name){
+						case "Москва": region_selected = 77; break;
+						case "Санкт-Петербург": region_selected = 78; break;
+						case "Новосибирск": region_selected = 54; break;
+						case "Екатеринбург": region_selected = 66; break;
+						case "Нижний Новгород": region_selected = 52; break;
+						case "Казань": region_selected = 116; break;
+						case "Челябинск": region_selected = 74; break;
+						case "Омск": region_selected = 55; break;
+						case "Самара": region_selected = 63; break;
+						case "Ростов-на-Дону": region_selected = 61; break;
+						case "Уфа": region_selected = 02; break;
+						case "Красноярск": region_selected = 24; break;
+						case "Воронеж": region_selected = 736; break;
+						case "Пермь": region_selected = 59; break;
+						case "Волгоград": region_selected = 34; break;
+						case "Краснодар": region_selected = 123; break;
+						case "Саратов": region_selected = 64; break;
+						default: region_selected = 77; break;
+					}
+					showModalCity(
+						"Ваш город: "+data.region_name+"? "
+					);
+				});
+			}else{
+				//дописать вывод города
+			}
 		}
+		$('#region_edited').on('click', function(){
+			if(region_edited == 0){
+				region_edited = 1
+				console.log(region_edited);
+			}else{
+				region_edited = 0;
+				console.log(region_edited);
+			}
+		});
+		$('#accept_region').on('click', function(){
+			if(region_edited==0){
+				localStorage.setItem('reg', region_selected);
+			}else if(region_edited == 1){
+				switch($('#select2-select_city-container').attr('title')){
+					case "Москва и Московская область": region_selected = 77; break;
+					case "Санкт Петербург и Ленинградская область": region_selected = 78; break;
+					case "Новосибирск": region_selected = 54; break;
+					case "Екатеринбург": region_selected = 66; break;
+					case "Нижний Новгород": region_selected = 52; break;
+					case "Казань": region_selected = 116; break;
+					case "Челябинск": region_selected = 74; break;
+					case "Омск": region_selected = 55; break;
+					case "Самара": region_selected = 63; break;
+					case "Ростов-на-Дону": region_selected = 61; break;
+					case "Уфа": region_selected = 02; break;
+					case "Красноярск": region_selected = 24; break;
+					case "Воронеж": region_selected = 736; break;
+					case "Пермь": region_selected = 59; break;
+					case "Волгоград": region_selected = 34; break;
+					case "Краснодар": region_selected = 123; break;
+					case "Саратов": region_selected = 64; break;
+					default: region_selected = 77; break;
+				}
+				localStorage.setItem('reg', region_selected);
+			}
+		});
 	
