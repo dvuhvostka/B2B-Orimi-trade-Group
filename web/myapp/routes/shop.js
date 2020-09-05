@@ -133,18 +133,16 @@ function addProduct() {
 
 
 /* GET users listing. */
-
-var getTea = `SELECT * FROM tea ORDER BY id DESC`;
-var getCoffee = `SELECT * FROM coffee WHERE type='coffee' ORDER BY id DESC`;
 var getSales = `SELECT * FROM sales ORDER BY id DESC`;
-var getOthers = `SELECT * FROM others ORDER BY id DESC`;
-
 
 router.route('/shop/:type?')
   .get(function(req,res){
     console.log("\n\nshop\n\n");
     pgPool.query(getSales,[],function(e,r){
       var type = req.params.type;
+      var getTea = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +`ORDER BY id DESC`;
+      var getCoffee = `SELECT * FROM coffee WHERE type='coffee'` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +` ORDER BY id DESC`;
+      var getOthers = `SELECT * FROM others WHERE type='other' ` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +`ORDER BY id DESC`;
       if (!type) {
         pgPool.query(getTea,[], function(err, response){
           pgPool.query(getCoffee,[], function(error, responses){
@@ -252,9 +250,8 @@ router.route('/shop/:type?')
       }
     }else if(type=='other'){
       if(req.query.id==undefined){
-        var coffeeFilters = `SELECT * FROM others ORDER BY id DESC`;
-        console.log(coffeeFilters);
-        pgPool.query(coffeeFilters,[], function(err, response){
+        var othersFilters = `SELECT * FROM others WHERE type='other' ` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +`ORDER BY id DESC`;;
+        pgPool.query(othersFilters,[], function(err, response){
           if (err) return console.error(err);
           var prods;
           if(response.rows==undefined){
@@ -274,8 +271,8 @@ router.route('/shop/:type?')
       });
     }else if(req.query.id){
       console.log(req.query.id)
-      var getcoffee = `SELECT * FROM others WHERE id='`+req.query.id+`'`;
-      pgPool.query(getcoffee,[], function(err, response){
+      var getothers = `SELECT * FROM others WHERE id='`+req.query.id+`'`;
+      pgPool.query(getothers,[], function(err, response){
         var prods;
         if(response.rows==undefined){
           prods = 0;
