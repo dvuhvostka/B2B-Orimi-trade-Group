@@ -68,6 +68,8 @@ block content
 										i.fas.fa-angle-right
 									a.link(href='/shop/other') Сопутствующие товары
 										i.fas.fa-angle-right
+									a.link(href='/shop/horeca') HoReCa
+										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
 								.price
@@ -178,6 +180,8 @@ block content
 										i.fas.fa-angle-right
 									a.link(href='/shop/other') Сопутствующие товары
 										i.fas.fa-angle-right
+									a.link(href='/shop/horeca') HoReCa
+										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
 								div.price
@@ -263,6 +267,30 @@ block content
 									i.fas.fa-angle-right
 								a.active_type.link(href='/shop/other') Сопутствующие товары
 									i.fas.fa-angle-right
+				when 'horeca'
+					form(method="GET" action="/shop")
+						ul(class='filters')
+							li 
+								a(class='filters_tags') Категория
+								.categories
+									a.link(href='/shop/tea') Чай
+										i.fas.fa-angle-right
+									a.link(href='/shop/coffee') Кофе
+										i.fas.fa-angle-right
+									a.link(href='/shop/other') Сопутствующие товары
+										i.fas.fa-angle-right
+									a.link.active_type(href='/shop/horeca') HoReCa
+										i.fas.fa-angle-right
+							li
+								a.filters_tags Бренд
+								.submenu_wrap
+									.submenu
+										input(type='checkbox' name='tea')
+										label Чай
+									.submenu
+										input(type='checkbox' name='coffee')
+										label Кофe
+								
 				default
 					form(method="GET" action="/shop")
 						ul(class='filters')
@@ -274,6 +302,8 @@ block content
 									a.link(href='/shop/coffee') Кофе
 										i.fas.fa-angle-right
 									a.link(href='/shop/other') Сопутствующие товары
+										i.fas.fa-angle-right
+									a.link(href='/shop/horeca') HoReCa
 										i.fas.fa-angle-right
 							li 
 								a(class='filters_tags') Цена
