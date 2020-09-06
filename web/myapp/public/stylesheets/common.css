@@ -56,4 +56,39 @@ ul {
   margin-left:20px;
   font-size: 30px;
 }
+
+.info {
+  display: flex;
+  flex-direction: column;
+
+}
+.copyright {
+  margin: 0;
+}
+
+.btn-help {
+  align-items: center;
+}
+
+.info a {
+  width: 200px;
+  margin: 0 auto;
+  color: black;
+}
+
+@media (max-width: 425px){
+  .info a {
+    text-align: center;
+  }
+
+  .btn-help {
+    margin: 10px 0;
+    width: 100%;
+  }
+}
+@media (max-width: 768px){
+  .info a {
+    text-align: center;
+  }  
+}
 /* ------------- */

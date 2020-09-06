@@ -1,1 +1,55 @@
 extends layout2
+
+block scripts
+  link(rel='stylesheet' href='/info_styles.css')
+block content
+  .info.mx-auto.mt-3.card.w-50
+    ul.info__nav.justify-content-center.nav.nav-pills(role='tablist')
+      li.nav-item(role='presentation')
+        a.nav-link.active#contact-pill(data-toggle='pill' href='#contacts' role='tab' aria-controls='contacts' aria-selected='true') Контакты
+      li.nav-item(role='presentation')
+        a.nav-link#delivery-pill(data-toggle='pill' href='#delivery' role='tab' aria-controls='delivery' aria-selected='false') Доставка и оплата
+    .tab-content.info__content.mx-auto
+      .tab-pane.fade.show.active#contacts(role='tabpanel' aria-labelledby='contact-pill')
+        .content
+          p.content__item
+            |По любым вопросам обращайтесь к нашему оператору:
+            br
+            br
+            em
+              |Курская Екатерина.
+            br
+            |Тлф. 8(495)644-38-86 (вн.181)
+            br
+            |Электронная почта - kurskaya.ep@orimimf.ru.
+            br
+            br
+            |Или по кнопке обратная связь внизу сайта
+      .tab-pane.fade#delivery(role='tabpanel' aria-labelledby='delivery-pill')
+        .content
+          h4.content__item_header Условия доставки и оплаты
+          p.content__item
+            |1. Для юридических лиц доступно 2 способа оплаты: наличными водителю или предоплата по выставленному счету.
+            br
+            |2. Для физических лиц доступно 2 способа оплаты: наличными водителю и предоплата онлайн.
+            br
+            |3. После создания заказа оператор связывается с Вами в течении 24 часов с момента заказа для подтверждения заказа.
+            br
+            |4. Минимальная сумма заказа для юридических лиц - 2000 рублей.
+            br
+            |5. Стоимость доставки рассчитывается в зависимости от удаленности Вашего адреса.
+            br
+            |6. При заказе от 4000 рублей - доставка бесплатная
+            br
+            |7. Для физических лиц доставка всегда платная.
+          h5.content__item_header Сроки доставки
+          p.content__item
+            |1. В Москве - на следующий день после зааказа
+            br
+            |2. В Московской области - до 3-х рабочих дней
+            br
+            |3. При оплате онлайн - на следующий день после получения средств в 
+            |Москве и в течении 3-х рабочих дней после получения средств в Московской области
+    script(src='info.js')        
+      
+          

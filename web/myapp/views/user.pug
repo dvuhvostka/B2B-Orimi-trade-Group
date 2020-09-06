@@ -2,6 +2,7 @@ extends layout2
 block scripts
   link(href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet")
   link(href='user_styles.css' rel='stylesheet')
+  link(href='moder.css' rel='stylesheet')
   script(src='user_js.js')
   script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
   script(src="https://unpkg.com/@popperjs/core@2")
@@ -110,7 +111,7 @@ block content
                       },
                       success: function(res) {
                         if(res.ok)
-                          alert('ok');
+                          showModal('ok');
                         else 
                           alert('bad');
                       }
@@ -193,27 +194,28 @@ block content
               button#leave_org Покинуть организацию
       if (permissions=='mod')
         .tab-pane.fade#nav-mod.panel(role='tabpanel' area-labelledby='nav-mod-tab')
-          nav
+          nav.mod__nav
             .nav.nav-pills.nav-fill#nav-mod(role='tablist')
               a.nav-item.nav-link.active#nav-mod-products-tab(aria-selected='true' aria-controls='nav-mod-products' role='tab' data-toggle="pill" href='#nav-mod-products') ТОВАРЫ
               a.nav-item.nav-link#nav-mod-sales-tab(aria-selected='false' aria-controls='nav-mod-sales' role='tab' data-toggle="pill" href='#nav-mod-sales') АКЦИИ
               a.nav-item.nav-link#nav-mod-firms-tab(aria-selected='false' aria-controls='nav-mod-firms' role='tab' data-toggle="pill" href='#nav-mod-firms') ФИРМЫ
-          .tab-content
-            .tab-pane.fade.show.active#nav-mod-products(role='tabpanel' aria-labelledby='nav-mod-products') 
-              a.btn.btn-primary(href='#create_product' data-toggle='collapse' aria-expanded='false' aria-controls='create_product') Создать товар
-              a.btn.btn-danger(href='#edit_product' data-toggle='collapse' aria-expanded='false' aria-controls='edit_product') Редактиовать товар
-              #create_product.collapse Создать товар
-              #edit_product.collapse Редактиовать товар
-            .tab-pane.fade#nav-mod-sales(role='tabpanel' aria-labelledby='nav-mod-sales')
-              .container
-                div
-                  input(placeholder="Название статьи")#newsTitle
-                  input(placeholder="Описание")#newsDescription
-                  input(placeholder="Текст статьи")#newsBody
-                  input(placeholder="Ссылка на изображение к статье", value="https://via.placeholder.com/600")#newsImg
-                  button(onclick="addNews();location.reload();")#add Добавить статью
-                  button(onclick="document.location.href='/add';")#delete Удалить все 
-            .tab-pane.fade#nav-mod-firms(role='tabpanel' aria-labelledby='nav-mod-firms') 
+              a.nav-item.nav-link#nav-mod-firms-request(aria-selected='false' aria-controls='nav-mod-request' role='tab' data-toggle="pill" href='#nav-mod-request') ЗАПРОСЫ              
+          .tab-content.mod__content
+            .tab-pane.fade.show.active#nav-mod-products(role='tabpanel' aria-labelledby='nav-mod-products').mod__content__item
+              .mod__content_products
+                a.btn.btn-info.content__products_link(href='#create_product' data-toggle='collapse' aria-expanded='false' aria-controls='create_product') Создать товар
+                a.btn.btn-info.content__products_link(href='#edit_product' data-toggle='collapse' aria-expanded='false' aria-controls='edit_product') Редактиовать товар
+                #create_product.collapse Создать товар
+                #edit_product.collapse Редактиовать товар
+            .tab-pane.fade#nav-mod-sales(role='tabpanel' aria-labelledby='nav-mod-sales').mod__content__item
+              .mod__content_sales
+                input.mod__content_sales__input(placeholder="Название статьи")#newsTitle
+                input.mod__content_sales__input(placeholder="Описание")#newsDescription
+                textarea.mod__content_sales__textarea(placeholder="Текст статьи")#newsBody
+                input.mod__content_sales__input(placeholder="Ссылка на изображение к статье", value="https://via.placeholder.com/600")#newsImg
+                button.mod__content_sales__btn.btn.btn-success(onclick="addNews();location.reload();")#add Добавить статью
+                button.mod__content_sales__btn.btn.btn-danger(onclick="document.location.href='/add';" data-toggle='tooltip' data-placement='top' title="Удаляет ВСЕ акции")#delete Удалить все 
+            .tab-pane.fade#nav-mod-firms(role='tabpanel' aria-labelledby='nav-mod-firms').mod__content__item
               p В списке #{uncorgs.length} фирм(а).
                 -for (var u=0; u<uncorgs.length; u++)
                   p #{uncorgs[u].org_name}
@@ -226,6 +228,7 @@ block content
                       img(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
                   button(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
                   button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
+            .tab-pane.fade#nav-mod-request(role='tabpanel' aria-labelledby='nav-mod-request').mod__content__item ЗАПРОСЫ ОТ ФИРМ
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
   script.
     $(function () {
