@@ -12,6 +12,7 @@ router.route('/info')
     res.render('info.pug', {
       isRegistred: userinfo.user_id,
       title: 'Фирменный магазин Орими-трэйд',
+      needFooter: false,
       });
   }).post(function(req,res){
     res.send("POST");

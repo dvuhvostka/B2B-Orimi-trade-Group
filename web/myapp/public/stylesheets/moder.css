@@ -1,0 +1,38 @@
+.mod {
+  margin:10px;
+}
+
+.mod__nav {
+  margin:10px;
+}
+
+.mod__content__item {
+  margin: 10px;
+}
+
+.mod__content_products{
+  text-align:center;
+}
+
+.content__products_link {
+  margin: 10px;
+}
+.mod__content_sales{
+  display:flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.mod__content_sales__input {
+  margin-top: 15px;
+}
+
+.mod__content_sales__textarea {
+  margin-top: 15px;
+  min-height: 150px;
+}
+
+.mod__content_sales__btn {
+  margin-top:10px;
+}
