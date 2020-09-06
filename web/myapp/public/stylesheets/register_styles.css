@@ -1,0 +1,38 @@
+.card#reg_page {
+  width: 40%;
+  margin: 20px 0;
+  min-width: 280px;
+}
+
+
+.card>ul {
+  display: flex;
+  color: black;
+  margin: 0 auto;
+	padding: 0;
+	margin-top:60px;
+}
+
+.card>ul>li:nth-child(1)::after {
+  content: '/';
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.card>ul>li {
+  margin-right: 10px;
+}
+
+.card>ul>li:nth-child(1) > a{
+	margin:auto;
+}
+
+.card-body {
+  margin-top: 40px;
+}
+
+.noLink {
+  pointer-events: none;
+	border-bottom: 1px solid black;
+	font-size: 20px;
+}

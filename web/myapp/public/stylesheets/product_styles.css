@@ -1,0 +1,163 @@
+#product_wrap {
+  display:grid;
+  grid-template-rows: auto auto auto auto;
+  grid-template-columns: auto auto auto;
+  grid-template-areas:
+    "a a a"
+    "f i p"
+    "hr hr hr"
+    "l s s "
+  ;
+  width:60%;
+  grid-gap:2em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top:20px;
+  align-items: center;
+}
+
+#logo {
+  grid-area:l;
+  display: flex;
+  flex-direction: column;
+}
+#logo a {
+  text-align: center;
+}
+#logo img {
+  width:150px;
+  margin-top:10px;
+}
+
+#logo span {
+  font-weight: bold;
+  text-align: center;
+  margin-left: 10px;
+}
+
+#sen {
+  grid-area: s;
+  padding-left:50px;
+  border-left: 1px solid #cbcbcb;
+  height: 100%;
+  margin: 0;
+  align-self: center;
+}
+
+#sen div {
+
+}
+
+#sen h5 {
+  font-style: italic;
+
+}
+
+#top_bar {
+  grid-area: a;
+}
+
+#top_bar h1 {
+  margin:10px;
+}
+
+#photo_area {
+  grid-area: f;
+}
+
+#hr {
+  grid-area: hr;
+  margin-top:10px;
+  border-bottom: 1px solid #cbcbcb;
+}
+
+#photo_area img {
+  max-width: 300px;
+}
+
+
+
+#info_wrap {
+  grid-area: i;
+  border-left: 1px solid #cbcbcb;
+  padding-left:50px;
+  border-right: 1px solid #cbcbcb;
+  padding-top:10px;
+  font-size: 14px;
+  height: 100%;
+  min-width: 400px;
+}
+
+#price_product {
+  grid-area: p;
+  align-self: flex-start;
+  min-width:250px;
+  padding-top:10px;
+}
+
+#price_wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+#price_wrap span {
+  text-align: left;
+  font-size: 30px;
+  color:red;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+#price_wrap span > i {
+  font-size: 15px;
+}
+
+#price_wrap .range_items {
+  margin-left:5px;
+}
+
+#price_wrap > button {
+  height:65px;
+  width: 150px;
+  margin-top: 20px;
+}
+
+#title_product {
+  font-size: 24px;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.breadcrumb {
+  background-color: white;
+}
+
+.p p:nth-child(1){
+    min-width:150px;
+}
+.p p:nth-child(1)::after{
+    content: "";
+    display:block;
+    left: 0;
+    position: relative;
+    width: 100%;
+    border-bottom: 1px dotted rgb(203, 203, 207);
+    z-index: -1;
+}
+.p {
+  text-align: left;
+}
+#logo p {
+  font-weight: 700;
+  margin-bottom:10px;
+  font-style: italic;
+}
+.in {
+  display: flex;
+}
+.in > p:nth-child(1){
+  color: rgb(108, 112, 112);
+  margin-right:10px;
+}
+
+/* -------------- */

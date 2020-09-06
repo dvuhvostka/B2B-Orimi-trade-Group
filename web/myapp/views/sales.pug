@@ -1,12 +1,12 @@
 extends layout2
 
-block append scripts
-  link(rel='stylesheet' href='news.css')
-
+block scripts
+  link(rel='stylesheet' href='sales_styles  .css')
+    
 block content
   - var q_n = news_q
     script(src='/news.js')
-    div(class='sales_wrap')
+    div(class='sales_wrap').container
       .row
         - for(var i=0; i<q_n; i++) 
           .col-sm-4
@@ -40,7 +40,3 @@ block content
       
       });
     });
-                    
-                    
-                                    
-    

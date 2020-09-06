@@ -1,0 +1,248 @@
+/* user styles */
+.card#user_page {
+  width: 40%;
+  margin-top: 20px;
+  min-width: 750px;
+}
+
+#nav-profile {
+  margin: 30px 15% 0;
+}
+
+#nav_panel{
+  margin:10px auto;
+  width:100%;
+  padding: 0 10px 0 10px;
+}
+
+#type {
+  font-style: italic;
+  min-width: 80px;
+}
+
+#phone > p:nth-child(2){
+  margin-right:20px;
+  margin-bottom: 0;
+}
+
+#phone_input {
+  min-width: 45px;
+  max-width:70px;
+  text-align: center;
+  height: 30px;
+  margin-top: 1px;
+}
+
+#phone_confirm {
+  min-width:340px;
+}
+#sms_button {
+  height: 30px;
+  font-size: 13px;
+  vertical-align: middle;
+  margin-right: 20px;
+}
+
+#phone_button {
+  height: 30px;
+  font-size: 13px;
+  vertical-align: middle;
+  margin-left: 20px;
+}
+
+.in {
+  display: flex;
+}
+#name, #surname, #third_name {
+  margin-right: 20px;
+}
+
+#surname {
+  margin-right: 20px;
+}
+
+.in > p:nth-child(1){
+  color: rgb(108, 112, 112);
+  margin-right:10px;
+}
+
+#profile p {
+  font-size: 15px;
+}
+
+.p-danger {
+  font-size: 14px;
+  vertical-align: middle;
+  margin: 3px 0 0;
+  font-weight: bold;
+  color: rgb(238, 61, 61) !important;
+}
+
+#org_info {
+  margin-top:5px;
+  margin-bottom: 50px;
+}
+
+#org_form {
+  display: flex;
+  flex-direction: column;
+  margin-top:10px;
+}
+
+#org_form input {
+  margin-bottom: 10px;
+}
+
+#org_form select {
+  margin-bottom: 10px;
+  height:30px;
+}
+#link_code_wrap {
+  margin-bottom: 10px;
+  font-style: italic;
+}
+#link_code {
+  margin-right:10px;
+  width:350px;
+}
+#link_code_wrap .btn {
+  height:auto;
+}
+.spinner-border {
+  margin: 5rem 47.4%;
+}
+
+#docs {
+  position: absolute;
+  width:0.1px;
+  height:0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+#deals{
+  margin-left:10px;
+  text-align: center;
+  margin: 30px 0;
+}
+.deal {
+  margin: 0 0 10px 10px;
+}
+
+.deal_wrap {
+  margin: 1rem 0 20px 0;
+  padding-top: 10px;
+  border-bottom: 1px solid #cbcbcb;
+  border-top: 1px solid #cbcbcb;
+
+}
+
+.deal_wrap > p {
+  text-align: right;
+  margin-right: 40px;
+  font-weight: bolder;
+  font-style: oblique;
+  margin-bottom: 10px;
+}
+.deal img {
+  width: 70px;
+  height: 70px;
+}
+
+.deal > a {
+  margin: 22px 0 0 30px;
+  color: black;
+}
+
+.title {
+  font-weight: bold;
+}
+a.title {
+  color:black;
+}
+
+p.title {
+  margin-bottom: 35px;
+}
+
+#balance_wrap {
+  margin: 10px 0 0 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+#balance_wrap p:nth-child(1){
+  font-style: italic;
+  margin-right: 10px;
+}
+
+.rub{
+  margin-left: 4px;
+  font-size: 15px;
+}
+
+#code {
+  margin: 10px 10px 25px 0;
+}
+
+#code_link {
+  margin: 10px 25px 20px 0;
+}
+
+#code_input {
+  height:35px;
+  margin: 0 15px 0 10px;
+  text-align: center;
+  min-width: 150px;
+}
+
+#code_btn {
+  height:35px;
+}
+
+#code > p {
+margin: 5px 0 0 0;
+}
+
+#dog {
+  line-height: 1;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+#dog input {
+  margin-right: 10px;
+}
+
+#question {
+  display: flex;
+  flex-direction: column;
+}
+.select_question {
+  margin: 10px 0;
+}
+
+.i {
+  font-size: 20px;
+  margin-right:10px;
+  line-height: 1;
+}
+
+#question button {
+  width:200px;
+  margin: 10px auto 0;
+}
+
+#question textarea {
+  min-height: 200px;
+  max-height:400px;
+  resize:vertical;
+  padding: 10px;
+}
+
+#ready_doc {
+  margin-left: 30px;
+}
+/* ----------- */
