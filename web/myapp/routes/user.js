@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const config = require('../config');
 const {Pool, Client} = require('pg');
-const pgp = require("pg-promise")(/*options*/);
 const multer = require('multer');
 const fs = require('fs');
 const rimraf = require('rimraf');
@@ -23,8 +22,6 @@ const {
   HOST = config.DB_HOST,
   DBNAME = config.DB_NAME
 } = process.env
-
-var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
 
 var pgPool = new Pool({
   host: HOST,

@@ -24,8 +24,6 @@ const {
 //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
 const IN_PROD = ENVIRONMENT === 'production';
 
-var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
-
 
 function xss_check(replace){
   var pattern = /script|javascript|src|onerror|%|<|>/g;

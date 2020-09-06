@@ -8,10 +8,26 @@ var helmet = require('helmet');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 var {Pool, Client} = require('pg');
-
-
-
+const pgp = require("pg-promise")(/*options*/);
 var config = require('./config');
+
+
+//var for sessions and connecting to databse
+const {
+  SESS_LIFETIME = config.SESS_TIME,
+  ENVIRONMENT = config.ENVIRONMENT,
+  SESS_NAME = config.SESS_NAME,
+  SESS_SECRET = config.SESS_SECRET,
+  USER = config.DB_USER,
+  PASSWORD = config.DB_PASSWORD,
+  HOST = config.DB_HOST,
+  DBNAME = config.DB_NAME
+} = process.env
+
+
+global.db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
+
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user');
@@ -28,18 +44,6 @@ var orderRoute = require('./routes/order');
 var app = express();
 
 //const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
-
-//var for sessions and connecting to databse
-const {
-  SESS_LIFETIME = config.SESS_TIME,
-  ENVIRONMENT = config.ENVIRONMENT,
-  SESS_NAME = config.SESS_NAME,
-  SESS_SECRET = config.SESS_SECRET,
-  USER = config.DB_USER,
-  PASSWORD = config.DB_PASSWORD,
-  HOST = config.DB_HOST,
-  DBNAME = config.DB_NAME
-} = process.env
 
 //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
 const IN_PROD = ENVIRONMENT === 'production';

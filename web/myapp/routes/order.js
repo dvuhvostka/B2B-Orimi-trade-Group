@@ -17,8 +17,6 @@ const {
   DBNAME = config.DB_NAME
 } = process.env
 
-var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
-
 router.route('/order')
   .get(function(req,res){
     res.render('order.pug', {
