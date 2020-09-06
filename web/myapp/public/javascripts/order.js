@@ -15,4 +15,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 window.onload = function(){
   //При загрузке страницы
+  $('#delivery_info').on('submit', (e)=>{
+    e.preventDefault();
+    if(localStorage.getItem('cart')){
+      $.ajax({
+        type: 'POST',
+        url: '/order',
+        data: {post_type: "delivery_info", formdata: $('#delivery_info').serialize(), cart: localStorage.getItem('cart')},
+        success: function(r){
+          switch(r.ok){
+            case true: alert(r.ok); break;
+            case false: console.log(r.error); localStorage.removeItem('cart'); break;
+            default: window.location.href = '/shop'; break;
+          }
+        }
+      });
+    }else{
+      alert('Корзина пуста');
+    }
+  })
 }
