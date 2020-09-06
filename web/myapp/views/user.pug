@@ -353,15 +353,19 @@ block content
       }
     
       function showattachment(deal_id){
-          $.post("/add",{post_type: "showattachment", deal_id: deal_id}, (data)=>{
-            var out = "";
-            var out_array = [];
-            for (var i=0; i<data.length; i++){
-                out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+"</p>";
-              }
-              console.log(out);
-              $('#'+deal_id).html(out);
-          });
+          if($.trim($('#'+deal_id).text()) != "" ){
+            $('#'+deal_id).html('');
+          }else{
+            $.post("/add",{post_type: "showattachment", deal_id: deal_id}, (data)=>{
+              var out = "";
+              var out_array = [];
+              for (var i=0; i<data.length; i++){
+                  out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+"</p>";
+                }
+                console.log(out);
+                $('#'+deal_id).html(out);
+            });
+          }
       }
     
     
