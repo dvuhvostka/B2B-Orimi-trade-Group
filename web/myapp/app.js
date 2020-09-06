@@ -23,6 +23,7 @@ var logoutRoute = require('./routes/logout');
 var cartRoute = require('./routes/cart');
 var addnewsRoute = require('./routes/add');
 var infoRoute = require('./routes/info');
+var orderRoute = require('./routes/order');
 
 var app = express();
 
@@ -119,6 +120,7 @@ app.use('/', logoutRoute);
 app.use('/', addnewsRoute);
 app.use('/', cartRoute);
 app.use('/', infoRoute);
+app.use('/', orderRoute);
 
 app.use('/?', function(req,res){
   res.redirect('/');
