@@ -149,20 +149,43 @@ block content
         #deals.d-none
           if (deals == 0)
             p.title У вас нет совершенных сделок!
-          else 
-            p.title Ваши сделки (#{deals.length} шт.)
-            -for (var i=0; i<deals.length; i++)
-              a(href='#').title № #{deals[i].id}
-              .deal_wrap
-                -var final_sum = Number(0)
-                -for (var x=0; x<deals[i].length; x++)
-                  - final_sum = Number(final_sum) + Number(deals[i][x].split(':')[6])
-                  .in.deal
-                    img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
-                    a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1] } шт. -  (#{deals[i][x].split(':')[6]}р.)
-                if (permissions=='mod')
-                  p ID пользователя #{deals[i].deal_owner}
-                p Итоговая стоимость: #{final_sum}
+          else
+            if (permissions=='user') 
+              p.title Ваши сделки (#{deals.length} шт.)
+              -for (var i=0; i<deals.length; i++)
+                a(href='#').title № #{deals[i].id}
+                .deal_wrap
+                  -var final_sum = Number(0)
+                  -for (var x=0; x<deals[i].length; x++)
+                    - final_sum = Number(final_sum) + Number(deals[i][x].split(':')[6])
+                    .in.deal
+                      img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
+                      a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1] } шт. -  (#{deals[i][x].split(':')[6]}р.)
+                  p Итоговая стоимость: #{final_sum}
+            else
+                -for(var i=0; i<deals_info.length; i++)
+                  p 
+                    b № #{deals_info[i].id}
+                  p
+                    b #{deals_info[i].date}
+                  p #{deals_info[i].owner_id}
+                  if (deals_info[i].confirmed==0)
+                    p Не подтверждена
+                  else 
+                    p Подтверждена
+                  p #{deals_info[i].second_name_owner} #{deals_info[i].first_name_owner} #{deals_info[i].third_name_owner}
+                  p #{deals_info[i].delivery_address} 
+                  p #{deals_info[i].owner_contact} 
+                  if (deals_info[i].payment_method=='nal')
+                    p Наличные
+                  if (deals_info[i].payment_method=='beznal')
+                    p Безнал
+                  if (deals_info[i].payment_method=='bill')
+                    p Выставлен счет
+                  p Итого: #{deals_info[i].final_price}
+                  button(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
+                  div(id=deals_info[i].id)
+                  
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
         #balance_wrap
           .in
@@ -318,6 +341,7 @@ block content
         var newsImg = document.getElementById("newsImg");
 
         var data = JSON.stringify({
+          post_type: 'createnews',
           title: newsTitle.value,
           desc: newsDescription.value,
           body: newsBody.value,
@@ -329,6 +353,18 @@ block content
         xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
         xhr.send(data);
         return xhr.responseText;
+      }
+    
+      function showattachment(deal_id){
+          $.post("/add",{post_type: "showattachment", deal_id: deal_id}, (data)=>{
+            var out = "";
+            var out_array = [];
+            for (var i=0; i<data.length; i++){
+                out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+"</p>";
+              }
+              console.log(out);
+              $('#'+deal_id).html(out);
+          });
       }
     
     
