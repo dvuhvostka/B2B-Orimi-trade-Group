@@ -27,12 +27,7 @@
             $('.all_li').html(out+"<button class='btn btn-success submit_cart '>Перейти к оплате</button>");
 
             $('.submit_cart').on('click', function(){
-
-              $.ajax({
-                type: 'POST',
-                url: '/order',
-                data: cart
-              })
+              window.location.href = '/order';
             });
     });
     function delfromcart(articul){

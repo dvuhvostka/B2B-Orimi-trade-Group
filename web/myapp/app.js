@@ -89,6 +89,7 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   switch (!null) {
     case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
+    case req.session.userId!=null: userinfo.user_id = req.session.userId; break;
   }
   next();
 })
