@@ -63,13 +63,22 @@ router.route('/add')
       pgPool.query(getUsers, [], function(err, resp){
         if(resp.rows[0]!=undefined){
           if(resp.rows[0].permissions=='mod'){
-              createNews(req.body.title, req.body.desc, req.body.body, req.body.img);
+            switch(req.body.post_type){
+              case 'showattachment': {
+                let get_deal_prods_sql = `SELECT * FROM deals WHERE deal_id='`+req.body.deal_id+`'`;
+                pgPool.query(get_deal_prods_sql, [], function(err, deals_products_data){
+                  res.json(deals_products_data.rows);
+                });
+                break;
+              }
+              case 'createnews': createNews(req.body.title, req.body.desc, req.body.body, req.body.img); res.send("ok"); break;
+              default: res.send('POST');
+            }
             };
           }else{
             console.log('!! /add not allowed : '+resp.rows[0].ip_addr);
           }
         });
-    res.send("ok");
   });
 
   module.exports = router;

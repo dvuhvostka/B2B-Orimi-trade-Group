@@ -71,7 +71,6 @@ user.route('/user')
   pgPool.query(getUserData,[], function(err, response){
     if(response.rows[0]){
       var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
-      var getUserDeals;
       var org_info = 0;
       var status;
       pgPool.query(get_org,[], function(err, resp){
@@ -87,11 +86,7 @@ user.route('/user')
         }
         var deals = 0;
 
-        if(response.rows[0].permissions == 'user'){
-          getUserDeals = `SELECT * FROM deals WHERE deal_owner='`+req.session.userId+`'`;
-        }else{
-          getUserDeals = `SELECT * FROM deals`;
-        }
+        var getUserDeals = `SELECT * FROM deals WHERE deal_owner='`+req.session.userId+`'`;
 
         db.any(getUserDeals).then(function(data) {
           if(data){deals = data;}
@@ -120,23 +115,26 @@ user.route('/user')
                   var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
                   uncorgs[i].docs = fls;
                 }
-                res.render('user',{
-                  title: "Аккаунт",
-                  isRegistred: req.session.userId,
-                  user_name: response.rows[0].username,
-                  user_second_name: response.rows[0].second_name,
-                  user_third_name: response.rows[0].third_name,
-                  number: response.rows[0].number,
-                  phone_confirmed: response.rows[0].phone_confirmed,
-                  type: response.rows[0].client_type,
-                  permissions: response.rows[0].permissions,
-                  balance: response.rows[0].balance,
-                  org_info: org_info,
-                  info: info,
-                  deals: d_data,
-                  uncorgs: uncorgs,
-                  link_code: response.rows[0].link_code,
-                  attached_org: attachedorg
+                db.any(`SELECT * FROM deals_info`).then(function(deals_info){
+                  res.render('user',{
+                    title: "Аккаунт",
+                    isRegistred: req.session.userId,
+                    user_name: response.rows[0].username,
+                    user_second_name: response.rows[0].second_name,
+                    user_third_name: response.rows[0].third_name,
+                    number: response.rows[0].number,
+                    phone_confirmed: response.rows[0].phone_confirmed,
+                    type: response.rows[0].client_type,
+                    permissions: response.rows[0].permissions,
+                    balance: response.rows[0].balance,
+                    org_info: org_info,
+                    info: info,
+                    deals: d_data,
+                    deals_info: deals_info,
+                    uncorgs: uncorgs,
+                    link_code: response.rows[0].link_code,
+                    attached_org: attachedorg
+                  });
                 });
               }).catch(error => {
                 console.log('ERROR:', error);
