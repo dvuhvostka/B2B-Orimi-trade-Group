@@ -140,7 +140,10 @@ block content
           input(type='text' value='1' class='input')
           button(class='btn btn-secondary plus')
             i.fas.fa-plus.controls
-        button.btn.btn-primary Добавить в корзину
+        if (products[0].subtype)
+          button(data-id=products[0].id type=products[0].subtype).btn.btn-primary#addtocart Добавить в корзину
+        else
+          button(data-id=products[0].id type=products[0].type).btn.btn-primary#addtocart Добавить в корзину
     div#hr
     if products[0].type != 'other'
       #logo
@@ -177,37 +180,4 @@ block content
         div
           h5 Описание
           p #{products[0].description}
-  script.
-    $('.minus').on('click', function(){
-      var item = $(this);
-      if (item.siblings('.input').val() > 1){
-        item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
-        $("#span_change").html(item.siblings('.input').val()*start_price);
-      } else {
-        return 0;
-      }
-    })
-    
-    $('.plus').on('click', function(){
-      var item = $(this);
-      if (item.siblings('.input').val() < 100){
-        item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
-        $("#span_change").html(item.siblings('.input').val()*start_price);
-      } else {
-        return 0;
-      }
-    })
-    var input = document.querySelector('.input');
-    
-    $('.input').on('change', function(){
-      if(parseInt($(this).val()) > 100){
-        $(this).val(100);
-      } else if (parseInt($(this).val()) < 1){
-        $(this).val(1);
-      }
-        $("#span_change").html($(this).val()*start_price);
-    })
-    window.onload = function() {
-      start_price = $('#span_change').html();
-      console.log(start_price);
-    }
+  script(src='../product.js')
