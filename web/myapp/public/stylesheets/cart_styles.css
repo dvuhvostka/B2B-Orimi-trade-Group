@@ -2,7 +2,7 @@
 
 #cart_page {
   margin-top: 20px;
-  min-width: 700px;
+  max-width: 700px;
 }
 
 .img_good_cart {
