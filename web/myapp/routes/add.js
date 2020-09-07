@@ -41,6 +41,21 @@ function createNews(header, intro, body, img) {
   });
 }
 
+function updateItemSql(data){
+  //UPDATE users SET link_code='' WHERE id='"+req.session.userId+"'"
+  var sql = `SET `;
+  var data_s = Object.entries(data);
+  for(let each of data_s){
+    var key = each[0];
+    var value = each[1];
+    if(key!='id')
+      sql += key+`=`+`'`+value+`'`+`, `;
+  }
+  sql = sql.slice(0,-2);
+  return sql;
+}
+
+
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 router.route('/add')
   .get(function(req,res){
@@ -73,16 +88,98 @@ router.route('/add')
               }
               case 'createnews': createNews(req.body.title, req.body.desc, req.body.body, req.body.img); res.send("ok"); break;
               case 'getItem':
-                var item_tea_sql = `SELECT * FROM tea WHERE articul='`+req.body.articul+`'`;
-                var item_coffee_sql = `SELECT * FROM coffee WHERE articul='`+req.body.articul+`'`;
-                var item_others_sql = `SELECT * FROM others WHERE articul='`+req.body.articul+`'`;
-                var item_horeca_sql = `SELECT * FROM horeca WHERE articul='`+req.body.articul+`'`;
-                var final_sql = item_tea_sql+" UNION "+item_coffee_sql+" UNION "+item_others_sql+" UNION "+item_horeca_sql+';';
-                console.log(final_sql);
-                pgPool.query(final_sql, [], function(err,resp){
-                  console.log(resp)
-                });
+              var item_sql_tea = `SELECT * FROM tea WHERE articul=$1`;
+              var item_sql_coffee = `SELECT * FROM coffee WHERE articul=$1`;
+              var item_sql_other = `SELECT * FROM others WHERE articul=$1`;
+              var item_sql_horeca = `SELECT * FROM horeca WHERE articul=$1`;
+                db.any(item_sql_tea, req.body.articul)
+                .then(function(response){
+                  if(response.length)
+                    res.json({
+                      response
+                    })
+                })
+                db.any(item_sql_coffee, req.body.articul)
+                .then(function(response){
+                  if(response.length)
+                    res.json({
+                      response
+                    })
+                })
+                db.any(item_sql_other, req.body.articul)
+                .then(function(response){
+                  if(response.length)
+                    res.json({
+                      response
+                    })
+                  //console.log(res.headersSent);
+                })
+                db.any(item_sql_horeca, req.body.articul)
+                .then(function(response){
+                  if(response.length)
+                    res.json({
+                      response
+                    })
+                })
+                setTimeout(()=>{
+                  if(!res.headersSent)
+                    res.json({
+                      response: {}
+                    });
+                },1000);
               break;
+              case 'edit_product': {
+                console.log(JSON.parse(req.body.data));
+                let data = JSON.parse(req.body.data);
+                if(data.sale_price){
+                  data.sale_price = data.item_price;
+                  delete data.item_price;
+                }
+                let sql;
+                let add_sql = updateItemSql(data);
+                if(!data.subtype){
+                  switch (data.type) {
+                    case 'tea':
+                      sql = `UPDATE tea `;
+                      sql += add_sql;
+                      sql += ` WHERE id=`+data.id;
+                      db.none(sql).then(()=>{
+                        console.log('ok');
+                        res.json('Изменения сохранены!');
+                      })
+                      break;
+                    case 'coffee':
+                      sql = `UPDATE coffee `;
+                      sql += add_sql;
+                      sql += ` WHERE id=`+data.id;
+                      db.none(sql).then(()=>{
+                        console.log('ok');
+                        res.json('Изменения сохранены!');
+                      })
+                      break;
+                    case 'other':
+                      sql = `UPDATE others `;
+                      sql += add_sql;
+                      sql += ` WHERE id=`+data.id;
+                      db.none(sql).then(()=>{
+                        console.log('ok');
+                        res.json('Изменения сохранены!');
+                      })
+                      break;
+                    default:
+
+                  }
+                } else {
+                  sql = `UPDATE horeca `;
+                  sql += add_sql;
+                  sql += ` WHERE id=`+data.id;
+                  console.log(sql);
+                  db.none(sql).then(()=>{
+                    console.log('ok');
+                    res.json('Изменения сохранены!');
+                  })
+                }
+              } break;
               default: res.send('POST');
             }
             };

@@ -41,3 +41,44 @@
   margin: 0 10px;
   line-height: 2;
 }
+
+.found__item {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: center;
+}
+
+.found__item label{
+  margin-right:10px;
+  display: inline-block;
+  font-weight:bold;
+  line-height: 2;
+}
+
+.found__item input {
+  display: inline-block;
+  margin-right:10px;
+  line-height: 1;
+}
+
+.item__price_sale {
+  margin-left:10px;
+}
+
+.d-in{
+  display: flex;
+  margin: 10px 10px 10px;
+}
+.item__name {
+  width:100%;
+}
+
+.btn__item_edit {
+  width:50%;
+  margin: 10px auto;
+}
+
+.item__id, .item__articul{
+  margin-left:10px;
+}

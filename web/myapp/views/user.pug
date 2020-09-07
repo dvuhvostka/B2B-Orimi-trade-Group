@@ -69,7 +69,7 @@ block content
                 p Ваша должность:
                 p #{info.position}
               button.btn.btn-primary(data-toggle='collapse', href='#question_wrap' aria-expanded='false' aria-controls='question_wrap') Запрос к Орими
-              a.btn.btn-info#ready_doc(href='docs/dogovor.doc' target='_blank') Договор поставки
+              a.btn.btn-info#ready_doc(href='docs/dogovor_p.doc' target='_blank') Договор поставки
               #question_wrap.collapse
                 #question
                   .in.select_question
@@ -232,6 +232,41 @@ block content
                 #edit_product.collapse
                   input(type='text' placeholder='Введите артикул').articul
                   button.btn.btn-info.articul-find Найти
+                  .found__item.d-none
+                    label.item__id id:
+                      span
+                    label.item__articul Артикул
+                      span
+                    .d-in
+                      label Тип
+                      input(type='text' value='' name='type').item__type
+                    .d-in
+                      label Подтип(ХоРеКа)
+                      input(type='text' value='' name='subtype').item__subtype
+                    .d-in
+                      label Бренд
+                      input(type='text' value='' name='sort').item__sort
+                    .d-in
+                      label Название
+                      input(type='text' value='' name='item_name').item__name
+                    .d-in
+                      label Цена
+                      input(type='text' name='item_price').item__price
+                      label Сделать цену акционной?
+                        input(type='checkbox' name='sale').item__price_sale
+                    .d-in
+                      label Упаковка
+                      input(type='text' value='' name='packaging').item__package
+                    .d-in
+                      label Кол-во в гофра ящике
+                      input(type='text' value='' name='box_count').item__box_count
+                    .d-in
+                      label Вес
+                      input(type='text' value='' name='weight').item__weight
+                      span г.
+                    button.btn.btn-success.btn__item_edit Сохранить
+                  .found__item_none.d-none
+                    span.text-danger Товар не найден!
             .tab-pane.fade#nav-mod-sales(role='tabpanel' aria-labelledby='nav-mod-sales').mod__content__item
               .mod__content_sales
                 input.mod__content_sales__input(placeholder="Название статьи")#newsTitle
