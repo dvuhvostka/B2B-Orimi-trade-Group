@@ -6,9 +6,23 @@ document.addEventListener('DOMContentLoaded', function () {
         url: '/order',
         data: {post_type: "getbalance"},
         success: function(r){
-          console.log(r.balance);
           $('#userbalance').html("ВАШ БОНУСНЫЙ БАЛАНС: "+r.balance);
           b = r.balance;
+        }
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/order',
+        data: {post_type: "getcartcost", cart: localStorage.getItem('cart')},
+        success: function(r){
+          if(!r.ok){
+            switch(r.error){
+              case "ERROR_CART_EMPTY": $('#cartcost').html("ВАША КОРЗИНА ПУСТА"); break;
+              default: console.log(r.arg); break;
+            }
+          }else {
+            $('#cartcost').html("СУММА ЗАКАЗА: "+r.fullcost);
+          }
         }
       });
 });
@@ -24,8 +38,8 @@ window.onload = function(){
         data: {post_type: "delivery_info", formdata: $('#delivery_info').serialize(), cart: localStorage.getItem('cart')},
         success: function(r){
           switch(r.ok){
-            case true: alert(r.ok); break;
-            case false: console.log(r.error); localStorage.removeItem('cart'); break;
+            case true: alert(r.message); localStorage.removeItem('cart'); window.location.href='/user'; break;
+            case false: console.log(r.error); break;
             default: window.location.href = '/shop'; break;
           }
         }
