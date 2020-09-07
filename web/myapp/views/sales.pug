@@ -2,41 +2,51 @@ extends layout2
 
 block scripts
   link(rel='stylesheet' href='sales_styles.css')
-    
 block content
   - var q_n = news_q
-    script(src='/news.js')
-    div(class='sales_wrap').container
-      .row
-        - for(var i=0; i<q_n; i++) 
-          .col-sm-4
-            .card.s(class='mx-auto mb-4 text-center shadow-lg ')
-              .card-header.s
-                h4(class='card-title') #{pnews[i].header}            
-              .card-body.s
-                if pnews[i].img_url                  
-                  img(src=pnews[i].img_url class='card-img-top' alt='...')
-                h5(class='card-subtitle' id='subtitle-text' + i) #{pnews[i].intro}
-                button(type='button' class='close' aria-label='close' style='display:none;')
-                  span( aria-hidden="true") &times;
-                a(href='#' onclick='return false' class='link-news text-right' id='link-n' + i) Читать далее...
-                p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
-  script.
-    $.fx.off = false;
-    $(document).ready(function(){
-      $('.link-news').on('click', function(){
-        var link_open = $(this);
-          link_open.siblings('.card-text').show(400);
-          link_open.siblings('.card-subtitle').hide(20);
-          link_open.siblings('.close').show(20);
-          link_open.hide(20);
-      });
-      $('.close').on('click', function(){
-        var link_close = $(this);
-        link_close.siblings('.card-text').hide(600);
-        link_close.siblings('.card-subtitle').show(20);
-        link_close.siblings('.link-news').show(20);
-        link_close.hide(20);
-      
-      });
-    });
+  - var Type = type
+  script(src='/news.js')
+  case Type
+    when 'set'
+      div 123123
+      p #{saleInfo.products_id.length}
+      script(src='/try.js')
+    when 'capsule'
+      div 12i3ji1o3j
+    when 'weekly'
+      div hqwelq
+    default
+      div(class='sales_wrap').container
+        .row
+          - for(var i=0; i<q_n; i++) 
+            .col-sm-6
+              .card.s(class='mx-auto mb-4 text-center shadow-lg ')
+                .card-header.s
+                  h4(class='card-title') #{pnews[i].header}            
+                .card-body.s
+                  if pnews[i].img_url                  
+                    img(src=pnews[i].img_url class='card-img-top' alt='...')
+                  h5(class='card-subtitle' id='subtitle-text' + i) #{pnews[i].intro}
+                  button(type='button' class='close' aria-label='close' style='display:none;')
+                    span( aria-hidden="true") &times;
+                  a(href='#' onclick='return false' class='link-news text-right' id='link-n' + i) Читать далее...
+                  p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
+      script.
+        $.fx.off = false;
+        $(document).ready(function(){
+          $('.link-news').on('click', function(){
+            var link_open = $(this);
+              link_open.siblings('.card-text').show(400);
+              link_open.siblings('.card-subtitle').hide(20);
+              link_open.siblings('.close').show(20);
+              link_open.hide(20);
+          });
+          $('.close').on('click', function(){
+            var link_close = $(this);
+            link_close.siblings('.card-text').hide(600);
+            link_close.siblings('.card-subtitle').show(20);
+            link_close.siblings('.link-news').show(20);
+            link_close.hide(20);
+          
+          });
+        });

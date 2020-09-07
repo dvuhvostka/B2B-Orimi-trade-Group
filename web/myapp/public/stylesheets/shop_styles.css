@@ -33,7 +33,7 @@
 
 /* shop styles */
 .grid-container {
-  margin-top:315px;
+  margin-top:615px;
   display: grid;
   grid-column-gap: 1em;
   grid-row-gap: 2em;
@@ -103,7 +103,7 @@
 /* slider styles */
 .carousel-wrap {
   position: relative;
-  height: 300px;
+  height: 500px;
   left: 0;
   width:1px;
   transition: left .5s ease-in-out;
@@ -114,7 +114,7 @@
   left:50%;
   width: 900px;
   margin-left: -450px;
-  height:302px;
+  height:500px;
   overflow: hidden;
 }
 .controls_carousel {
@@ -123,7 +123,7 @@
 .controls_carousel li {
   display: inline-block;
   position: absolute;
-  top: 233px;
+  top: 333px;
 }
 .controls_carousel li a {
   color: black;
@@ -141,8 +141,8 @@
   opacity: 40%;
 }
 .content {
-  height: 300px;
-  width: 280px;
+  height: 500px;
+  width: 480px;
   float: left;
   border: 1px solid #cbcbcb;
   padding: 10px;
@@ -156,9 +156,17 @@
 }
 
 .content img {
-  width: 250px;
-  height:245px;
+  width: 400px;
+  max-height: 95%;
   border-radius:.25rem;
+}
+
+.sales__intro {
+  color: black;
+}
+
+.sales__link:hover{
+  text-decoration: none;
 }
 /* ------------- */
 /* Goods styles */

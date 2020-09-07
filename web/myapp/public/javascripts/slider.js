@@ -8,7 +8,7 @@ function getOptimalSize(){
     "768": 2,
     "1024": 2,
     "1440": 3,
-    "2560": 4
+    "2560": 3
   }
   var size = screen.width;
   for (let each of Object.keys(screen_width)){
@@ -52,7 +52,7 @@ function slider(l){
   if (optimal_size > length){
     optimal_size = length;
   }
-  const content_width = 300;
+  const content_width = 500;
   var margin = setOptimalWidth(optimal_size,content_width,inner);
   setControls(left,right,margin);
   var busy;
@@ -67,7 +67,7 @@ function slider(l){
     console.log(parseInt(wrap.css('left')));
       if(parseInt(wrap.css('left')) <= -content_width)
       wrap.css({
-        "left":  "+=300px"
+        "left":  "+="+content_width+"px"
       });
       setTimeout(function(){
         busy = false;
@@ -81,7 +81,7 @@ function slider(l){
     console.log(parseInt(wrap.css('left')));
     if(parseInt(wrap.css('left')) > -(content_width*length-optimal_size*content_width))
     wrap.css({
-      "left": "-=300px"
+      "left": "-="+content_width+"px"
     });
     setTimeout(function(){
       busy = false;

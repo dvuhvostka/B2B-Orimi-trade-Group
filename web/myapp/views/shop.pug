@@ -27,8 +27,9 @@ block content
 			- for(var i = 0;i<sales_q;i++)
 				.content
 					h5 #{sales[i].header}
-					a(href='/sales')
+					a(href='/sales').sales__link
 						img(src=sales[i].img_url)
+						p.sales__intro #{sales[i].intro}
 	ul.controls_carousel
 		li.control-left
 			a(href='#')
