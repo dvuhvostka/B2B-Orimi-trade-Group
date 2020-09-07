@@ -6,18 +6,21 @@ block content
   else
     form#delivery_info
       p
-        input(type='text' id="input_addr" name='address' placeholder='Введите адрес доставки')
+        input(type='text' id="input_addr" name='address' placeholder='Введите адрес доставки' required)
       p
-        input(type='radio' id="input_nal" name='payment' value="nal")
-        label наличные 	&#8195;
+        input(type='radio' id="input_nal" name='payment' value="nal" checked)
+        label &#8194;Наличные 	&#8195;
         input(type='radio' id="input_beznal" name='payment' value="beznal")
-        label безнал 	&#8195;     
+        label &#8194;Онлайн 	&#8195;     
         input(type='radio' id="input_bill" name='payment' value="bill")
-        label счет 	&#8195;
+        label &#8194;Счёт 	&#8195;
       p
         label#userbalance
       p
         input(type="text" name="input_bonus" id="input_bonus" placeholder="Сколько баллов использовать в скидку")
+        span &#8194;
         input(type='checkbox' id="use_bonus" name="bonuses")
+      p
+        label#cartcost СУММА ЗАКАЗА: 
       p
         button(type='submit').submit_payment Подтвердить

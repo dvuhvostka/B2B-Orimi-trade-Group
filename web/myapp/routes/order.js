@@ -47,6 +47,290 @@ function check_cart(cart) {
   }
 }
 
+add_deal_with_bonuses = (data, payment_method, userdata, bonuses, res) => {
+  // console.log(bonuses);
+  // console.log(payment_method);
+  // console.log(userdata);
+  // console.log(data);
+
+  data.fullcost -= Math.floor(bonuses); //Вычли бонусы из цены
+  console.log(data.fullcost);
+  db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact})', {
+    owner_id: userdata[0].id,
+    confirmed: 0,
+    date: new Date(),
+    first_name_owner: userdata[0].username,
+    second_name_owner: userdata[0].second_name,
+    third_name_owner: userdata[0].third_name,
+    delivery_address: decodeURI(payment_method[0]),
+    final_price: data.fullcost,
+    payment_method: payment_method[1],
+    owner_contact: userdata[0].number
+  }).then(function(){
+      // Записываем товары.
+      if(bonuses){
+        db.none("UPDATE users SET balance=balance-"+Math.floor(bonuses)+" WHERE id='"+userdata[0].id+"'");
+      }
+      db.one('SELECT * FROM deals_info WHERE id=(SELECT MAX(id) FROM deals_info)').then(function(deal){
+        for (var i = 0; i<data.length; i++){
+        db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype})',{
+            product: data[i].product,
+            deal_owner: userdata[0].id,
+            type: data[i].type,
+            count: data[i].count,
+            deal_id: deal.id,
+            sort: data[i].sort,
+            product_id: data[i].id,
+            price_of_one: data[i].price_of_one,
+            full_price: data[i].full_price,
+            subtype: data[i].subtype
+          });
+        }
+      });
+  });
+  var message = 'SUCCESS';
+  res.json({
+    ok: true,
+    message
+  })
+}
+
+returnCartCost = (data, res, response_type, bonuses, userId, payment_method) => {
+  if(response_type=="ajax"){
+    switch(data){
+      case "PRODUCT_TYPE_ERROR": {
+        var error = "PRODUCT_TYPE_ERROR";
+        res.json({
+          ok: false,
+          error
+        });
+        break;
+      }
+      default: {
+        var fullcost = data.fullcost;
+        res.json({
+          ok: true,
+          data,
+          fullcost
+        });
+        break;
+      }
+    }
+  }else if(response_type=="check_bonus_with_cost"){
+
+    if (bonuses*1){
+      //console.log("BONUS INPUT IS VALID");
+      console.log(userId)
+      var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
+
+      db.any(getuserbalance_sql).then(function(balance_response){
+        if(balance_response[0].balance>=bonuses){
+          if(bonuses>data.fullcost){
+            var error = "ERROR_BONUS_COUNT"; //Пользователь прислал пустую корзину
+            res.json({
+              ok: false,
+              error
+            });
+          }else{
+            //Пользователь прошел проверку. У него на балансе достаточно бонусов. Он ввел меньше бонусов, чем стоит товар.
+            var min_price = data.fullcost - Math.floor(bonuses);
+            if(min_price>=2000){
+              switch(payment_method){
+                case 'nal': break;
+                case 'beznal': console.log("ONLINE PAYMENT METHOD");break;
+                case 'bill': break;
+                default: console.log("NO_PAYMENT_METHOD_ERROR");
+              }
+              add_deal_with_bonuses(data, payment_method, balance_response, bonuses, res);
+              console.log('!SUCCESS!');
+            }else{
+              var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
+              res.json({
+                ok: false,
+                error
+              });
+            }
+          }
+        }else {
+          var error = "ERROR_BALANCE"; //Пользователь прислал пустую корзину
+          res.json({
+            ok: false,
+            error
+          });
+        }
+      }).catch(function(e) {
+        console.log("GETBALANCE_ERROR: ",e);
+      });
+
+    }else{
+      var error = "ERROR_BONUS_INPUT";
+      res.json({
+        ok: false,
+        error
+      });
+    }
+  }else if(response_type=='without_bonus'){
+        if(data.fullcost>=2000){
+          var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
+          db.any(getuserbalance_sql).then(function(balance_response){
+            add_deal_with_bonuses(data, payment_method, balance_response, 0, res);
+            console.log('!SUCCESS!');
+          });
+        }else{
+          var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
+          res.json({
+            ok: false,
+            error
+          });
+        }
+  }
+}
+
+get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method) => {
+  switch(cart) {
+    case 0: console.log("ERROR_CART_CONTENT"); break;
+    default: {
+      //Если полученный объект с данными корзины не пустой:
+        console.log(cart);
+        var tea_sql = `SELECT * FROM tea WHERE id=0`;
+        var coffee_sql = `SELECT * FROM coffee WHERE id=0`;
+        var horeca_sql = `SELECT * FROM horeca WHERE id=0`;
+        var other_sql = `SELECT * FROM others WHERE id=0`;
+
+        for (var i=0; i<cart.length; i++){
+          switch(cart[i].type){
+            case "tea":{
+              tea_sql += ` OR id=`+cart[i].id;
+              break;
+            }
+            case "coffee":{
+              coffee_sql += ` OR id=`+cart[i].id;
+              break;
+            }
+            case "horeca": {
+              horeca_sql += ` OR id=`+cart[i].id;
+              break;
+            }
+            case "other": {
+              other_sql += ` OR id=`+cart[i].id;
+              break;
+            }
+            default: {
+              returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, userId, payment_method);
+              break;
+            }
+          }
+        }
+        db.task(async (t) => {
+            let tea= await t.any(tea_sql);
+            let coffee= await t.any(coffee_sql);
+            let horeca= await t.any(horeca_sql);
+            let others= await t.any(other_sql);
+            return {tea,coffee,horeca,others};
+        })
+           .then(data => {
+              var fullcost = 0;
+               for(var i=0; i<cart.length; i++){
+                 switch(cart[i].type){
+                   case "tea":{
+                      for(var x=0; x<data.tea.length; x++){
+                        if(data.tea[x].id==cart[i].id){
+                          cart[i].price_of_one = data.tea[x].item_price;
+                          cart[i].full_price = Math.ceil((data.tea[x].item_price*cart[i].count)*100)/100;
+                          cart[i].sort = data.tea[x].sort;
+                          cart[i].product = data.tea[x].item_name;
+                          cart[i].subtype = 0;
+                          fullcost += cart[i].full_price;
+                        }
+                      }
+                     break;
+                   }
+                   case "coffee":{
+                     for(var x=0; x<data.coffee.length; x++){
+                       if(data.coffee[x].id==cart[i].id){
+                         cart[i].price_of_one = data.coffee[x].item_price;
+                         cart[i].full_price = Math.ceil((data.coffee[x].item_price*cart[i].count)*100)/100;
+                         cart[i].sort = data.coffee[x].sort;
+                         cart[i].product = data.coffee[x].item_name;
+                         cart[i].subtype = 0;
+                         fullcost += cart[i].full_price;
+                       }
+                     }
+                     break;
+                   }
+                   case "horeca": {
+                     for(var x=0; x<data.horeca.length; x++){
+                       if(data.horeca[x].id==cart[i].id){
+                         cart[i].type = data.horeca[x].type;
+                         cart[i].price_of_one = data.horeca[x].item_price;
+                         cart[i].full_price = Math.ceil((data.horeca[x].item_price*cart[i].count)*100)/100;
+                         cart[i].sort = data.horeca[x].sort;
+                         cart[i].product = data.horeca[x].item_name;
+                         cart[i].subtype = 'horeca';
+                         fullcost += cart[i].full_price;
+                       }
+                     }
+                     break;
+                   }
+                   case "other": {
+                     for(var x=0; x<data.others.length; x++){
+                       if(data.others[x].id==cart[i].id){
+                         cart[i].price_of_one = data.others[x].item_price;
+                         cart[i].full_price = Math.ceil((data.others[x].item_price*cart[i].count)*100)/100;
+                         cart[i].product = data.others[x].item_name;
+                         cart[i].subtype = 0;
+                         cart[i].sort = data.others[x].sort;
+                         fullcost += cart[i].full_price;
+                       }
+                     }
+                     break;
+                   }
+                   default: {
+                     returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, bonuses, userId, payment_method);
+                     break;
+                   }
+                 }
+               }
+               cart.fullcost = Math.ceil((fullcost)*100)/100;
+               returnCartCost(cart, res, response_type,bonuses, userId, payment_method); //Передаем обновленную и пересчитанную корзину на вывод
+           })
+            .catch(error => {
+            });
+
+      break;
+    }
+  }
+}
+
+check_formdata = (formdata, cart, res, userId) => {
+  var parsed_args = formdata.split('&');
+  var array = [];
+  for (var i = 0; i<parsed_args.length; i++){
+    var pa = parsed_args[i].split('=');
+    array.push(pa[1]);
+  }
+  switch(array.length){
+    case 3:{
+      // ЕСЛИ ПОЛЬЗОВАТЕЛЬ НЕ ИСПОЛЬЗУЕТ БОНУСЫ ДЛЯ ОПЛАТЫ.
+      get_cart_cost(cart, res , "without_bonus", 0, userId, array);
+      console.log('WITHOUT BONUSES');
+      switch (array[1]) {
+        case 'beznal': console.log("ONLINE PAYMENT METHOD"); break; //ПЕРЕНАПРАВЛЯЕМ КЛИЕНТА НА ОНЛАЙН КАССУ
+        default: break;
+      }
+
+      break;
+    }
+    case 4:{
+      // ЕСЛИ ПОЛЬЗОВАТЕЛЬ ПОСТАВИЛ ГАЛОЧКУ ИСПОЛЬЗОВАТЬ БОНУСЫ - ПРОВЕРЯЕМ ИХ НАЛИЧИЕ.
+      get_cart_cost(cart, res , "check_bonus_with_cost", array[2], userId, array);
+      console.log('WITH BONUSES: '+array[2]);
+      break;
+    }
+    default: break;
+  }
+}
+
 router.route('/order')
   .get(function(req,res){
     res.render('order.pug', {
@@ -66,9 +350,22 @@ router.route('/order')
           });
           break;
         }
+        case "getcartcost": { // ЗАПРОС НА ПОЛУЧЕНИЕ ОБЩЕЙ СУММЫ КОРЗИНЫ
+          if(req.body.cart!=''){
+            var cart = JSON.parse(req.body.cart); // Получаем корзину
+            var mycart = check_cart(cart); // Парсим и проверяем корзину
+            get_cart_cost(mycart, res, "ajax", 0, req.session.userId);
+          }else{
+            var error = "ERROR_CART_EMPTY";
+            res.json({
+              ok: false,
+              error
+            });
+          }
+          break;
+        }
         case "delivery_info": {
           if(req.body.cart!=''){
-            console.log(req.body.cart);
             var cart = JSON.parse(req.body.cart);
             var mycart = check_cart(cart); //Проверка корзины
             var error;
@@ -79,13 +376,9 @@ router.route('/order')
                 error
               })
             }else{
-              // Проверить введенные поля
-              // Получить цены товаров
-              // Проверить баланс юзера, если он использует бонусные баллы
-              // Посчитать итоговую цену
-              // Занести сделку в бд.
+              // Идет проверка введенных данных и запись в бд сделки.
+              let formdata = check_formdata(req.body.formdata, mycart, res, req.session.userId);
             }
-            console.log(mycart);
           }else{
             var error = "ERROR_EMPTY_CART"; //Пользователь прислал пустую корзину
             res.json({
