@@ -88,6 +88,7 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   switch (!null) {
     case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
+    case req.session.userId!=null: userinfo.user_id = req.session.userId; break;
   }
   next();
 })
@@ -100,11 +101,6 @@ app.get('/', function(req,res){
   if(req.session.userId){
     userinfo.user_id = req.session.userId;
   }
-  // //res.sendFile(path.join(__dirname, '/public/index.html'));
-  // res.render('index', {
-  //   title: 'Main page',
-  //   isRegistred: req.session.userId,
-  //   isRoot: true
   res.redirect('/shop');
 });
 

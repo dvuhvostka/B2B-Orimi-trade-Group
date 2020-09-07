@@ -227,9 +227,11 @@ block content
             .tab-pane.fade.show.active#nav-mod-products(role='tabpanel' aria-labelledby='nav-mod-products').mod__content__item
               .mod__content_products
                 a.btn.btn-info.content__products_link(href='#create_product' data-toggle='collapse' aria-expanded='false' aria-controls='create_product') Создать товар
-                a.btn.btn-info.content__products_link(href='#edit_product' data-toggle='collapse' aria-expanded='false' aria-controls='edit_product') Редактиовать товар
+                a.btn.btn-info.content__products_link(href='#edit_product' data-toggle='collapse' aria-expanded='false' aria-controls='edit_product') Редактировать товар
                 #create_product.collapse Создать товар
-                #edit_product.collapse Редактиовать товар
+                #edit_product.collapse
+                  input(type='text' placeholder='Введите артикул').articul
+                  button.btn.btn-info.articul-find Найти
             .tab-pane.fade#nav-mod-sales(role='tabpanel' aria-labelledby='nav-mod-sales').mod__content__item
               .mod__content_sales
                 input.mod__content_sales__input(placeholder="Название статьи")#newsTitle
@@ -253,6 +255,8 @@ block content
                   button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
             .tab-pane.fade#nav-mod-request(role='tabpanel' aria-labelledby='nav-mod-request').mod__content__item ЗАПРОСЫ ОТ ФИРМ
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
+  if (permissions=='mod')
+    script(src='moder.js')
   script.
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()

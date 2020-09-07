@@ -72,6 +72,17 @@ router.route('/add')
                 break;
               }
               case 'createnews': createNews(req.body.title, req.body.desc, req.body.body, req.body.img); res.send("ok"); break;
+              case 'getItem':
+                var item_tea_sql = `SELECT * FROM tea WHERE articul='`+req.body.articul+`'`;
+                var item_coffee_sql = `SELECT * FROM coffee WHERE articul='`+req.body.articul+`'`;
+                var item_others_sql = `SELECT * FROM others WHERE articul='`+req.body.articul+`'`;
+                var item_horeca_sql = `SELECT * FROM horeca WHERE articul='`+req.body.articul+`'`;
+                var final_sql = item_tea_sql+" UNION "+item_coffee_sql+" UNION "+item_others_sql+" UNION "+item_horeca_sql+';';
+                console.log(final_sql);
+                pgPool.query(final_sql, [], function(err,resp){
+                  console.log(resp)
+                });
+              break;
               default: res.send('POST');
             }
             };
