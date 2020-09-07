@@ -239,7 +239,7 @@ block content
                 textarea.mod__content_sales__textarea(placeholder="Текст статьи")#newsBody
                 input.mod__content_sales__input(placeholder="Ссылка на изображение к статье", value="https://via.placeholder.com/600")#newsImg
                 button.mod__content_sales__btn.btn.btn-success(onclick="addNews();location.reload();")#add Добавить статью
-                button.mod__content_sales__btn.btn.btn-danger(onclick="document.location.href='/add';" data-toggle='tooltip' data-placement='top' title="Удаляет ВСЕ акции")#delete Удалить все 
+                button.mod__content_sales__btn.btn.btn-danger(onclick="document.location.href='/add';" data-toggle='tooltip' data-placement='top' title="Удаляет последнюю запись")#delete Удалить последнюю запись 
             .tab-pane.fade#nav-mod-firms(role='tabpanel' aria-labelledby='nav-mod-firms').mod__content__item
               p В списке #{uncorgs.length} фирм(а).
                 -for (var u=0; u<uncorgs.length; u++)

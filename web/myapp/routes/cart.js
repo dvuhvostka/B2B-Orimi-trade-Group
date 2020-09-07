@@ -18,7 +18,6 @@ const {
   HOST = config.DB_HOST,
   DBNAME = config.DB_NAME
 } = process.env
-var db_cart = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
 
 
 var serverCart = [];
@@ -70,10 +69,10 @@ router.route('/cart')
     if ((sql_coffee.length == 0) && (sql_tea.length == 0) && (sql_others.length == 0) && (sql_horeca.length == 0)) {
       res.send("POST");
     } else if ((sql_coffee.length != 0) || (sql_tea.length != 0) || (sql_others.length!=0) || (sql_horeca.length!=0)) {
-      db_cart.any(sql_coffee_result).then(function(data) {
-        db_cart.any(sql_tea_result).then(function(data2) {
-          db_cart.any(sql_others_result).then(function(data3) {
-            db_cart.any(sql_horeca_result).then(function(data4) {
+      db.any(sql_coffee_result).then(function(data) {
+        db.any(sql_tea_result).then(function(data2) {
+          db.any(sql_others_result).then(function(data3) {
+            db.any(sql_horeca_result).then(function(data4) {
                 if (data) {
                   products_data.coffee = data;
                 }

@@ -121,16 +121,6 @@ function checkCoffeeFilters (data){
   return final_sql;
 }
 
-function addProduct() {
-  db.none('INSERT INTO products(carousel_img, item_name, item_price, type, sort) VALUES(${src}, ${name}, ${price}, ${type}, ${sort})',{
-    src: 'store_prods/tea/1/1.jpg',
-    name: 'Зеленый чай в пакетиках Greenfield Flying Dragon, 25 шт.',
-    price: 358,
-    type: 'tea',
-    sort: "greenfield"
-  });
-}
-
 
 /* GET users listing. */
 var getSales = `SELECT * FROM sales ORDER BY id DESC`;

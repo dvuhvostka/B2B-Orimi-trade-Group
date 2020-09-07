@@ -44,7 +44,7 @@ function createNews(header, intro, body, img) {
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 router.route('/add')
   .get(function(req,res){
-    var delQ = "DELETE FROM sales"
+    var delQ = "DELETE FROM sales WHERE id=(SELECT MAX(id) FROM sales)"
     var getUsers = "SELECT * FROM users WHERE id='"+req.session.userId+"'";
     pgPool.query(getUsers, [], function(err, resp){
       if(resp.rows[0]!=undefined){

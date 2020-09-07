@@ -1,0 +1,23 @@
+extends layout2
+block content
+  script(src='order.js')
+  if !isRegistred
+    p Зарегистрируйся
+  else
+    form#delivery_info
+      p
+        input(type='text' id="input_addr" name='address' placeholder='Введите адрес доставки')
+      p
+        input(type='radio' id="input_nal" name='payment' value="nal")
+        label наличные 	&#8195;
+        input(type='radio' id="input_beznal" name='payment' value="beznal")
+        label безнал 	&#8195;     
+        input(type='radio' id="input_bill" name='payment' value="bill")
+        label счет 	&#8195;
+      p
+        label#userbalance
+      p
+        input(type="text" name="input_bonus" id="input_bonus" placeholder="Сколько баллов использовать в скидку")
+        input(type='checkbox' id="use_bonus" name="bonuses")
+      p
+        button(type='submit').submit_payment Подтвердить

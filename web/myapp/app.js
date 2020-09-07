@@ -8,25 +8,9 @@ var helmet = require('helmet');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 var {Pool, Client} = require('pg');
-
-
-
+const pgp = require("pg-promise")(/*options*/);
 var config = require('./config');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/user');
-var salesRouter = require('./routes/sales');
-var shopRouter = require('./routes/shop');
-var registerRouter = require('./routes/register');
-var loginRouter = require('./routes/login');
-var logoutRoute = require('./routes/logout');
-var cartRoute = require('./routes/cart');
-var addnewsRoute = require('./routes/add');
-var infoRoute = require('./routes/info');
-
-var app = express();
-
-//const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
 
 //var for sessions and connecting to databse
 const {
@@ -39,6 +23,27 @@ const {
   HOST = config.DB_HOST,
   DBNAME = config.DB_NAME
 } = process.env
+
+
+global.db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+HOST+":5432/"+config.DB_NAME);
+
+
+
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/user');
+var salesRouter = require('./routes/sales');
+var shopRouter = require('./routes/shop');
+var registerRouter = require('./routes/register');
+var loginRouter = require('./routes/login');
+var logoutRoute = require('./routes/logout');
+var cartRoute = require('./routes/cart');
+var addnewsRoute = require('./routes/add');
+var infoRoute = require('./routes/info');
+var orderRoute = require('./routes/order');
+
+var app = express();
+
+//const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
 
 //while we develop the web site ENVIRONMENT = development and IN_PROD = false.
 const IN_PROD = ENVIRONMENT === 'production';
@@ -115,6 +120,7 @@ app.use('/', logoutRoute);
 app.use('/', addnewsRoute);
 app.use('/', cartRoute);
 app.use('/', infoRoute);
+app.use('/', orderRoute);
 
 app.use('/?', function(req,res){
   res.redirect('/');
