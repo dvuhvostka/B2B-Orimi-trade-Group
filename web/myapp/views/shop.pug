@@ -53,8 +53,12 @@ block content
 						a(href='/shop/'+products[i].subtype+'?id='+products[i].id class='item_name') #{products[i].item_name}
 					else
 						a(href='/shop/'+products[i].type+'?id='+products[i].id class='item_name') #{products[i].item_name}
-					p(class='item_price') #{products[i].item_price} 
-						i.fas.fa-ruble-sign
+					if(products[i].sale_price!=0)
+						p(class='item_price') #{products[i].sale_price}
+							i.fas.fa-ruble-sign
+					else
+						p(class='item_price') #{products[i].item_price}
+							i.fas.fa-ruble-sign
 					div.footer_item
 						if(products[i].subtype)
 							button.b(class='btn btn-primary addtocart' type=products[i].subtype data-id=products[i].id) Купить
