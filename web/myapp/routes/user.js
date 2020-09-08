@@ -205,24 +205,24 @@ user.route('/user')
       }
     }else if(req.body.post_type=="delete_org_skdjfgh213asRQadSKSFD3123244"){
       db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'");
-      rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('done'); });
-      console.log("Organiztion deleted from user: "+req.session.userId);
+      rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('done'); });
+      console.log("Organiztion deleted from user: "+req.body.org_owner_id);
     }else if(req.body.post_type=="confirm_org_askdjfhl123123kaGFDGdfhFsdf3123"){
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
       db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'");
       ncp.limit = 16;
-      var srcPath = './public/images/uploads/'+req.session.userId; //current folder
-      fs.mkdir('./public/images/confirmed_uploads/'+req.session.userId, err=>{});
+      var srcPath = './public/images/uploads/'+req.body.org_owner_id; //current folder
+      fs.mkdir('./public/images/confirmed_uploads/'+req.body.org_owner_id, err=>{});
       console.log('confirmed_uploads created: done');
-      var destPath = './public/images/confirmed_uploads/'+req.session.userId; //Any destination folder
+      var destPath = './public/images/confirmed_uploads/'+req.body.org_owner_id; //Any destination folder
       ncp(srcPath, destPath, function (err) {
         if (err) {
           return console.error(err);
         }
         console.log('Copying files: done');
-        rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('uploads deleted: done'); });
+        rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('uploads deleted: done'); });
       });
-      console.log("org confirmed: "+req.session.userId+" done");
+      console.log("org confirmed: "+req.body.org_owner_id+" done");
       var link_code = crypto.randomBytes(20).toString('hex');
       console.log("link code generated: " +link_code);
       db.none("UPDATE organizations SET link_code='"+link_code+"' WHERE owner_id='"+req.body.org_owner_id+"'");
