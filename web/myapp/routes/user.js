@@ -212,15 +212,16 @@ user.route('/user')
       db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'");
       ncp.limit = 16;
       var srcPath = './public/images/uploads/'+req.body.org_owner_id; //current folder
-      fs.mkdir('./public/images/confirmed_uploads/'+req.body.org_owner_id, err=>{});
-      console.log('confirmed_uploads created: done');
+      //fs.mkdir('./public/images/confirmed_uploads/'+req.body.org_owner_id, err=>{});
+      //console.log('confirmed_uploads created: done');
       var destPath = './public/images/confirmed_uploads/'+req.body.org_owner_id; //Any destination folder
       ncp(srcPath, destPath, function (err) {
         if (err) {
           return console.error(err);
+        }else{
+          console.log('Copying files: done');
+          rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('uploads deleted: done'); });
         }
-        console.log('Copying files: done');
-        rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('uploads deleted: done'); });
       });
       console.log("org confirmed: "+req.body.org_owner_id+" done");
       var link_code = crypto.randomBytes(20).toString('hex');
