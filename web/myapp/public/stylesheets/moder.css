@@ -82,3 +82,23 @@
 .item__id, .item__articul{
   margin-left:10px;
 }
+
+.form__label {
+  min-width: 170px;
+  text-align: left;
+}
+
+.form__input {
+  min-width: 200px;
+  min-height: 32px;
+}
+
+.form__sublabel {
+  font-size:13px;
+  margin: auto 0 auto 10px;
+  text-align: left;
+  line-height: 1;
+}
+.form__input_item_name {
+  width:100%;
+}

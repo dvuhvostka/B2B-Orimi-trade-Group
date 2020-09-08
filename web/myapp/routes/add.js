@@ -52,6 +52,7 @@ function updateItemSql(data){
       sql += key+`=`+`'`+value+`'`+`, `;
   }
   sql = sql.slice(0,-2);
+  console.log(sql);
   return sql;
 }
 
@@ -129,12 +130,16 @@ router.route('/add')
                 },1000);
               break;
               case 'edit_product': {
-                console.log(JSON.parse(req.body.data));
+                //console.log(JSON.parse(req.body.data));
                 let data = JSON.parse(req.body.data);
+                console.log(data.sale_price);
                 if(data.sale_price){
                   data.sale_price = data.item_price;
                   delete data.item_price;
+                } else {
+                  data.sale_price = 0;
                 }
+                console.log(data);
                 let sql;
                 let add_sql = updateItemSql(data);
                 if(!data.subtype){

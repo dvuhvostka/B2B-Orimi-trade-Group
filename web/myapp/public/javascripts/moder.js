@@ -22,7 +22,7 @@ $('.articul-find').on('click', ()=>{
         $('.item__weight').attr('value', item.weight?item.weight:'none');
         $('.item__type').attr('value', item.type);
         $('.item__sort').attr('value', item.sort);
-        $('.item__price_sale').prop('checked', false);
+        $('.item__price_sale').prop('checked', item.sale_price? true: false);
         $('.item__subtype').attr('value', item.subtype?item.subtype:'none');
       }
       else {
@@ -42,9 +42,10 @@ $('.btn__item_edit').on('click', ()=>{
     if (key == 'sale'){
       if (each.checked){
       key = 'sale_price';
-      value = 'true';
+      value = true;
     } else {
-      continue;
+      key = 'sale_price';
+      value = false;
     }
   }
     if(value == 'none'){
@@ -54,8 +55,6 @@ $('.btn__item_edit').on('click', ()=>{
   }
   data['id'] = Number($('.item__id span').html());
   let json = JSON.stringify(data)
-  console.log(json);
-  console.log(json.item_price);
   $.ajax({
     type:"POST",
     url: '/add',
@@ -68,4 +67,30 @@ $('.btn__item_edit').on('click', ()=>{
       alert(res);
     }
   });
+})
+
+var select = document.querySelector('.main_select_type');
+
+select.addEventListener('change',()=>{
+  var selectedOption = select.options[select.selectedIndex].value;
+  switch (selectedOption) {
+    case 'tea':
+        $('.product__type').addClass('d-none');
+        $('.'+selectedOption+'_type').removeClass('d-none');
+      break;
+    case 'coffee':
+        $('.product__type').addClass('d-none');
+        $('.'+selectedOption+'_type').removeClass('d-none');
+      break;
+    case 'others':
+        $('.product__type').addClass('d-none');
+        $('.'+selectedOption+'_type').removeClass('d-none');
+      break;
+    case 'horeca':
+        $('.product__type').addClass('d-none');
+        $('.'+selectedOption+'_type').removeClass('d-none');
+      break;
+    default:
+
+  }
 })
