@@ -21,7 +21,7 @@
             }
           if(data.horeca)
             for(var i = 0; i<data.horeca.length; i++){
-              out += '<div type='+data.horeca[i].type+' class = "'+data.horeca[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/horeca/'+data.horeca[i].type+'/'+data.horeca[i].sort+'/'+data.horeca[i].id+'.jpg><a href="/shop/horeca?id='+data.horeca[i].id+'" class="item_name_cart"> '+data.horeca[i].item_name+'</a><div class="info_wrap"><p class="item_count"> Кол-во: '+cart[data.horeca[i].subtype+data.horeca[i].id]+' шт.</p><p > Цена: '+Math.ceil((data.horeca[i].item_price*cart[data.horeca[i].subtype+data.horeca[i].id])*100)/100+' р.</p></div><button onclick=delfromcart("'+data.horeca[i].subtype+data.horeca[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
+              out += '<div type='+data.horeca[i].type+' class = "'+data.horeca[i].id+' good_cart"><img class="img_good_cart" src=/store_prods/horeca/'+data.horeca[i].sort+'/'+data.horeca[i].id+'.jpg><a href="/shop/horeca?id='+data.horeca[i].id+'" class="item_name_cart"> '+data.horeca[i].item_name+'</a><div class="info_wrap"><p class="item_count"> Кол-во: '+cart[data.horeca[i].subtype+data.horeca[i].id]+' шт.</p><p > Цена: '+Math.ceil((data.horeca[i].item_price*cart[data.horeca[i].subtype+data.horeca[i].id])*100)/100+' р.</p></div><button onclick=delfromcart("'+data.horeca[i].subtype+data.horeca[i].id+'") class="btn btn-danger del_btn">Удалить</button></div>'
               console.log(data.horeca);
             }
             $('.all_li').html(out+"<button class='btn btn-success submit_cart '>Перейти к оплате</button>");

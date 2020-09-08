@@ -28,14 +28,27 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.onload = function(){
+  if(localStorage.getItem('reg')){
+    var region = 0;
+    for (var i=0; i<array.length; i++){
+      if (array[i].id == localStorage.getItem('reg')) region = array[i].text;
+    }
+    $('#input_addr').val(region);
+  }
   //При загрузке страницы
   $('#delivery_info').on('submit', (e)=>{
     e.preventDefault();
+    var region = 0;
+
+    if(localStorage.getItem('reg')){
+      region = localStorage.getItem('reg');
+    }
+
     if(localStorage.getItem('cart')){
       $.ajax({
         type: 'POST',
         url: '/order',
-        data: {post_type: "delivery_info", formdata: $('#delivery_info').serialize(), cart: localStorage.getItem('cart')},
+        data: {post_type: "delivery_info", formdata: $('#delivery_info').serialize(), cart: localStorage.getItem('cart'), region},
         success: function(r){
           switch(r.ok){
             case true: alert(r.message); localStorage.removeItem('cart'); window.location.href='/user'; break;

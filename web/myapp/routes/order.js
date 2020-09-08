@@ -17,6 +17,10 @@ const {
   DBNAME = config.DB_NAME
 } = process.env
 
+function isInteger(num) {
+  return (num ^ 0) === num;
+}
+
 function check_cart(cart) {
   var result = 1;
   var object_product = [];
@@ -47,13 +51,12 @@ function check_cart(cart) {
   }
 }
 
-add_deal_with_bonuses = (data, payment_method, userdata, bonuses, res) => {
+add_deal_with_bonuses = (data, payment_method, userdata, bonuses, res, region) => {
   // console.log(bonuses);
   // console.log(payment_method);
   // console.log(userdata);
   // console.log(data);
-
-  data.fullcost -= Math.floor(bonuses); //Вычли бонусы из цены
+  data.fullcost -= bonuses/10; //Вычли бонусы из цены
   console.log(data.fullcost);
   db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact})', {
     owner_id: userdata[0].id,
@@ -95,7 +98,7 @@ add_deal_with_bonuses = (data, payment_method, userdata, bonuses, res) => {
   })
 }
 
-returnCartCost = (data, res, response_type, bonuses, userId, payment_method) => {
+returnCartCost = (data, res, response_type, bonuses, userId, payment_method, region) => {
   if(response_type=="ajax"){
     switch(data){
       case "PRODUCT_TYPE_ERROR": {
@@ -133,22 +136,38 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method) => 
             });
           }else{
             //Пользователь прошел проверку. У него на балансе достаточно бонусов. Он ввел меньше бонусов, чем стоит товар.
-            var min_price = data.fullcost - Math.floor(bonuses);
-            if(min_price>=2000){
-              switch(payment_method){
-                case 'nal': break;
-                case 'beznal': console.log("ONLINE PAYMENT METHOD");break;
-                case 'bill': break;
-                default: console.log("NO_PAYMENT_METHOD_ERROR");
-              }
-              add_deal_with_bonuses(data, payment_method, balance_response, bonuses, res);
-              console.log('!SUCCESS!');
-            }else{
-              var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
+            var min_price = data.fullcost - bonuses/10;
+            if(bonuses<10){
+              var error = "ERROR_MIN_10_BONUS"; //Пользователь прислал пустую корзину
               res.json({
                 ok: false,
                 error
               });
+            }else{
+              if(isInteger(bonuses)){
+                if(min_price>=2000){
+                  switch(payment_method){
+                    case 'nal': break;
+                    case 'beznal': console.log("ONLINE PAYMENT METHOD");break;
+                    case 'bill': break;
+                    default: console.log("NO_PAYMENT_METHOD_ERROR");
+                  }
+                  add_deal_with_bonuses(data, payment_method, balance_response, bonuses, res, region);
+                  console.log('!SUCCESS!');
+                }else{
+                  var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
+                  res.json({
+                    ok: false,
+                    error
+                  });
+                }
+              }else{
+                var error = "ERROR_ONLY_INT_COUNT"; //Пользователь прислал пустую корзину
+                res.json({
+                  ok: false,
+                  error
+                });
+              }
             }
           }
         }else {
@@ -173,7 +192,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method) => 
         if(data.fullcost>=2000){
           var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
           db.any(getuserbalance_sql).then(function(balance_response){
-            add_deal_with_bonuses(data, payment_method, balance_response, 0, res);
+            add_deal_with_bonuses(data, payment_method, balance_response, 0, res, region);
             console.log('!SUCCESS!');
           });
         }else{
@@ -186,7 +205,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method) => 
   }
 }
 
-get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method) => {
+get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, region) => {
   switch(cart) {
     case 0: console.log("ERROR_CART_CONTENT"); break;
     default: {
@@ -216,7 +235,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method) => {
               break;
             }
             default: {
-              returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, userId, payment_method);
+              returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, userId, payment_method, region);
               break;
             }
           }
@@ -286,13 +305,13 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method) => {
                      break;
                    }
                    default: {
-                     returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, bonuses, userId, payment_method);
+                     returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, bonuses, userId, payment_method, region);
                      break;
                    }
                  }
                }
                cart.fullcost = Math.ceil((fullcost)*100)/100;
-               returnCartCost(cart, res, response_type,bonuses, userId, payment_method); //Передаем обновленную и пересчитанную корзину на вывод
+               returnCartCost(cart, res, response_type,bonuses, userId, payment_method, region); //Передаем обновленную и пересчитанную корзину на вывод
            })
             .catch(error => {
             });
@@ -302,7 +321,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method) => {
   }
 }
 
-check_formdata = (formdata, cart, res, userId) => {
+check_formdata = (formdata, cart, res, userId, region) => {
   var parsed_args = formdata.split('&');
   var array = [];
   for (var i = 0; i<parsed_args.length; i++){
@@ -312,7 +331,7 @@ check_formdata = (formdata, cart, res, userId) => {
   switch(array.length){
     case 3:{
       // ЕСЛИ ПОЛЬЗОВАТЕЛЬ НЕ ИСПОЛЬЗУЕТ БОНУСЫ ДЛЯ ОПЛАТЫ.
-      get_cart_cost(cart, res , "without_bonus", 0, userId, array);
+      get_cart_cost(cart, res , "without_bonus", 0, userId, array, region);
       console.log('WITHOUT BONUSES');
       switch (array[1]) {
         case 'beznal': console.log("ONLINE PAYMENT METHOD"); break; //ПЕРЕНАПРАВЛЯЕМ КЛИЕНТА НА ОНЛАЙН КАССУ
@@ -323,7 +342,7 @@ check_formdata = (formdata, cart, res, userId) => {
     }
     case 4:{
       // ЕСЛИ ПОЛЬЗОВАТЕЛЬ ПОСТАВИЛ ГАЛОЧКУ ИСПОЛЬЗОВАТЬ БОНУСЫ - ПРОВЕРЯЕМ ИХ НАЛИЧИЕ.
-      get_cart_cost(cart, res , "check_bonus_with_cost", array[2], userId, array);
+      get_cart_cost(cart, res , "check_bonus_with_cost", array[2], userId, array, region);
       console.log('WITH BONUSES: '+array[2]);
       break;
     }
@@ -354,7 +373,7 @@ router.route('/order')
           if(req.body.cart!=''){
             var cart = JSON.parse(req.body.cart); // Получаем корзину
             var mycart = check_cart(cart); // Парсим и проверяем корзину
-            get_cart_cost(mycart, res, "ajax", 0, req.session.userId);
+            get_cart_cost(mycart, res, "ajax", 0, req.session.userId, req.body.region);
           }else{
             var error = "ERROR_CART_EMPTY";
             res.json({
@@ -377,7 +396,7 @@ router.route('/order')
               })
             }else{
               // Идет проверка введенных данных и запись в бд сделки.
-              let formdata = check_formdata(req.body.formdata, mycart, res, req.session.userId);
+              let formdata = check_formdata(req.body.formdata, mycart, res, req.session.userId, req.body.region);
             }
           }else{
             var error = "ERROR_EMPTY_CART"; //Пользователь прислал пустую корзину
