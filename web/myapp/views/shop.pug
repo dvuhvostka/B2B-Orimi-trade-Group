@@ -46,9 +46,9 @@ block content
 				div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
 					div(class='carousel_img')
 						if(products[i].subtype)
-							img(src="../store_prods/horeca/"+products[i].sort+"/"+products[i].id+".jpg")
+							img(src="../store_prods/horeca/"+products[i].sort+"/"+products[i].id+"/"+"1.jpg")
 						else
-							img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
+							img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].articul+"/"+"1.jpg")
 					if(products[i].subtype)
 						a(href='/shop/'+products[i].subtype+'?id='+products[i].id class='item_name') #{products[i].item_name}
 					else

@@ -108,10 +108,10 @@ user.route('/user')
             }
             if (response.rows[0].permissions=='mod'){
               db.any(`SELECT * FROM organizations WHERE org_confirmed=0`).then(function(uncorgs){
-                for(var i=0; i<uncorgs.length; i++){
-                  var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
-                  uncorgs[i].docs = fls;
-                }
+                  for(var i=0; i<uncorgs.length; i++){
+                    var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
+                    uncorgs[i].docs = fls;
+                  }
                 db.any(`SELECT * FROM deals_info`).then(function(deals_info){
                   res.render('user',{
                     title: "Аккаунт",
@@ -243,6 +243,74 @@ user.route('/user')
         res.json({
           ok:false
         })
+      });
+    }else if(req.body.post_type="add_tea"){
+      var i=0;
+      var storage_tea = multer.diskStorage({
+      destination: function (req, file, cb) {
+        fs.mkdir('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul);
+      },
+      filename: function (req, file, cb) {
+        i++;
+        cb(null, i + path.extname(file.originalname));
+      }
+      });
+
+      var upload_tea = multer({
+      storage: storage_tea,
+      limits: {fileSize: 5 * 1024 * 1024},
+      fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        if (ext!='.jpg'&&ext!='.jpeg'&&ext!='.png'){
+          const err = new Error('Extension');
+          err.code = "EXTENSION";
+          return cb(err);
+        }
+        cb(null, true);
+      }
+      }).any();
+      upload_tea(req, res, err => {
+          if (err == undefined){
+            var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul);
+            db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
+              item_name: req.body.item_name,
+              item_price: req.body.item_price,
+              type: 'tea',
+              sort: req.body.sort,
+              about: req.body.about,
+              weight: req.body.weight,
+              packaging: req.body.packaging,
+              tea_bags: req.body.tea_bags,
+              box_count: req.body.box_count,
+              description: req.body.description,
+              articul: req.body.articul,
+              sale_price: 0,
+              pic_count: fls.length
+            }).catch(error => {
+              console.log('ERROR:', error);
+            });
+            res.json({
+              ok: !error,
+              error
+            });
+          }else if(err.code == 'EXTENSION'){
+            error = 'Неверный формат файла. (Только JPG и PNG)';
+            console.log(error);
+            res.json({
+              ok: !error,
+              error
+            });
+          }else if(err.code == 'LIMIT_FILE_SIZE'){
+            error = 'Слишком большой файл. Допустимо не более 5 м/байт.';
+            console.log(error);
+            res.json({
+              ok: !error,
+              error
+            });
+          }else{
+            console.log(err);
+          }
       });
     }else{
         upload(req, res, err => {
