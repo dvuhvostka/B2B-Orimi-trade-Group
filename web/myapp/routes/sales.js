@@ -24,139 +24,111 @@ var pgPool = new Pool({
   database: DBNAME
 });
 
-function getSaleItems(articul) {
-  var item_sql_tea = `SELECT * FROM tea WHERE item_name=$1`;
-  var item_sql_coffee = `SELECT * FROM coffee WHERE item_name=$1`;
-  var item_sql_other = `SELECT * FROM others WHERE item_name=$1`;
-  var item_sql_horeca = `SELECT * FROM horeca WHERE item_name=$1`;
-    db.any(item_sql_tea, articul)
-    .then(function(response){
-      if(response.length)
-        res.json({
-          response
-        })
-    })
-    .catch(function(e) {
-      console.log(e);
-    })
-    db.any(item_sql_coffee, articul)
-    .then(function(response){
-      return response;
-    })
-    .catch(function(e) {
-      console.log(e);
-    })
-    db.any(item_sql_other, articul)
-    .then(function(response){
-      if(response.length)
-        res.json({
-          response
-        })
-      //console.log(res.headersSent);
-    })
-    .catch(function(e) {
-      console.log(e);
-    })
-    db.any(item_sql_horeca, articul)
-    .then(function(response){
-      if(response.length)
-        res.json({
-          response
-        })
-    })
-    .catch(function(e) {
-      console.log(e);
-    })
-}
 
-
-var getNews = `SELECT * FROM sales ORDER BY id DESC`;
+var getNews = `SELECT * FROM sales ORDER BY id`;
 /* GET users listing. */
 router.get('/sales/:type?', function(req, res) {
   //console.log(req.params.type);
   switch (req.params.type) {
     case 'set':
       if (req.query.id){
-        //console.log(123123);
         var getSale = `SELECT * FROM sets WHERE set_id='`+req.query.id+`'`;
         db.one(getSale).then((response)=>{
-        //  console.log(response);
-          var getItems = new Promise(function(resolve,reject){
-              var item;
-              for(let each of response.products_id){
-              item += getSaleItems(each);
-            }
-            resolve(item)
-          });
-          getItems.then((r) =>{
+          console.table(response);
+          var tea_sql = `select item_name,id,type,sort from tea where`;
+          var coffee_sql = `select item_name,id,type,sort from coffee where`;
+          var horeca_sql = `select item_name,id,subtype,sort from horeca where`;
+          var others_sql = `select item_name,id,type,sort from others where`;
+
+          for(let each of response.products_id){
+            tea_sql += ` articul='`+each+`' or`;
+            coffee_sql += ` articul='`+each+`' or`;
+            horeca_sql += ` articul='`+each+`' or`;
+            others_sql += ` articul='`+each+`' or`;
+          }
+          tea_sql = tea_sql.slice(0,-3);
+          coffee_sql = coffee_sql.slice(0,-3);
+          horeca_sql = horeca_sql.slice(0,-3);
+          others_sql = others_sql.slice(0,-3);
+          var final_sql = tea_sql+' union '+coffee_sql+' union '+horeca_sql+' union '+others_sql;
+          // console.log(final_sql);
+          db.any(final_sql).then((r) =>{
             console.log(r);
-          })
-          res.render('sales.pug',{
-            isRegistred: req.session.userId,
-            main: false,
-            type: req.params.type,
-            title: 'Акции',
-            saleInfo: response,
+            res.render('sales.pug',{
+              isRegistred: req.session.userId,
+              id:req.query.id,
+              main: false,
+              type: req.params.type,
+              title: 'Акционный набор №'+response.set_id,
+              saleInfo: response,
+              products_info: r,
+            });
           });
         });
       } else {
-        var getSales = `SELECT * FROM sets`;
+        var getSales = `SELECT * FROM sets ORDER by set_id`;
         db.any(getSales).then((response)=>{
+          console.log(response.length);
           res.render('sales.pug',{
             isRegistred: req.session.userId,
             main: true,
-            type: req.param.type,
-            title: 'Акции',
+            type: req.params.type,
+            title: 'Акциионные наборы',
             salesInfo: response,
           });
         });
       }
       break;
     case 'capsule':
-      if(req.query.id){
-        var getSale = `SELECT * FROM sets WHERE set_id='`+req.query.id+`'`;
-        db.one(getSale).then((response)=>{
-          res.render('sales.pug',{
-            isRegistred: req.session.userId,
-            main: false,
-            type: req.param.type,
-            title: 'Акции',
-            saleInfo: response,
-          });
-        });
-      } else {
-        var getSales = `SELECT * FROM sets`;
-        db.any(getSales).then((response)=>{
-          res.render('sales.pug',{
-            isRegistred: req.session.userId,
-            main: true,
-            type: req.param.type,
-            title: 'Акции',
-            salesInfo: response,
-          });
-        });
-      }
+      res.render('sales.pug',{
+        isRegistred: req.session.userId,
+        main: true,
+        type: req.params.type,
+        title: 'Кофемашина BORK',
+      });
       break;
     case 'weekly':
       if(req.query.id){
-        var getSale = `SELECT * FROM weekly_sales WHERE set_id='`+req.query.id+`'`;
+        var getSale = `SELECT * FROM weekly WHERE weekly_id='`+req.query.id+`'`;
         db.one(getSale).then((response)=>{
+          var tea_sql = `select item_name,id,type,sort from tea where`;
+          var coffee_sql = `select item_name,id,type,sort from coffee where`;
+          var horeca_sql = `select item_name,id,subtype,sort from horeca where`;
+          var others_sql = `select item_name,id,type,sort from others where`;
+
+          for(let each of response.products_id){
+            tea_sql += ` articul='`+each+`' or`;
+            coffee_sql += ` articul='`+each+`' or`;
+            horeca_sql += ` articul='`+each+`' or`;
+            others_sql += ` articul='`+each+`' or`;
+          }
+          tea_sql = tea_sql.slice(0,-3);
+          coffee_sql = coffee_sql.slice(0,-3);
+          horeca_sql = horeca_sql.slice(0,-3);
+          others_sql = others_sql.slice(0,-3);
+          var final_sql = tea_sql+' union '+coffee_sql+' union '+horeca_sql+' union '+others_sql;
+          // console.log(final_sql);
+          db.any(final_sql).then((r) =>{
           res.render('sales.pug',{
             isRegistred: req.session.userId,
+            id:req.query.id,
             main: false,
-            type: req.param.type,
-            title: 'Акции',
+            type: req.params.type,
+            title: 'Кейс №'+response.weekly_id,
             saleInfo: response,
+            products_info: r,
           });
         });
+      });
       } else {
-        var getSales = `SELECT * FROM weekly_sales`;
+        var getSales = `SELECT * FROM weekly ORDER by weekly_id`;
         db.any(getSales).then((response)=>{
+          console.log(response);
           res.render('sales.pug',{
             isRegistred: req.session.userId,
             main: true,
-            type: req.param.type,
-            title: 'Акции',
+            type: req.params.type,
+            title: 'Фото полок',
             salesInfo: response,
           });
         });

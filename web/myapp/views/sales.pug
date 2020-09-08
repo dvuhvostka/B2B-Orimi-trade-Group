@@ -1,52 +1,152 @@
 extends layout2
 
 block scripts
-  link(rel='stylesheet' href='sales_styles.css')
+  link(rel='stylesheet' href='../../sales_styles.css')
 block content
   - var q_n = news_q
   - var Type = type
+  - var Main = main
   script(src='/news.js')
   case Type
     when 'set'
-      div 123123
-      p #{saleInfo.products_id.length}
-      script(src='/try.js')
+      if (id)
+        .sale__wrap_set
+          .sale__breadcrumb
+            nav(aria-label='breadcrumb')
+              ol.breadcrumb
+                li.breadcrumb-item
+                  a(href='/sales') Акции
+                li.breadcrumb-item
+                  a(href='/sales/set') Акционные наборы
+                li.breadcrumb-item.active(aria-current='page') Акционный набор №#{saleInfo.set_id}
+          .sale__content
+            h3.content__header Акционный набор №#{saleInfo.set_id}
+            p.content__title Включает в себя:
+            .content__items_wrap
+              - for(var i = 0; i < saleInfo.products_id.length; i++)
+                .item_product
+                  img(src="../store_prods/"+products_info[i].type+"/"+products_info[i].sort+"/"+products_info[i].id+".jpg").item_product__img
+                  a(href='/shop/'+products_info[i].type+'?id='+products_info[i].id).item_product__name #{products_info[i].item_name}
+                  p.item_product__amount Количество #{saleInfo.amount[i]} шт.
+            .content__footer
+              p.item_cashback Кэшбек за покупку 
+                span.cashback_value #{saleInfo.cashback}%
+              .amount_wrap  
+                span Количество
+                .range_items
+                  button(class='btn btn-secondary minus')
+                    i.fas.fa-minus.controls
+                  input(type='text' value='1' class='input count_input_pack')
+                  button(class='btn btn-secondary plus')
+                    i.fas.fa-plus.controls
+              .item_price_wrap
+                p.item_price_wrap 
+                  span.item_price #{saleInfo.set_price}
+                    i.fas.fa-ruble-sign
+                  button.btn.btn-primary.item_btn_addToCart Добавить в корзину
+              
+            hr
+        script(src='../sales.js')
+      else
+        .sale_wrap_main_set
+          .sale__breadcrumb
+            nav(aria-label='breadcrumb')
+              ol.breadcrumb
+                li.breadcrumb-item
+                  a(href='/sales') Акции
+                li.breadcrumb-item.active(aria-current='page') Акционные наборы
+          .sale__content_main
+            h3.main_content__header Акционные наборы
+            .sale__cards_sets
+              - for (var i = 0; i < salesInfo.length; i++)
+                .card_set
+                  h5.set__headder Акционный набор №#{salesInfo[i].set_id}
+                  img.set__img(src='sales/sets/'+salesInfo[i].set_id+'logo.png')
+                  a.btn.btn-primary(href='/sales/set?id='+salesInfo[i].set_id) Перейти
+            .sale__info
+              p.sale__info_text
+                |За покупку каждого такого набора, покупатель (юр. лицо) получает на свой счет в ЛК сумму, которая составляет определенный процент за набор.
+                br
+                |Каждый набор продается только целиком. Не более 3-х наборов каждого вида одному покупателю.
+                br
+                |Цена указывается на каждую позицию и на набор целиком. В корзину можно положить набор, как отдельный сет.
+                br
+                |Купить данные наборы покупатель может через сайт Орими в Москве и Московской обл
+
     when 'capsule'
-      div 12i3ji1o3j
+      .sale_wrap_main_capsule
+        .sale__breadcrumb
+          nav(aria-label='breadcrumb')
+            ol.breadcrumb
+              li.breadcrumb-item
+                a(href='/sales') Акции
+              li.breadcrumb-item.active(aria-current='page') Кофемашина BORK
+        .sale__content_capsule
+          h3.main_content__header Кофемашина BORK
+          .capsule__images
+            a.image_link(href='/sales/capsule/1.png' target='_blank' rel='nofollow')
+              img.image(src='/sales/capsule/1.png')
+            a.image_link(href='/sales/capsule/2.png' target='_blank' rel='nofollow')
+              img.image(src='/sales/capsule/2.png')
+          p.sale__info_text
+            | Кофемашина BORK бесплатно при заказе на 3000 рублей в месяц
     when 'weekly'
-      div hqwelq
+      if !id
+        .sale_wrap_main_set
+          .sale__breadcrumb
+            nav(aria-label='breadcrumb')
+              ol.breadcrumb
+                li.breadcrumb-item
+                  a(href='/sales') Акции
+                li.breadcrumb-item.active(aria-current='page') Фотографии полок
+          .sale__content_main
+            h3.main_content__header Баллы за поддержание ассортимента
+            .sale__cards_sets
+              - for (var i = 0; i < salesInfo.length; i++)
+                .card_set
+                  h5.set__headder Кейс №#{salesInfo[i].weekly_id}
+                  img.set__img(src='sales/weekly/'+salesInfo[i].weekly_id+'logo.png')
+                  a.btn.btn-primary(href='/sales/weekly?id='+salesInfo[i].weekly_id) Перейти
+            .sale__info
+              p.sale__info_text
+                |Поддерживайте необходимый ассортимент в вашем магазине и получайте еженедельные бонусы на счет!
+                br
+                |Отправляйте фотографию полки каждую неделю.
+                br
+                |Подробные условия для каждой программы читайте в соответствующих кейсах
+      else
+        .sale__wrap_weekly
+          .sale__breadcrumb
+            nav(aria-label='breadcrumb')
+              ol.breadcrumb
+                li.breadcrumb-item
+                  a(href='/sales') Акции
+                li.breadcrumb-item
+                  a(href='/sales/weekly') Фотографии полок
+                li.breadcrumb-item.active(aria-current='page') Кейс №#{saleInfo.weekly_id}
+          .sale__content
+            h3.content__header Кейс №#{saleInfo.weekly_id}
+            p.requirments 
+              span.requirments__header Условия программы
+              br
+              |#{saleInfo.requirements}
+            .content__items_wrap
+              - for(var i = 0; i < saleInfo.products_id.length; i++)
+                .item_product_weekly
+                  img(src="../store_prods/"+products_info[i].type+"/"+products_info[i].sort+"/"+products_info[i].id+".jpg").item_product__img_weekly
+                  a(href='/shop/'+products_info[i].type+'?id='+products_info[i].id).item_product__name #{products_info[i].item_name}
+            .content__footer              
+            hr
     default
-      div(class='sales_wrap').container
-        .row
-          - for(var i=0; i<q_n; i++) 
-            .col-sm-6
-              .card.s(class='mx-auto mb-4 text-center shadow-lg ')
-                .card-header.s
-                  h4(class='card-title') #{pnews[i].header}            
-                .card-body.s
-                  if pnews[i].img_url                  
-                    img(src=pnews[i].img_url class='card-img-top' alt='...')
-                  h5(class='card-subtitle' id='subtitle-text' + i) #{pnews[i].intro}
-                  button(type='button' class='close' aria-label='close' style='display:none;')
-                    span( aria-hidden="true") &times;
-                  a(href='#' onclick='return false' class='link-news text-right' id='link-n' + i) Читать далее...
-                  p(class='card-text' id='main-text' + (i+3*j) style='display: none;') #{pnews[i].body}
-      script.
-        $.fx.off = false;
-        $(document).ready(function(){
-          $('.link-news').on('click', function(){
-            var link_open = $(this);
-              link_open.siblings('.card-text').show(400);
-              link_open.siblings('.card-subtitle').hide(20);
-              link_open.siblings('.close').show(20);
-              link_open.hide(20);
-          });
-          $('.close').on('click', function(){
-            var link_close = $(this);
-            link_close.siblings('.card-text').hide(600);
-            link_close.siblings('.card-subtitle').show(20);
-            link_close.siblings('.link-news').show(20);
-            link_close.hide(20);
-          
-          });
-        });
+      .sales_wrap        
+        .sales__content
+          h3.sales__title Наши акции
+          hr
+          .sales__cards_wrap
+            - for (var i = 0; i < news_q; i++)
+              .sales_card
+                h4.card__header #{pnews[i].header}
+                img.card__img(src=''+pnews[i].img_url)
+                p.card__about #{pnews[i].body}
+                a.btn.btn-primary.sales__btn(href='/sales'+pnews[i].sale_url) Попробовать
+          hr

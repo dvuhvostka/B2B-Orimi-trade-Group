@@ -123,7 +123,7 @@ function checkCoffeeFilters (data){
 
 
 /* GET users listing. */
-var getSales = `SELECT * FROM sales ORDER BY id DESC`;
+var getSales = `SELECT * FROM sales ORDER BY id`;
 
 router.route('/shop/:type?')
   .get(function(req,res){

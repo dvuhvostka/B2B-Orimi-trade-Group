@@ -33,7 +33,7 @@
 
 /* shop styles */
 .grid-container {
-  margin-top:615px;
+  margin-top:335px;
   display: grid;
   grid-column-gap: 1em;
   grid-row-gap: 2em;
@@ -103,7 +103,7 @@
 /* slider styles */
 .carousel-wrap {
   position: relative;
-  height: 500px;
+  height: 300px;
   left: 0;
   width:1px;
   transition: left .5s ease-in-out;
@@ -114,7 +114,7 @@
   left:50%;
   width: 900px;
   margin-left: -450px;
-  height:500px;
+  height:300px;
   overflow: hidden;
 }
 .controls_carousel {
@@ -123,7 +123,7 @@
 .controls_carousel li {
   display: inline-block;
   position: absolute;
-  top: 333px;
+  top: 233px;
 }
 .controls_carousel li a {
   color: black;
@@ -141,9 +141,11 @@
   opacity: 40%;
 }
 .content {
-  height: 500px;
-  width: 480px;
+  height: 300px;
+  width: 280px;
   float: left;
+  display: flex;
+  flex-direction: column;
   border: 1px solid #cbcbcb;
   padding: 10px;
   text-align: center;
@@ -156,15 +158,23 @@
 }
 
 .content img {
-  width: 400px;
-  max-height: 95%;
+  max-width: 200px;
+  max-height: 200px;
+  margin: auto 0;
+  vertical-align: middle;
   border-radius:.25rem;
 }
-
+.content__header{
+  font-style: italic;
+}
 .sales__intro {
   color: black;
 }
-
+.sales__link{
+  height: 100%;
+  justify-content:center;
+  display: flex;
+}
 .sales__link:hover{
   text-decoration: none;
 }

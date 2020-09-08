@@ -52,7 +52,7 @@ function slider(l){
   if (optimal_size > length){
     optimal_size = length;
   }
-  const content_width = 500;
+  const content_width = 300;
   var margin = setOptimalWidth(optimal_size,content_width,inner);
   setControls(left,right,margin);
   var busy;

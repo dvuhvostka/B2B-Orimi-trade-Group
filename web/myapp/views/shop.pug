@@ -26,10 +26,9 @@ block content
 		.carousel-wrap
 			- for(var i = 0;i<sales_q;i++)
 				.content
-					h5 #{sales[i].header}
+					h5.content__header #{sales[i].header}
 					a(href='/sales').sales__link
 						img(src=sales[i].img_url)
-						p.sales__intro #{sales[i].intro}
 	ul.controls_carousel
 		li.control-left
 			a(href='#')
@@ -47,7 +46,7 @@ block content
 				div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
 					div(class='carousel_img')
 						if(products[i].subtype)
-							img(src="../store_prods/horeca/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
+							img(src="../store_prods/horeca/"+products[i].sort+"/"+products[i].id+".jpg")
 						else
 							img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].id+".jpg")
 					if(products[i].subtype)
