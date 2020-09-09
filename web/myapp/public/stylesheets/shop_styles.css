@@ -158,14 +158,26 @@
 }
 
 .content img {
-  max-width: 200px;
-  max-height: 200px;
+  width: 200px;
+  height: 200px;
   margin: auto 0;
   vertical-align: middle;
   border-radius:.25rem;
 }
+
+@font-face {
+  font-family: "ModernHEcoLight";
+  src: url("../fonts/ModernHEcoLight/ModernHEcoLight.eot");
+  src: url("../fonts/ModernHEcoLight/ModernHEcoLight.eot?#iefix")format("embedded-opentype"),
+  url("../fonts/ModernHEcoLight/ModernHEcoLight.woff") format("woff"),
+  url("../fonts/ModernHEcoLight/ModernHEcoLight.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
 .content__header{
-  font-style: italic;
+  font-family: "ModernHEcoLight";
+  font-size: 20px;
 }
 .sales__intro {
   color: black;
