@@ -1,27 +1,46 @@
 extends layout2
+block scripts
+  link(rel='stylesheet' href='../order.css')
 block content
   script(src='cities.js')
-  script(src='order.js')
   if !isRegistred
     p Зарегистрируйся
   else
-    form#delivery_info
-      p
-        input(type='text' id="input_addr" name='address' placeholder='Введите адрес доставки' required)
-      p
-        input(type='radio' id="input_nal" name='payment' value="nal" checked)
-        label &#8194;Наличные 	&#8195;
-        input(type='radio' id="input_beznal" name='payment' value="beznal")
-        label &#8194;Онлайн 	&#8195;     
-        input(type='radio' id="input_bill" name='payment' value="bill")
-        label &#8194;Счёт 	&#8195;
-      p
-        label#userbalance
-      p
-        input(type="text" name="input_bonus" id="input_bonus" placeholder="Сколько баллов использовать в скидку")
-        span &#8194;
-        input(type='checkbox' id="use_bonus" name="bonuses")
-      p
-        label#cartcost СУММА ЗАКАЗА: 
-      p
-        button(type='submit').submit_payment Подтвердить
+    .order__wrap
+      h3.order__header.header Оформление заказа 
+      form#delivery_info.order__form
+        label#cartcost.order__label.mb Заказ на сумму: 
+          span.price
+          i.fas.fa-ruble-sign
+        label#userbalance.order__label.mb
+        .order__bonuses.mb
+          .d-in
+            input(type='checkbox' id="use_bonus" name="bonuses").order__input.order__radio.checkbox_bonuses
+            .bonuses
+              label.order__label Использовать баллы?
+              input(type="text" name="input_bonus" id="input_bonus" placeholder="" disabled).order__input.bonuses__input
+          hr
+          label.order__label Сумма к оплате: 
+            span.order__final_price
+            i.fas.fa-ruble-sign
+          label.order__label.text-danger.d-none.order_min Мин.сумма заказа 2000 рублей!
+        .order__payment
+          h5.payment__header.header Способ оплаты
+          .mb.order__radio_set
+            .d-in
+              input(type='radio' id="input_nal" name='payment' value="nal" checked).order__radio.order__input
+              label.order__label Наличные водителю
+            .d-in
+              input(type='radio' id="input_beznal" name='payment' value="beznal").order__radio.order__input
+              label.order__label Онлайн    
+            .d-in
+              input(type='radio' id="input_bill" name='payment' value="bill").order__radio.order__input
+              label.order__label Рассчетный счёт
+        .order__delivery.mb
+          h5.delivery__header.header Адрес доставки
+          input(type='text' id="input_addr" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input
+        .order__comments.mb
+          h5.header.comments__headder Комментарии к заказу
+          textarea.comments__area
+        button(type='submit').submit_payment.btn.btn-primary Подтвердить заказ
+    script(src='order.js')

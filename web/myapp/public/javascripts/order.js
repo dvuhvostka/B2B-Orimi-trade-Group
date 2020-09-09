@@ -6,8 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
         url: '/order',
         data: {post_type: "getbalance"},
         success: function(r){
-          $('#userbalance').html("ВАШ БОНУСНЫЙ БАЛАНС: "+r.balance);
+          $('#userbalance').html("Ваш бонусный баланс: "+r.balance+" бонуса(ов)");
+          $('.bonuses__input').attr('placeholder',r.balance)
           b = r.balance;
+          $('.bonuses__input').on('change',()=>{
+            if(Number($('.bonuses__input').val()) > r.balance){
+            $('.bonuses__input').val(r.balance);
+            }
+          });
         }
       });
       $.ajax({
@@ -21,8 +27,19 @@ document.addEventListener('DOMContentLoaded', function () {
               default: console.log(r.arg); break;
             }
           }else {
-            $('#cartcost').html("СУММА ЗАКАЗА: "+r.fullcost);
+            $('.price').html(r.fullcost+' ');
+            $('.order__final_price').html(r.fullcost+' ');
           }
+          var price = Number($('.order__final_price').html());
+          $('.bonuses__input').on('change',()=>{
+            var bonuses = $('.bonuses__input').val();
+            $('.order__final_price').html(price-(bonuses/10)+' ');
+            if(price-(bonuses/10) < 2000){
+              $('.order_min').removeClass('d-none');
+            } else {
+              $('.order_min').addClass('d-none');
+            }
+          });
         }
       });
 });
@@ -33,8 +50,15 @@ window.onload = function(){
     for (var i=0; i<array.length; i++){
       if (array[i].id == localStorage.getItem('reg')) region = array[i].text;
     }
-    $('#input_addr').val(region);
+    $('#input_addr').val(region+', ');
   }
+  $('.checkbox_bonuses').on('change',()=>{
+    if ($('.checkbox_bonuses').prop('checked')){
+      $('.bonuses__input').removeAttr('disabled')
+    } else {
+      $('.bonuses__input').attr('disabled',true)
+    }
+  });
   //При загрузке страницы
   $('#delivery_info').on('submit', (e)=>{
     e.preventDefault();
