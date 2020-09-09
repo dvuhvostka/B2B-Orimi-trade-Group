@@ -50,9 +50,9 @@ block content
       hr
     #photo_area
       if(products[0].subtype)
-        img(src="../store_prods/horeca/"+products[0].sort+"/"+products[0].id+".jpg")
+        img(src="../store_prods/horeca/"+products[0].sort+"/"+products[0].articul+"/"+"1.jpg")
       else
-        img(src="../store_prods/"+products[0].type+"/"+products[0].sort+"/"+products[0].id+".jpg")
+        img(src="../store_prods/"+products[0].type+"/"+products[0].sort+"/"+products[0].articul+"/"+"1.jpg")
     #info_wrap
       case products[0].type
         when 'tea'

@@ -40,11 +40,51 @@ const redirectLogin = function(req,res,next){
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    fs.mkdir('./public/images/uploads/'+req.session.userId, err=>{});
-    cb(null, './public/images/uploads/'+req.session.userId);
+    switch(req.body.post_type){
+      case "add_tea": {
+        fs.mkdir('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul);
+        break;
+      }
+      case "add_coffee": {
+        fs.mkdir('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul);
+        break;
+      }
+      case "add_horeca": {
+        fs.mkdir('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul);
+        break;
+      }
+      case "add_other": {
+        fs.mkdir('./public/images/store_prods/other/'+req.body.type+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/other/'+req.body.type+'/'+req.body.articul);
+        break;
+      }
+      default: {
+        fs.mkdir('./public/images/uploads/'+req.session.userId, err=>{});
+        cb(null, './public/images/uploads/'+req.session.userId);
+        break;
+      }
+    }
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    switch(req.body.post_type){
+      case "add_tea": {
+          var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
+          cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
+      case "add_coffee": {
+          var fls = fs.readdirSync('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul+'/');
+          cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
+      default: {
+          cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        break;
+      }
+    }
   }
 })
 
@@ -61,6 +101,10 @@ var upload = multer({
     cb(null, true);
   }
 }).any();
+
+
+addProductTea = () => {
+}
 
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
@@ -108,10 +152,10 @@ user.route('/user')
             }
             if (response.rows[0].permissions=='mod'){
               db.any(`SELECT * FROM organizations WHERE org_confirmed=0`).then(function(uncorgs){
-                for(var i=0; i<uncorgs.length; i++){
-                  var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
-                  uncorgs[i].docs = fls;
-                }
+                  for(var i=0; i<uncorgs.length; i++){
+                    var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
+                    uncorgs[i].docs = fls;
+                  }
                 db.any(`SELECT * FROM deals_info`).then(function(deals_info){
                   res.render('user',{
                     title: "Аккаунт",
@@ -205,24 +249,25 @@ user.route('/user')
       }
     }else if(req.body.post_type=="delete_org_skdjfgh213asRQadSKSFD3123244"){
       db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'");
-      rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('done'); });
-      console.log("Organiztion deleted from user: "+req.session.userId);
+      rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('done'); });
+      console.log("Organiztion deleted from user: "+req.body.org_owner_id);
     }else if(req.body.post_type=="confirm_org_askdjfhl123123kaGFDGdfhFsdf3123"){
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
       db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'");
       ncp.limit = 16;
-      var srcPath = './public/images/uploads/'+req.session.userId; //current folder
-      fs.mkdir('./public/images/confirmed_uploads/'+req.session.userId, err=>{});
-      console.log('confirmed_uploads created: done');
-      var destPath = './public/images/confirmed_uploads/'+req.session.userId; //Any destination folder
+      var srcPath = './public/images/uploads/'+req.body.org_owner_id; //current folder
+      //fs.mkdir('./public/images/confirmed_uploads/'+req.body.org_owner_id, err=>{});
+      //console.log('confirmed_uploads created: done');
+      var destPath = './public/images/confirmed_uploads/'+req.body.org_owner_id; //Any destination folder
       ncp(srcPath, destPath, function (err) {
         if (err) {
           return console.error(err);
+        }else{
+          console.log('Copying files: done');
+          rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('uploads deleted: done'); });
         }
-        console.log('Copying files: done');
-        rimraf('./public/images/uploads/'+req.session.userId, function () { console.log('uploads deleted: done'); });
       });
-      console.log("org confirmed: "+req.session.userId+" done");
+      console.log("org confirmed: "+req.body.org_owner_id+" done");
       var link_code = crypto.randomBytes(20).toString('hex');
       console.log("link code generated: " +link_code);
       db.none("UPDATE organizations SET link_code='"+link_code+"' WHERE owner_id='"+req.body.org_owner_id+"'");
@@ -246,30 +291,64 @@ user.route('/user')
     }else{
         upload(req, res, err => {
           if (err == undefined){
-            var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
-            var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
-            pgPool.query(get_org,[], function(err, response){
-              pgPool.query(getUserData,[], function(error, resp){
-                  if(!response.rows[0]){
-                    db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
-                      org_name: req.body.org_name,
-                      org_address: req.body.org_address,
-                      owner_inn: req.body.inn,
-                      owner_id: req.session.userId,
-                      type: req.body.type,
-                      org_confirmed: 0,
-                      owner_position: req.body.position,
-                      owner_name: resp.rows[0].username,
-                      owner_sname: resp.rows[0].second_name,
-                      owner_tname: resp.rows[0].third_name,
+            switch(req.body.post_type){
+              case "add_coffee": {
+                console.log('add_coffee');
+                break;
+              }
+              case "add_tea":{
+                var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
+                db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
+                  item_name: req.body.item_name,
+                  item_price: req.body.item_price,
+                  type: 'tea',
+                  sort: req.body.sort,
+                  about: req.body.about,
+                  weight: req.body.weight,
+                  packaging: req.body.packaging,
+                  tea_bags: req.body.tea_bags,
+                  box_count: req.body.box_count,
+                  description: req.body.description,
+                  articul: req.body.articul,
+                  sale_price: 0,
+                  pic_count: fls.length
+                }).catch(error => {
+                  console.log('ERROR:', error);
+                });
+                res.json({
+                  ok: !error,
+                  error
+                });
+                break;
+              }
+              default: {
+                  var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
+                  var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+                  pgPool.query(get_org,[], function(err, response){
+                    pgPool.query(getUserData,[], function(error, resp){
+                        if(!response.rows[0]){
+                          db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
+                            org_name: req.body.org_name,
+                            org_address: req.body.org_address,
+                            owner_inn: req.body.inn,
+                            owner_id: req.session.userId,
+                            type: req.body.type,
+                            org_confirmed: 0,
+                            owner_position: req.body.position,
+                            owner_name: resp.rows[0].username,
+                            owner_sname: resp.rows[0].second_name,
+                            owner_tname: resp.rows[0].third_name,
+                          });
+                        }
                     });
-                  }
-              });
-            });
-            res.json({
-              ok: !error,
-              error
-            });
+                  });
+                  res.json({
+                    ok: !error,
+                    error
+                  });
+                break;
+              }
+            }
           }else if(err.code == 'EXTENSION'){
             error = 'Неверный формат файла. (Только JPG и PNG)';
             console.log(error);

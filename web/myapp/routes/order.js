@@ -18,7 +18,8 @@ const {
 } = process.env
 
 function isInteger(num) {
-  return (num ^ 0) === num;
+  num = num*1;
+  return Number.isInteger(num);
 }
 
 function check_cart(cart) {
@@ -254,8 +255,10 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                    case "tea":{
                       for(var x=0; x<data.tea.length; x++){
                         if(data.tea[x].id==cart[i].id){
-                          cart[i].price_of_one = data.tea[x].item_price;
-                          cart[i].full_price = Math.ceil((data.tea[x].item_price*cart[i].count)*100)/100;
+                          var price = data.tea[x].item_price;
+                          if (data.tea[x].sale_price!=0) price = data.tea[x].sale_price;
+                          cart[i].price_of_one = price;
+                          cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
                           cart[i].sort = data.tea[x].sort;
                           cart[i].product = data.tea[x].item_name;
                           cart[i].subtype = 0;
@@ -267,8 +270,10 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                    case "coffee":{
                      for(var x=0; x<data.coffee.length; x++){
                        if(data.coffee[x].id==cart[i].id){
-                         cart[i].price_of_one = data.coffee[x].item_price;
-                         cart[i].full_price = Math.ceil((data.coffee[x].item_price*cart[i].count)*100)/100;
+                         var price = data.coffee[x].item_price;
+                         if (data.coffee[x].sale_price!=0) price = data.coffee[x].sale_price;
+                         cart[i].price_of_one = price;
+                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
                          cart[i].sort = data.coffee[x].sort;
                          cart[i].product = data.coffee[x].item_name;
                          cart[i].subtype = 0;
@@ -280,9 +285,11 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                    case "horeca": {
                      for(var x=0; x<data.horeca.length; x++){
                        if(data.horeca[x].id==cart[i].id){
+                         var price = data.horeca[x].item_price;
+                         if (data.horeca[x].sale_price!=0) price = data.horeca[x].sale_price;
                          cart[i].type = data.horeca[x].type;
-                         cart[i].price_of_one = data.horeca[x].item_price;
-                         cart[i].full_price = Math.ceil((data.horeca[x].item_price*cart[i].count)*100)/100;
+                         cart[i].price_of_one = price;
+                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
                          cart[i].sort = data.horeca[x].sort;
                          cart[i].product = data.horeca[x].item_name;
                          cart[i].subtype = 'horeca';
@@ -294,8 +301,10 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                    case "other": {
                      for(var x=0; x<data.others.length; x++){
                        if(data.others[x].id==cart[i].id){
-                         cart[i].price_of_one = data.others[x].item_price;
-                         cart[i].full_price = Math.ceil((data.others[x].item_price*cart[i].count)*100)/100;
+                         var price = data.others[x].item_price;
+                         if (data.others[x].sale_price!=0) price = data.others[x].sale_price;
+                         cart[i].price_of_one = price;
+                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
                          cart[i].product = data.others[x].item_name;
                          cart[i].subtype = 0;
                          cart[i].sort = data.others[x].sort;

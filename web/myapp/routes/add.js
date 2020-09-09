@@ -24,23 +24,6 @@ var pgPool = new Pool({
   database: DBNAME
 });
 
-function createNews(header, intro, body, img) {
-  var today = new Date();
-  //var time = today.getDate()+"."+today.getMonth()+"."+today.getFullYear();
-  //console.log(time);
-  var data = {
-    date: today,
-    header: header,
-    body: body,
-    img_url: img,
-    intro: intro
-  }
-  var query = "INSERT INTO sales(date, header, body, img_url, intro) VALUES($1,$2,$3,$4,$5)";
-  pgPool.query(query, [data.date, data.header, data.body, data.img_url, data.intro], function(err, response){
-    if(err) return console.error(err);
-  });
-}
-
 function updateItemSql(data){
   //UPDATE users SET link_code='' WHERE id='"+req.session.userId+"'"
   var sql = `SET `;
@@ -60,19 +43,6 @@ function updateItemSql(data){
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 router.route('/add')
   .get(function(req,res){
-    var delQ = "DELETE FROM sales WHERE id=(SELECT MAX(id) FROM sales)"
-    var getUsers = "SELECT * FROM users WHERE id='"+req.session.userId+"'";
-    pgPool.query(getUsers, [], function(err, resp){
-      if(resp.rows[0]!=undefined){
-        if(resp.rows[0].permissions=='mod'){
-            pgPool.query(delQ, [], function(err, response){
-              if(err) return console.error(err);
-          });
-        }else{
-          console.log('!! /add not allowed : '+resp.rows[0].ip_addr);
-        }
-      }
-    });
     res.send("<script>document.location.href='/sales'</script>");
   }).post(urlencodedParser, function(req,res){
     var getUsers = "SELECT * FROM users WHERE id='"+req.session.userId+"'";
@@ -87,7 +57,6 @@ router.route('/add')
                 });
                 break;
               }
-              case 'createnews': createNews(req.body.title, req.body.desc, req.body.body, req.body.img); res.send("ok"); break;
               case 'getItem':
               var item_sql_tea = `SELECT * FROM tea WHERE articul=$1`;
               var item_sql_coffee = `SELECT * FROM coffee WHERE articul=$1`;
