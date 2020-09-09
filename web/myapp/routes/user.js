@@ -40,11 +40,51 @@ const redirectLogin = function(req,res,next){
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    fs.mkdir('./public/images/uploads/'+req.session.userId, err=>{});
-    cb(null, './public/images/uploads/'+req.session.userId);
+    switch(req.body.post_type){
+      case "add_tea": {
+        fs.mkdir('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul);
+        break;
+      }
+      case "add_coffee": {
+        fs.mkdir('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul);
+        break;
+      }
+      case "add_horeca": {
+        fs.mkdir('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul);
+        break;
+      }
+      case "add_other": {
+        fs.mkdir('./public/images/store_prods/other/'+req.body.type+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/other/'+req.body.type+'/'+req.body.articul);
+        break;
+      }
+      default: {
+        fs.mkdir('./public/images/uploads/'+req.session.userId, err=>{});
+        cb(null, './public/images/uploads/'+req.session.userId);
+        break;
+      }
+    }
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    switch(req.body.post_type){
+      case "add_tea": {
+          var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
+          cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
+      case "add_coffee": {
+          var fls = fs.readdirSync('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul+'/');
+          cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
+      default: {
+          cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        break;
+      }
+    }
   }
 })
 
@@ -61,6 +101,10 @@ var upload = multer({
     cb(null, true);
   }
 }).any();
+
+
+addProductTea = () => {
+}
 
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
@@ -244,101 +288,67 @@ user.route('/user')
           ok:false
         })
       });
-    }else if(req.body.post_type="add_tea"){
-      var i=0;
-      var storage_tea = multer.diskStorage({
-      destination: function (req, file, cb) {
-        fs.mkdir('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul, err=>{});
-        cb(null, './public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul);
-      },
-      filename: function (req, file, cb) {
-        i++;
-        cb(null, i + path.extname(file.originalname));
-      }
-      });
-
-      var upload_tea = multer({
-      storage: storage_tea,
-      limits: {fileSize: 5 * 1024 * 1024},
-      fileFilter: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        if (ext!='.jpg'&&ext!='.jpeg'&&ext!='.png'){
-          const err = new Error('Extension');
-          err.code = "EXTENSION";
-          return cb(err);
-        }
-        cb(null, true);
-      }
-      }).any();
-      upload_tea(req, res, err => {
-          if (err == undefined){
-            var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul);
-            db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
-              item_name: req.body.item_name,
-              item_price: req.body.item_price,
-              type: 'tea',
-              sort: req.body.sort,
-              about: req.body.about,
-              weight: req.body.weight,
-              packaging: req.body.packaging,
-              tea_bags: req.body.tea_bags,
-              box_count: req.body.box_count,
-              description: req.body.description,
-              articul: req.body.articul,
-              sale_price: 0,
-              pic_count: fls.length
-            }).catch(error => {
-              console.log('ERROR:', error);
-            });
-            res.json({
-              ok: !error,
-              error
-            });
-          }else if(err.code == 'EXTENSION'){
-            error = 'Неверный формат файла. (Только JPG и PNG)';
-            console.log(error);
-            res.json({
-              ok: !error,
-              error
-            });
-          }else if(err.code == 'LIMIT_FILE_SIZE'){
-            error = 'Слишком большой файл. Допустимо не более 5 м/байт.';
-            console.log(error);
-            res.json({
-              ok: !error,
-              error
-            });
-          }else{
-            console.log(err);
-          }
-      });
     }else{
         upload(req, res, err => {
           if (err == undefined){
-            var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
-            var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
-            pgPool.query(get_org,[], function(err, response){
-              pgPool.query(getUserData,[], function(error, resp){
-                  if(!response.rows[0]){
-                    db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
-                      org_name: req.body.org_name,
-                      org_address: req.body.org_address,
-                      owner_inn: req.body.inn,
-                      owner_id: req.session.userId,
-                      type: req.body.type,
-                      org_confirmed: 0,
-                      owner_position: req.body.position,
-                      owner_name: resp.rows[0].username,
-                      owner_sname: resp.rows[0].second_name,
-                      owner_tname: resp.rows[0].third_name,
+            switch(req.body.post_type){
+              case "add_coffee": {
+                console.log('add_coffee');
+                break;
+              }
+              case "add_tea":{
+                var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
+                db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
+                  item_name: req.body.item_name,
+                  item_price: req.body.item_price,
+                  type: 'tea',
+                  sort: req.body.sort,
+                  about: req.body.about,
+                  weight: req.body.weight,
+                  packaging: req.body.packaging,
+                  tea_bags: req.body.tea_bags,
+                  box_count: req.body.box_count,
+                  description: req.body.description,
+                  articul: req.body.articul,
+                  sale_price: 0,
+                  pic_count: fls.length
+                }).catch(error => {
+                  console.log('ERROR:', error);
+                });
+                res.json({
+                  ok: !error,
+                  error
+                });
+                break;
+              }
+              default: {
+                  var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
+                  var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+                  pgPool.query(get_org,[], function(err, response){
+                    pgPool.query(getUserData,[], function(error, resp){
+                        if(!response.rows[0]){
+                          db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
+                            org_name: req.body.org_name,
+                            org_address: req.body.org_address,
+                            owner_inn: req.body.inn,
+                            owner_id: req.session.userId,
+                            type: req.body.type,
+                            org_confirmed: 0,
+                            owner_position: req.body.position,
+                            owner_name: resp.rows[0].username,
+                            owner_sname: resp.rows[0].second_name,
+                            owner_tname: resp.rows[0].third_name,
+                          });
+                        }
                     });
-                  }
-              });
-            });
-            res.json({
-              ok: !error,
-              error
-            });
+                  });
+                  res.json({
+                    ok: !error,
+                    error
+                  });
+                break;
+              }
+            }
           }else if(err.code == 'EXTENSION'){
             error = 'Неверный формат файла. (Только JPG и PNG)';
             console.log(error);
