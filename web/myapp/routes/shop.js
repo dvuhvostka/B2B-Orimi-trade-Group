@@ -189,15 +189,19 @@ router.route('/shop/:type?')
         }else if(req.query.id){
           var gettea = `SELECT * FROM tea WHERE type='tea' AND id='`+req.query.id+`'`;
           pgPool.query(gettea,[], function(err, response){
-            var prods = response.rows;
-            res.render('product.pug', {
-              isRegistred: req.session.userId,
-              products: prods,
-              prod_count: prods.length,
-              title: 'Фирменный магазин Орими-трэйд',
-              type: 'tea',
-              needFooter: false
-              });
+            if(response.rows.length==0){
+              res.redirect('/shop');
+            }else{
+              var prods = response.rows;
+              res.render('product.pug', {
+                isRegistred: req.session.userId,
+                products: prods,
+                prod_count: prods.length,
+                title: 'Фирменный магазин Орими-трэйд',
+                type: 'tea',
+                needFooter: false
+                });
+            }
           });
         }
     }
@@ -210,7 +214,7 @@ router.route('/shop/:type?')
           pgPool.query(coffeeFilters,[], function(err, response){
             if (err) return console.error(err);
             var prods;
-            if(response.rows==undefined){
+            if(response.rows.length==undefined){
               prods = 0;
             }else{prods = response.rows;}
           console.log(prods); //debug
@@ -226,21 +230,26 @@ router.route('/shop/:type?')
           });
         });
       }else if(req.query.id){
-        console.log(req.query.id)
+
         var getcoffee = `SELECT * FROM coffee WHERE type='coffee' AND id='`+req.query.id+`'`;
         pgPool.query(getcoffee,[], function(err, response){
           var prods;
-          if(response.rows==undefined){
+          if(response.rows.length==0){
+            console.log("123");
+            res.redirect('/shop');
             prods = 0;
-          }else{prods = response.rows;}
-          res.render('product.pug', {
-            isRegistred: req.session.userId,
-            products: prods,
-            prod_count: prods.length,
-            title: 'Фирменный магазин Орими-трэйд',
-            type: 'tea',
-            needFooter: false
-            });
+          }else{
+            prods = response.rows;
+            console.log("123");
+            res.render('product.pug', {
+              isRegistred: req.session.userId,
+              products: prods,
+              prod_count: prods.length,
+              title: 'Фирменный магазин Орими-трэйд',
+              type: 'tea',
+              needFooter: false
+              });
+          }
         });
       }
     }else if(type=='other'){
@@ -269,17 +278,20 @@ router.route('/shop/:type?')
       var getothers = `SELECT * FROM others WHERE id='`+req.query.id+`'`;
       pgPool.query(getothers,[], function(err, response){
         var prods;
-        if(response.rows==undefined){
+        if(response.rows.length==0){
           prods = 0;
-        }else{prods = response.rows;}
-        res.render('product.pug', {
-          isRegistred: req.session.userId,
-          products: prods,
-          prod_count: prods.length,
-          title: 'Фирменный магазин Орими-трэйд',
-          type: 'other',
-          needFooter: false
-          });
+          res.redirect('/shop');
+        }else{
+          prods = response.rows;
+          res.render('product.pug', {
+            isRegistred: req.session.userId,
+            products: prods,
+            prod_count: prods.length,
+            title: 'Фирменный магазин Орими-трэйд',
+            type: 'other',
+            needFooter: false
+            });
+        }
       });
     }
   }else if(type=='horeca'){
@@ -316,17 +328,20 @@ router.route('/shop/:type?')
     var gethoreca = `SELECT * FROM horeca WHERE id='`+req.query.id+`'`;
     pgPool.query(gethoreca,[], function(err, response){
       var prods;
-      if(response.rows==undefined){
+      if(response.rows.length==0){
         prods = 0;
-      }else{prods = response.rows;}
-      res.render('product.pug', {
-        isRegistred: req.session.userId,
-        products: prods,
-        prod_count: prods.length,
-        title: 'Фирменный магазин Орими-трэйд',
-        type: 'horeca',
-        needFooter: false
-        });
+        res.redirect('/shop');
+      }else{
+        prods = response.rows;
+        res.render('product.pug', {
+          isRegistred: req.session.userId,
+          products: prods,
+          prod_count: prods.length,
+          title: 'Фирменный магазин Орими-трэйд',
+          type: 'horeca',
+          needFooter: false
+          });
+      }
     });
   }
   }
