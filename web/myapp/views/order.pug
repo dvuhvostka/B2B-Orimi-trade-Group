@@ -18,7 +18,7 @@ block content
             input(type='checkbox' id="use_bonus" name="bonuses").order__input.order__radio.checkbox_bonuses
             .bonuses
               label.order__label Использовать баллы?
-              input(type="text" name="input_bonus" id="input_bonus" placeholder="" disabled).order__input.bonuses__input
+              input(type="text" name="input_bonus" id="input_bonus" placeholder="" disabled).order__input.bonuses__input.sym_none
           hr
           label.order__label Сумма к оплате: 
             span.order__final_price
@@ -41,6 +41,6 @@ block content
           input(type='text' id="input_addr" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input
         .order__comments.mb
           h5.header.comments__headder Комментарии к заказу
-          textarea.comments__area
+          textarea(name='comments').comments__area
         button(type='submit').submit_payment.btn.btn-primary Подтвердить заказ
     script(src='order.js')

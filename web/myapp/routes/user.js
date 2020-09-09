@@ -51,7 +51,12 @@ var storage = multer.diskStorage({
         cb(null, './public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul);
         break;
       }
-      case "add_horeca": {
+      case "add_horeca_tea": {
+        fs.mkdir('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul, err=>{});
+        cb(null, './public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul);
+        break;
+      }
+      case "add_horeca_coffee": {
         fs.mkdir('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul, err=>{});
         cb(null, './public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul);
         break;
@@ -80,7 +85,12 @@ var storage = multer.diskStorage({
           cb(null, fls.length+1 + path.extname(file.originalname));
         break;
       }
-      case "add_horeca": {
+      case "add_horeca_tea": {
+          var fls = fs.readdirSync('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul+'/');
+          cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
+      case "add_horeca_coffee": {
           var fls = fs.readdirSync('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul+'/');
           cb(null, fls.length+1 + path.extname(file.originalname));
         break;
@@ -98,9 +108,11 @@ var storage = multer.diskStorage({
   }
 })
 
+var maxFileSize = 20 * 1024 * 1024;
+
 var upload = multer({
   storage: storage,
-  limits: {fileSize: 5 * 1024 * 1024},
+  limits: {fileSize: maxFileSize},
   fileFilter: (req, file, cb) => {
     const ext = path.extname(file.originalname);
 
@@ -121,7 +133,15 @@ var upload = multer({
           }
         break;
       }
-      case "add_horeca": {
+      case "add_horeca_tea": {
+          if (ext!='.jpg'){
+            const err = new Error('Extension');
+            err.code = "Изображения товара только в формате .jpg";
+            return cb(err);
+          }
+        break;
+      }
+      case "add_horeca_coffee": {
           if (ext!='.jpg'){
             const err = new Error('Extension');
             err.code = "Изображения товара только в формате .jpg";
@@ -338,31 +358,173 @@ user.route('/user')
           if (err == undefined){
             switch(req.body.post_type){
               case "add_coffee": {
-                console.log('add_coffee');
+                var fls = fs.readdirSync('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul+'/');
+                db.any(`SELECT * FROM coffee WHERE articul='`+req.body.articul+`'`).then(function(data){
+                  if(data.length!=0){
+                    var error = "Товар "+req.body.articul+" уже существует!";
+                    res.json({
+                      ok: false,
+                      error
+                    });
+                  }else{
+                    db.none('INSERT INTO coffee(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
+                      item_name: req.body.item_name,
+                      item_price: req.body.item_price,
+                      type: 'coffee',
+                      sort: req.body.sort,
+                      category: req.body.category,
+                      weight: req.body.weight,
+                      packaging: req.body.packaging,
+                      box_count: req.body.box_count,
+                      description: req.body.description,
+                      articul: req.body.articul,
+                      sale_price: 0,
+                      pic_count: fls.length
+                    }).catch(error => {
+                      console.log('ERROR_COFFEE_ADDING_TO_DB:', error);
+                    });
+                    res.json({
+                      ok: !error,
+                      error
+                    });
+                  }
+                });
                 break;
               }
               case "add_tea":{
                 var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
-                db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
-                  item_name: req.body.item_name,
-                  item_price: req.body.item_price,
-                  type: 'tea',
-                  sort: req.body.sort,
-                  about: req.body.about,
-                  weight: req.body.weight,
-                  packaging: req.body.packaging,
-                  tea_bags: req.body.tea_bags,
-                  box_count: req.body.box_count,
-                  description: req.body.description,
-                  articul: req.body.articul,
-                  sale_price: 0,
-                  pic_count: fls.length
-                }).catch(error => {
-                  console.log('ERROR:', error);
+                db.any(`SELECT * FROM tea WHERE articul='`+req.body.articul+`'`).then(function(data){
+                  if(data.length!=0){
+                    var error = "Товар "+req.body.articul+" уже существует!";
+                    res.json({
+                      ok: false,
+                      error
+                    });
+                  }else{
+                    db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
+                      item_name: req.body.item_name,
+                      item_price: req.body.item_price,
+                      type: 'tea',
+                      sort: req.body.sort,
+                      about: req.body.about,
+                      weight: req.body.weight,
+                      packaging: req.body.packaging,
+                      tea_bags: req.body.tea_bags,
+                      box_count: req.body.box_count,
+                      description: req.body.description,
+                      articul: req.body.articul,
+                      sale_price: 0,
+                      pic_count: fls.length
+                    }).catch(error => {
+                      console.log('ERROR_TEA_ADDING_TO_DB:', error);
+                    });
+                    res.json({
+                      ok: !error,
+                      error
+                    });
+                  }
                 });
-                res.json({
-                  ok: !error,
-                  error
+                break;
+              }
+              case "add_other": {
+                var fls = fs.readdirSync('./public/images/store_prods/other/'+req.body.type+'/'+req.body.articul+'/');
+                db.any(`SELECT * FROM others WHERE articul='`+req.body.articul+`'`).then(function(data){
+                  if(data.length!=0){
+                    var error = "Товар "+req.body.articul+" уже существует!";
+                    res.json({
+                      ok: false,
+                      error
+                    });
+                  }else{
+                    db.none('INSERT INTO others(item_name, item_price, type, sort, description, box_count, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${description}, ${box_count}, ${articul}, ${sale_price}, ${pic_count})',  {
+                      item_name: req.body.item_name,
+                      item_price: req.body.item_price,
+                      type: 'other',
+                      sort: req.body.type,
+                      box_count: req.body.box_count,
+                      description: req.body.description,
+                      articul: req.body.articul,
+                      sale_price: 0,
+                      pic_count: fls.length
+                    }).catch(error => {
+                      console.log('ERROR_OTHERS_ADDING_TO_DB:', error);
+                    });
+                    res.json({
+                      ok: !error,
+                      error
+                    });
+                  }
+                });
+                break;
+              }
+              case "add_horeca_tea": {
+                var fls = fs.readdirSync('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul+'/');
+                db.any(`SELECT * FROM horeca WHERE articul='`+req.body.articul+`'`).then(function(data){
+                  if(data.length!=0){
+                    var error = "Товар "+req.body.articul+" уже существует!";
+                    res.json({
+                      ok: false,
+                      error
+                    });
+                  }else{
+                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, subtype) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype})',  {
+                      item_name: req.body.item_name,
+                      item_price: req.body.item_price,
+                      type: 'tea',
+                      sort: req.body.sort,
+                      about: req.body.about,
+                      weight: req.body.weight,
+                      packaging: req.body.packaging,
+                      tea_bags: req.body.tea_bags,
+                      box_count: req.body.box_count,
+                      description: req.body.description,
+                      articul: req.body.articul,
+                      sale_price: 0,
+                      pic_count: fls.length,
+                      subtype: 'horeca'
+                    }).catch(error => {
+                      console.log('ERROR_HORECA_TEA_ADDING_TO_DB:', error);
+                    });
+                    res.json({
+                      ok: !error,
+                      error
+                    });
+                  }
+                });
+                break;
+              }
+              case "add_horeca_coffee": {
+                var fls = fs.readdirSync('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul+'/');
+                db.any(`SELECT * FROM horeca WHERE articul='`+req.body.articul+`'`).then(function(data){
+                  if(data.length!=0){
+                    var error = "Товар "+req.body.articul+" уже существует!";
+                    res.json({
+                      ok: false,
+                      error
+                    });
+                  }else{
+                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, subtype) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype})',  {
+                      item_name: req.body.item_name,
+                      item_price: req.body.item_price,
+                      type: 'coffee',
+                      sort: req.body.sort,
+                      category: req.body.category,
+                      weight: req.body.weight,
+                      packaging: req.body.packaging,
+                      box_count: req.body.box_count,
+                      description: req.body.description,
+                      articul: req.body.articul,
+                      sale_price: 0,
+                      pic_count: fls.length,
+                      subtype: 'horeca'
+                    }).catch(error => {
+                      console.log('ERROR_HORECA_COFFEE_ADDING_TO_DB:', error);
+                    });
+                    res.json({
+                      ok: !error,
+                      error
+                    });
+                  }
                 });
                 break;
               }
@@ -402,7 +564,7 @@ user.route('/user')
               error
             });
           }else if(err.code == 'LIMIT_FILE_SIZE'){
-            error = 'Слишком большой файл. Допустимо не более 5 м/байт.';
+            error = 'Слишком большой файл. Допустимо не более 20 м/байт.';
             console.log(error);
             res.json({
               ok: !error,

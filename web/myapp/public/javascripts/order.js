@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         success: function(r){
           if(!r.ok){
             switch(r.error){
-              case "ERROR_CART_EMPTY": $('#cartcost').html("ВАША КОРЗИНА ПУСТА"); break;
+              case "ERROR_CART_EMPTY": document.location.href='/shop'; break;
               default: console.log(r.arg); break;
             }
           }else {
@@ -45,6 +45,18 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.onload = function(){
+  var input_check = $('.sym_none');
+    for(let each of input_check){
+      each.onkeypress=function(e){
+        e = e || event;
+        if (e.ctrlKey || e.altKey || e.metaKey) return;
+        var chr = String.fromCharCode(e.which);
+        if (chr == null) return;
+        if (chr < '0' || chr > '9') {
+          return false;
+        }
+      }
+    }
   if(localStorage.getItem('reg')){
     var region = 0;
     for (var i=0; i<array.length; i++){

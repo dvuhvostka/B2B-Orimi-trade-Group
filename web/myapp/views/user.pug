@@ -175,6 +175,7 @@ block content
                     p Безнал
                   if (deals_info[i].payment_method=='bill')
                     p Выставлен счет
+                  p Использовано бонусов: #{deals_info[i].bonuses} (Скидка: #{deals_info[i].bonuses/10} руб.)
                   p Итого: #{deals_info[i].final_price}
                   button(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
                   div(id=deals_info[i].id)
@@ -228,9 +229,10 @@ block content
                       option(name='tea' value='tea') Чай
                       option(name='coffee' value='coffee') Кофе
                       option(value='others') Сопутствующие
-                      option(value='horeca') Хорека
+                      option(value='horeca') Хорека Чай
+                      option(value='horeca2') Хорека Кофе
                     .product__type.tea_type.d-none
-                      form(enctype='multipart/form-data')#add_product_form
+                      form(enctype='multipart/form-data')#add_tea_form
                         .tea__form
                           .d-in
                             input(value="add_tea" name='post_type' style="visibility: hidden").form__input.form__input_item_name
@@ -242,19 +244,36 @@ block content
                             input.form__input(name='item_price' required)
                           .d-in
                             label.form__label Брэнд
-                            input.form__input(name='sort' required)
-                            label.text-muted.form__sublabel greenfield, nuri, shah, tess, nila, java, candy, gita
+                            select(name='sort' required)
+                              option(disabled selected value='') Выберите Брэнд
+                              option(value='greenfield') Greenfield
+                              option(value='tess') Tess
+                              option(value='shah') Шах
+                              option(value='nila') Жемчужина Нила
+                              option(value='nuri') Принцесса Нури
+                              option(value='java') Принцесса Ява
+                              option(value='candy') Принцесса Канди
+                              option(value='gita') Принцесса Гита
                           .d-in
                             label.form__label Тип чая
-                            input.form__input(name='about' required)
-                            label.text-muted.form__sublabel black(черный), black_1(черный с добавками), green, green_1, herbal
+                            select(name='about' required)
+                              option(disabled selected value='') Выберите тип чая
+                              option(value='black') Чёрный
+                              option(value='black_1') Чёрный с добавками
+                              option(value='green') Зелёный
+                              option(value='green_1') Зелёный с добавками
+                              option(value='herbal') Гербальный
                           .d-in
                             label.form__label Вес
                             input.form__input(name='weight' required)
                           .d-in
                             label.form__label Упаковка
-                            input.form__input(name='packaging' required)
-                            label.form__sublabel.text-muted box,package,present,capsule
+                            select(name='packaging' required)
+                              option(disabled selected value='') Выберите упаковку
+                              option(value='box') Коробка
+                              option(value='package') Пакет
+                              option(value='present') Подарочная упаковка
+                              option(value='capsule') В капсулах
                           .d-in
                             label.form__label Кол-во пакетиков
                             input.form__input(name='tea_bags' required)
@@ -270,10 +289,10 @@ block content
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
-                            label.form__sublabel.text-muted Изображения товара только в формате .jpeg
+                            label.form__sublabel.text-muted Изображения товара только в формате .jpg
                           button(type='submit').btn.btn-success.btn__form_add Добавить товар
                     .product__type.coffee_type.d-none
-                      form(enctype='multipart/form-data')#add_product_form
+                      form(enctype='multipart/form-data')#add_coffee_form
                         .tea__form
                           .d-in
                             input(style="visibility: hidden" value="add_coffee" name='post_type').form__input.form__input_item_name
@@ -285,19 +304,118 @@ block content
                             input.form__input(name='item_price' required)
                           .d-in
                             label.form__label Брэнд
-                            input.form__input(name='sort' required)
-                            label.text-muted.form__sublabel greenfield, nuri, shah, tess, nila, java, candy, gita
+                            select(name='sort' required)
+                              option(disabled selected value='') Выберите Брэнд
+                              option(value='jardin') Jardin
+                              option(value='jokey') Jokey
+                              option(value='piazza') Piazza del Caffe
                           .d-in
-                            label.form__label Тип чая
-                            input.form__input(name='about' required)
-                            label.text-muted.form__sublabel black(черный), black_1(черный с добавками), green, green_1, herbal
+                            label.form__label Категория
+                            select(name='category' required)
+                              option(disabled selected value='') Выберите категорию
+                              option(value='milled') Молотый
+                              option(value='milled_2') Молотый с ароматом
+                              option(value='cereal_2') Зерновой (светлая обжарка)
+                              option(value='cereal_3') Зерновой (средняя обжарка)
+                              option(value='cereal_4') Зерновой (тёмная обжарка)
                           .d-in
                             label.form__label Вес
                             input.form__input(name='weight' required)
                           .d-in
                             label.form__label Упаковка
-                            input.form__input(name='packaging' required)
-                            label.form__sublabel.text-muted box,package,present,capsule
+                            select(name='packaging' required)
+                              option(disabled selected value='') Выберите упаковку
+                              option(value='glass_jar') Стеклянная банка
+                              option(value='can') Жестяная банка
+                              option(value='soft_pack') Мягкая упаковка
+                              option(value='capsule') В капсулах
+                          .d-in
+                            label.form__label Кол-во в гофра-ящике
+                            input.form__input(name='box_count' required)
+                          .d-in
+                            label.form__label Описание
+                            textarea.form__input(name='description' required)
+                          .d-in
+                            label.form__label Артикул
+                            input.form__input(name='articul' required)
+                          .d-in
+                            label.form__label Фотография
+                            input(type='file' name='documents' multiple required)
+                            label.form__sublabel.text-muted Изображения товара только в формате .jpg
+                          button(type='submit').btn.btn-success.btn__form_add Добавить товар
+                    .product__type.others_type.d-none
+                      form(enctype='multipart/form-data')#add_other_form
+                        .tea__form
+                          .d-in
+                            input(style="visibility: hidden" value="add_other" name='post_type').form__input.form__input_item_name
+                          .d-in
+                            label.form__label Название
+                            input(name='item_name' required).form__input.form__input_item_name
+                          .d-in
+                            label.form__label Цена
+                            input.form__input(name='item_price' required)
+                          .d-in
+                            label.form__label Тип товара
+                            select(name='type' required)
+                              option(disabled selected value='') Выберите тип
+                              option(value='sugar') Сахар
+                          .d-in
+                            label.form__label Кол-во в гофра-ящике
+                            input.form__input(name='box_count' required)
+                          .d-in
+                            label.form__label Описание
+                            textarea.form__input(name='description' required)
+                          .d-in
+                            label.form__label Артикул
+                            input.form__input(name='articul' required)
+                          .d-in
+                            label.form__label Фотография
+                            input(type='file' name='documents' multiple required)
+                            label.form__sublabel.text-muted Изображения товара только в формате .jpg
+                          button(type='submit').btn.btn-success.btn__form_add Добавить товар
+                    .product__type.horeca_type.d-none
+                      form(enctype='multipart/form-data')#add_horeca_tea_form
+                        .tea__form
+                          .d-in
+                            input(value="add_horeca_tea" name='post_type' style="visibility: hidden").form__input.form__input_item_name
+                          .d-in
+                            label.form__label Название
+                            input(name='item_name' required).form__input.form__input_item_name
+                          .d-in
+                            label.form__label Цена
+                            input.form__input(name='item_price' required)
+                          .d-in
+                            label.form__label Брэнд
+                            select(name='sort' required)
+                              option(disabled selected value='') Выберите Брэнд
+                              option(value='greenfield') Greenfield
+                              option(value='tess') Tess
+                              option(value='shah') Шах
+                              option(value='nila') Жемчужина Нила
+                              option(value='nuri') Принцесса Нури
+                              option(value='java') Принцесса Ява
+                              option(value='candy') Принцесса Канди
+                              option(value='gita') Принцесса Гита
+                          .d-in
+                            label.form__label Тип чая
+                            select(name='about' required)
+                              option(disabled selected value='') Выберите тип чая
+                              option(value='black') Чёрный
+                              option(value='black_1') Чёрный с добавками
+                              option(value='green') Зелёный
+                              option(value='green_1') Зелёный с добавками
+                              option(value='herbal') Гербальный
+                          .d-in
+                            label.form__label Вес
+                            input.form__input(name='weight' required)
+                          .d-in
+                            label.form__label Упаковка
+                            select(name='packaging' required)
+                              option(disabled selected value='') Выберите упаковку
+                              option(value='box') Коробка
+                              option(value='package') Пакет
+                              option(value='present') Подарочная упаковка
+                              option(value='capsule') В капсулах
                           .d-in
                             label.form__label Кол-во пакетиков
                             input.form__input(name='tea_bags' required)
@@ -313,10 +431,60 @@ block content
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
-                            label.form__sublabel.text-muted Изображения товара только в формате .jpeg
+                            label.form__sublabel.text-muted Изображения товара только в формате .jpg
                           button(type='submit').btn.btn-success.btn__form_add Добавить товар
-                    .product__type.others_type.d-none
-                    .product__type.horeca_type.d-none
+                    .product__type.horeca2_type.d-none
+                      form(enctype='multipart/form-data')#add_horeca_coffee_form
+                        .tea__form
+                          .d-in
+                            input(style="visibility: hidden" value="add_horeca_coffee" name='post_type').form__input.form__input_item_name
+                          .d-in
+                            label.form__label Название
+                            input(name='item_name' required).form__input.form__input_item_name
+                          .d-in
+                            label.form__label Цена
+                            input.form__input(name='item_price' required)
+                          .d-in
+                            label.form__label Брэнд
+                            select(name='sort' required)
+                              option(disabled selected value='') Выберите Брэнд
+                              option(value='jardin') Jardin
+                              option(value='jokey') Jokey
+                              option(value='piazza') Piazza del Caffe
+                          .d-in
+                            label.form__label Категория
+                            select(name='category' required)
+                              option(disabled selected value='') Выберите категорию
+                              option(value='milled') Молотый
+                              option(value='milled_2') Молотый с ароматом
+                              option(value='cereal_2') Зерновой (светлая обжарка)
+                              option(value='cereal_3') Зерновой (средняя обжарка)
+                              option(value='cereal_4') Зерновой (тёмная обжарка)
+                          .d-in
+                            label.form__label Вес
+                            input.form__input(name='weight' required)
+                          .d-in
+                            label.form__label Упаковка
+                            select(name='packaging' required)
+                              option(disabled selected value='') Выберите упаковку
+                              option(value='glass_jar') Стеклянная банка
+                              option(value='can') Жестяная банка
+                              option(value='soft_pack') Мягкая упаковка
+                              option(value='capsule') В капсулах
+                          .d-in
+                            label.form__label Кол-во в гофра-ящике
+                            input.form__input(name='box_count' required)
+                          .d-in
+                            label.form__label Описание
+                            textarea.form__input(name='description' required)
+                          .d-in
+                            label.form__label Артикул
+                            input.form__input(name='articul' required)
+                          .d-in
+                            label.form__label Фотография
+                            input(type='file' name='documents' multiple required)
+                            label.form__sublabel.text-muted Изображения товара только в формате .jpg
+                          button(type='submit').btn.btn-success.btn__form_add Добавить товар
                 #delete_product.collapse 123123
                 #edit_product.collapse
                   input(type='text' placeholder='Введите артикул').articul
@@ -470,10 +638,9 @@ block content
             });
           }
       }
-      $('#add_product_form').on('submit', function(e) {
+      $('#add_tea_form, #add_coffee_form, #add_other_form, #add_horeca_tea_form, #add_horeca_coffee_form').on('submit', function(e) {
           e.preventDefault();
           var formData = new FormData(this);
-          console.log(this);
           $.ajax({
               type: "POST",
               url: "/user",
@@ -485,7 +652,7 @@ block content
                   alert(r.error);
                 }else{
                   alert("Товар успешно добавлен.");
-                  document.location.href='/user';
+                  document.location.href='/shop';
                 }
               }
             })

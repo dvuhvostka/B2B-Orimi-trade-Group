@@ -90,6 +90,9 @@ select.addEventListener('change',()=>{
         $('.product__type').addClass('d-none');
         $('.'+selectedOption+'_type').removeClass('d-none');
       break;
+    case 'horeca2':
+        $('.product__type').addClass('d-none');
+        $('.'+selectedOption+'_type').removeClass('d-none');
     default:
 
   }

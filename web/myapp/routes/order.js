@@ -52,42 +52,64 @@ function check_cart(cart) {
   }
 }
 
-add_deal_with_bonuses = (data, payment_method, userdata, bonuses, res, region) => {
+add_deal_with_bonuses = (cart, data, userdata, bonuses, res, region) => {
   // console.log(bonuses);
   // console.log(payment_method);
   // console.log(userdata);
   // console.log(data);
+
+var address, payment, bonuses, comments;
+  switch(data.length){
+    case 3: {
+      payment = data[0];
+      address = decodeURI(data[1]);
+      comments = decodeURI(data[2]);
+      bonuses = 0;
+      break;
+    }
+    case 5: {
+        bonuses = data[1];
+        payment = data[2];
+        address = decodeURI(data[3]);
+        comments = decodeURI(data[4]);
+      break;
+    }
+    default: break;
+  }
+
   data.fullcost -= bonuses/10; //Вычли бонусы из цены
-  console.log(data.fullcost);
-  db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact})', {
+  console.log(cart.fullcost);
+  db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact, bonuses, comments) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact}, ${bonuses}, ${comments})', {
     owner_id: userdata[0].id,
     confirmed: 0,
     date: new Date(),
     first_name_owner: userdata[0].username,
     second_name_owner: userdata[0].second_name,
     third_name_owner: userdata[0].third_name,
-    delivery_address: decodeURI(payment_method[0]),
-    final_price: data.fullcost,
-    payment_method: payment_method[1],
-    owner_contact: userdata[0].number
+    delivery_address: address,
+    final_price: cart.fullcost,
+    payment_method: payment,
+    owner_contact: userdata[0].number,
+    bonuses: bonuses,
+    comments: comments
   }).then(function(){
       // Записываем товары.
       if(bonuses){
         db.none("UPDATE users SET balance=balance-"+Math.floor(bonuses)+" WHERE id='"+userdata[0].id+"'");
       }
       db.one('SELECT * FROM deals_info WHERE id=(SELECT MAX(id) FROM deals_info)').then(function(deal){
-        for (var i = 0; i<data.length; i++){
+        for (var i = 0; i<cart.length; i++){
         db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype})',{
-            product: data[i].product,
+            product: cart[i].product,
             deal_owner: userdata[0].id,
-            type: data[i].type,
-            count: data[i].count,
+            type: cart[i].type,
+            count: cart[i].count,
             deal_id: deal.id,
-            sort: data[i].sort,
-            product_id: data[i].id,
-            price_of_one: data[i].price_of_one,
-            full_price: data[i].full_price,
-            subtype: data[i].subtype
+            sort: cart[i].sort,
+            product_id: cart[i].id,
+            price_of_one: cart[i].price_of_one,
+            full_price: cart[i].full_price,
+            subtype: cart[i].subtype
           });
         }
       });
@@ -147,7 +169,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
             }else{
               if(isInteger(bonuses)){
                 if(min_price>=2000){
-                  switch(payment_method){
+                  switch(payment_method[2]){
                     case 'nal': break;
                     case 'beznal': console.log("ONLINE PAYMENT METHOD");break;
                     case 'bill': break;
@@ -337,22 +359,27 @@ check_formdata = (formdata, cart, res, userId, region) => {
     var pa = parsed_args[i].split('=');
     array.push(pa[1]);
   }
+
+  var pattern = /<|>|src|script/g;
   switch(array.length){
     case 3:{
+      array[1] = array[1].replace(pattern, "");
+      array[2] = array[2].replace(pattern, "");
       // ЕСЛИ ПОЛЬЗОВАТЕЛЬ НЕ ИСПОЛЬЗУЕТ БОНУСЫ ДЛЯ ОПЛАТЫ.
       get_cart_cost(cart, res , "without_bonus", 0, userId, array, region);
       console.log('WITHOUT BONUSES');
-      switch (array[1]) {
+      switch (array[0]) {
         case 'beznal': console.log("ONLINE PAYMENT METHOD"); break; //ПЕРЕНАПРАВЛЯЕМ КЛИЕНТА НА ОНЛАЙН КАССУ
         default: break;
       }
-
       break;
     }
-    case 4:{
+    case 5:{
+      array[3] = array[3].replace(pattern, "");
+      array[4] = array[4].replace(pattern, "");
       // ЕСЛИ ПОЛЬЗОВАТЕЛЬ ПОСТАВИЛ ГАЛОЧКУ ИСПОЛЬЗОВАТЬ БОНУСЫ - ПРОВЕРЯЕМ ИХ НАЛИЧИЕ.
-      get_cart_cost(cart, res , "check_bonus_with_cost", array[2], userId, array, region);
-      console.log('WITH BONUSES: '+array[2]);
+      get_cart_cost(cart, res , "check_bonus_with_cost", array[1], userId, array, region);
+      console.log('WITH BONUSES: '+array[1]);
       break;
     }
     default: break;
