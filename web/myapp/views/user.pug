@@ -230,7 +230,7 @@ block content
                       option(value='others') Сопутствующие
                       option(value='horeca') Хорека
                     .product__type.tea_type.d-none
-                      form(enctype='multipart/form-data')#add_tea_form
+                      form(enctype='multipart/form-data').add_product_form
                         .tea__form
                           .d-in
                             input(value="add_tea" name='post_type' style="visibility: hidden").form__input.form__input_item_name
@@ -273,7 +273,7 @@ block content
                             label.form__sublabel.text-muted Изображения товара только в формате .jpeg
                           button(type='submit').btn.btn-success.btn__form_add Добавить товар
                     .product__type.coffee_type.d-none
-                      form(enctype='multipart/form-data')#add_coffee_form
+                      form(enctype='multipart/form-data').add_product_form
                         .tea__form
                           .d-in
                             input(style="visibility: hidden" value="add_coffee" name='post_type').form__input.form__input_item_name
@@ -470,7 +470,7 @@ block content
             });
           }
       }
-      $('#add_tea_form').on('submit', function(e) {
+      $('.add_product_form').on('submit', function(e) {
           e.preventDefault();
           var formData = new FormData(this);
           $.ajax({
@@ -481,31 +481,12 @@ block content
               contentType: false,
               success: function(r){
                 if(r.ok == false){
-                  console.log(r.error);
+                  alert(r.error);
                 }else{
-                  console.log(r);
+                  alert("Товар успешно добавлен.");
                 }
               }
             })
-        });
-        
-      $('#add_coffee_form').on('submit', function(e) {
-          e.preventDefault();
-          var formData = new FormData(this);
-          $.ajax({
-              type: "POST",
-              url: "/user",
-              data: formData,
-              processData: false,
-              contentType: false,
-              success: function(r){
-                if(r.ok == false){
-                  console.log(r.error);
-                }else{
-                  console.log(r);
-                }
-              }
-            });
         });
     
     

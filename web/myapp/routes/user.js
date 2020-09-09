@@ -80,6 +80,16 @@ var storage = multer.diskStorage({
           cb(null, fls.length+1 + path.extname(file.originalname));
         break;
       }
+      case "add_horeca": {
+          var fls = fs.readdirSync('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul+'/');
+          cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
+      case "add_other": {
+          var fls = fs.readdirSync('./public/images/store_prods/other/'+req.body.type+'/'+req.body.articul+'/');
+          cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
       default: {
           cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
         break;
@@ -93,10 +103,48 @@ var upload = multer({
   limits: {fileSize: 5 * 1024 * 1024},
   fileFilter: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    if (ext!='.jpg'&&ext!='.jpeg'&&ext!='.png'){
-      const err = new Error('Extension');
-      err.code = "EXTENSION";
-      return cb(err);
+
+    switch(req.body.post_type){
+        case "add_tea": {
+          if (ext!='.jpg'){
+            const err = new Error('Extension');
+            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            return cb(err);
+          }
+        break;
+      }
+      case "add_coffee": {
+          if (ext!='.jpg'){
+            const err = new Error('Extension');
+            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            return cb(err);
+          }
+        break;
+      }
+      case "add_horeca": {
+          if (ext!='.jpg'){
+            const err = new Error('Extension');
+            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            return cb(err);
+          }
+        break;
+      }
+      case "add_other": {
+          if (ext!='.jpg'){
+            const err = new Error('Extension');
+            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            return cb(err);
+          }
+        break;
+      }
+      default: {
+          if (ext!='.jpg'&&ext!='.jpeg'&&ext!='.png'){
+            const err = new Error('Extension');
+            err.code = "EXTENSION";
+            return cb(err);
+          }
+        break;
+      }
     }
     cb(null, true);
   }
