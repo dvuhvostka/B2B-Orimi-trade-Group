@@ -108,7 +108,7 @@ var upload = multer({
         case "add_tea": {
           if (ext!='.jpg'){
             const err = new Error('Extension');
-            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            err.code = "Изображения товара только в формате .jpg";
             return cb(err);
           }
         break;
@@ -116,7 +116,7 @@ var upload = multer({
       case "add_coffee": {
           if (ext!='.jpg'){
             const err = new Error('Extension');
-            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            err.code = "Изображения товара только в формате .jpg";
             return cb(err);
           }
         break;
@@ -124,7 +124,7 @@ var upload = multer({
       case "add_horeca": {
           if (ext!='.jpg'){
             const err = new Error('Extension');
-            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            err.code = "Изображения товара только в формате .jpg";
             return cb(err);
           }
         break;
@@ -132,7 +132,7 @@ var upload = multer({
       case "add_other": {
           if (ext!='.jpg'){
             const err = new Error('Extension');
-            err.code = "Изображения товара только в формате .jpg или .jpeg";
+            err.code = "Изображения товара только в формате .jpg";
             return cb(err);
           }
         break;
@@ -150,9 +150,6 @@ var upload = multer({
   }
 }).any();
 
-
-addProductTea = () => {
-}
 
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
@@ -406,6 +403,13 @@ user.route('/user')
             });
           }else if(err.code == 'LIMIT_FILE_SIZE'){
             error = 'Слишком большой файл. Допустимо не более 5 м/байт.';
+            console.log(error);
+            res.json({
+              ok: !error,
+              error
+            });
+          }else if(err.code == "Изображения товара только в формате .jpg"){
+            error = 'Изображения товара только в формате .jpg';
             console.log(error);
             res.json({
               ok: !error,
