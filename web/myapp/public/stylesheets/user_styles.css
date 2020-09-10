@@ -167,7 +167,7 @@ p.title {
 }
 
 #balance_wrap {
-  margin: 10px 0 0 25px;
+  margin: 10px 25px 0 25px;
   display: flex;
   flex-direction: column;
 }
@@ -245,4 +245,17 @@ margin: 5px 0 0 0;
 #ready_doc {
   margin-left: 30px;
 }
+
+.header {
+  text-align: center;
+}
+.sale__item {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+.item__info {
+  text-align: center;
+}
+
 /* ----------- */

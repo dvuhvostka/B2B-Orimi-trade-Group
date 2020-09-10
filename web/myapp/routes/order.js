@@ -151,7 +151,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
 
       db.any(getuserbalance_sql).then(function(balance_response){
         if(balance_response[0].balance>=bonuses){
-          if(bonuses>data.fullcost){
+          if(bonuses/10>data.fullcost){
             var error = "ERROR_BONUS_COUNT"; //Пользователь прислал пустую корзину
             res.json({
               ok: false,

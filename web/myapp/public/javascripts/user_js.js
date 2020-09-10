@@ -38,10 +38,8 @@ $.fn.setCursorPosition = function(pos) {
   }
 };
 $(function($){
-  $.mask.definitions['r'] = "[а-яА-яЁё]";
   $("#inn").click(function(){
     $(this).setCursorPosition(0);
   }).mask("9999999999",{autoclear: false, placeholder: ''});
-  $("#phone_input").mask("9999",{placeholder: '_'});
 });
 document.addEventListener('DOMContentLoaded', ready);

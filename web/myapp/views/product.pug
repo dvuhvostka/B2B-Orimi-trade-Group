@@ -130,16 +130,17 @@ block content
                 p Капсулы
     #price_product
       #price_wrap
-        span.in
-          #span_change #{products[0].item_price}
-          span
-            i.fas.fa-ruble-sign
-        .range_items
-          button(class='btn btn-secondary minus')
-            i.fas.fa-minus.controls
-          input(type='text' value='1' class='input')
-          button(class='btn btn-secondary plus')
-            i.fas.fa-plus.controls
+        .amount 
+          span.in.price__total
+            #span_change #{products[0].item_price}
+            span
+              i.fas.fa-ruble-sign
+          .range_items
+            button(class='btn btn-secondary minus')
+              i.fas.fa-minus.controls
+            input(type='text' value='1' class='input')
+            button(class='btn btn-secondary plus')
+              i.fas.fa-plus.controls
         if (products[0].subtype)
           button(data-id=products[0].id type=products[0].subtype).btn.btn-primary#addtocart Добавить в корзину
         else
@@ -177,7 +178,6 @@ block content
             a(href="https://jardincoffee.com/views/home" target='_blank')
               img(src="../logos/"+products[0].sort+".png")
       #sen
-        div
-          h5 Описание
-          p #{products[0].description}
+        h5.header Описание
+        p #{products[0].description}
   script(src='../product.js')

@@ -183,32 +183,41 @@ block content
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
         #balance_wrap
           .in
-            p Ваш баланс составляет: 
-            p #{balance}
-              i.fas.fa-ruble-sign.rub
+            p Ваш бонусный баланс составляет: 
+            p #{balance} б.
+            span.text-muted (10 бонусов = 1 рубль)
+          .sales__block
+            h4.sales__block__header.header Участие в акциях
           if (type=='ur_type' && org_info==2)
             div#link_code_wrap Код для продавцов
               .in
                 input(type="text" id="link_code" value=""+info.link_code+"" )
                 button.btn.btn-primary(onclick="copylinkcode()") Копировать
-          if (type=='phys_type' && !link_code)
-            a#code_link(data-toggle='collapse' href='#code' aria-expanded='false' aria-controls='code').btn.btn-info Участие в акции для продавцов
-            #code.collapse.in
-              p Введите код организации:
-              input#code_input(type='text' required)
-              button.btn.btn-success#code_btn Подтвердить
-          else if (link_code)
-            .in
-              p.text-success Вы участвуете в акции для продавцов!
-              a.text-info(href='/sales') Подробнее об акции
-            .in
-              p Ваш код:
-              p #{link_code}
-            .in
-              p Организация: 
-              p #{attached_org.org_name}
-            .in
-              button#leave_org Покинуть организацию
+            .sale__item
+              h5.item__header.header Поддержи ассортимент
+              a(href='/sales/weekly' target='_blank').item__info Подробнее об акции
+            .sale__item
+              h5.item__header.header Кофемашина BORK
+              a(href='/sales/capsule' target='_blank').item__info Подробнее об акции
+          if (type=='phys_type')
+            if (!link_code)
+              a#code_link(data-toggle='collapse' href='#code' aria-expanded='false' aria-controls='code').btn.btn-info Участие в акции для продавцов
+              #code.collapse.in
+                p Введите код организации:
+                input#code_input(type='text' required)
+                button.btn.btn-success#code_btn Подтвердить
+            else if (link_code)
+              .in
+                p.text-success Вы участвуете в акции для продавцов!
+                a.text-info(href='/sales/') Подробнее об акции
+              .in
+                p Ваш код:
+                p #{link_code}
+              .in
+                p Организация: 
+                p #{attached_org.org_name}
+              .in
+                button.btn.btn-danger#leave_org Покинуть организацию
       if (permissions=='mod')
         .tab-pane.fade#nav-mod.panel(role='tabpanel' area-labelledby='nav-mod-tab')
           nav.mod__nav
@@ -244,7 +253,7 @@ block content
                             input.form__input(name='item_price' required)
                           .d-in
                             label.form__label Брэнд
-                            select(name='sort' required)
+                            select(name='sort' required).form__input
                               option(disabled selected value='') Выберите Брэнд
                               option(value='greenfield') Greenfield
                               option(value='tess') Tess
@@ -256,7 +265,7 @@ block content
                               option(value='gita') Принцесса Гита
                           .d-in
                             label.form__label Тип чая
-                            select(name='about' required)
+                            select(name='about' required).form__input
                               option(disabled selected value='') Выберите тип чая
                               option(value='black') Чёрный
                               option(value='black_1') Чёрный с добавками
@@ -268,7 +277,7 @@ block content
                             input.form__input(name='weight' required)
                           .d-in
                             label.form__label Упаковка
-                            select(name='packaging' required)
+                            select(name='packaging' required).form__input
                               option(disabled selected value='') Выберите упаковку
                               option(value='box') Коробка
                               option(value='package') Пакет

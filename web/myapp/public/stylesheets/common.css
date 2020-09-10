@@ -30,6 +30,7 @@ nav {
 
 footer {
   max-height: 20vh;
+  margin: 30px 0;
 }
 /* navbar styles */
 .navbar-collapse>* {
@@ -76,7 +77,7 @@ ul {
   color: black;
 }
 
-@media (max-width: 425px){
+@media (max-width: 990px){
   .info a {
     text-align: center;
   }
@@ -84,11 +85,24 @@ ul {
   .btn-help {
     margin: 10px 0;
     width: 100%;
+    max-width: 290px;
   }
 }
 @media (max-width: 768px){
   .info a {
     text-align: center;
-  }  
+  }
+}
+
+@media (max-width: 320px){
+  .navbar-brand {
+    font-size: 0.83em;
+  }
+}
+
+@media (max-width: 425px){
+  .navbar-brand {
+    font-size: 0.9em;
+  }
 }
 /* ------------- */

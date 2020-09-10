@@ -22,7 +22,19 @@ function showModalCity(mssg){
   input_range_price.addEventListener('change', function(){
     range_price.value = input_range_price.value;
   });
+  range_price.addEventListener('touchmove', function(){
+    input_range_price.value = range_price.value;
+  });
+  range_price.addEventListener('touchend', function(){
+    input_range_price.value = range_price.value;
+  });
   range_weight.addEventListener('mousemove', function(){
+    input_range_weight.value = range_weight.value;
+  });
+  range_weight.addEventListener('touchmove', function(){
+    input_range_weight.value = range_weight.value;
+  });
+  range_weight.addEventListener('touchend', function(){
     input_range_weight.value = range_weight.value;
   });
   input_range_weight.addEventListener('change', function(){
