@@ -141,10 +141,10 @@ block content
           span.sr-only Loading...
         #deals.d-none
           if (deals == 0)
-          if(permissions=='mod')
-            a(href='/deals') Все сделки
-          else
-            p.title У вас нет совершенных сделок!
+            if(permissions=='mod')
+              a(href='/deals') Все сделки
+            else
+              p.title У вас нет совершенных сделок!
           else
             if(permissions=='mod')
               a(href='/deals') Все сделки
