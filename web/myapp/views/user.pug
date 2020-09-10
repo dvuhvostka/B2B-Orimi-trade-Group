@@ -143,7 +143,9 @@ block content
           if (deals == 0)
             p.title У вас нет совершенных сделок!
           else
-            if (permissions=='user') 
+            if(permissions=='mod')
+              a(href='/deals') Все сделки
+            else
               p.title Ваши сделки (#{deals.length} шт.)
               -for (var i=0; i<deals.length; i++)
                 a(href='#').title № #{deals[i].id}
@@ -152,39 +154,18 @@ block content
                   -for (var x=0; x<deals[i].length; x++)
                     - final_sum = Number(final_sum) + Number(deals[i][x].split(':')[6])
                     .in.deal
-                      img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+".jpg")
+                      if(deals[i][x].split(':')[7]!=0)
+                        img(src="/store_prods/"+deals[i][x].split(':')[7]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+"/1.jpg")
+                      else
+                        img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+"/1.jpg")
                       a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1] } шт. -  (#{deals[i][x].split(':')[6]}р.)
                   p Итоговая стоимость: #{final_sum}
-            else
-                -for(var i=0; i<deals_info.length; i++)
-                  p 
-                    b № #{deals_info[i].id}
-                  p
-                    b #{deals_info[i].date}
-                  p #{deals_info[i].owner_id}
-                  if (deals_info[i].confirmed==0)
-                    p Не подтверждена
-                  else 
-                    p Подтверждена
-                  p #{deals_info[i].second_name_owner} #{deals_info[i].first_name_owner} #{deals_info[i].third_name_owner}
-                  p #{deals_info[i].delivery_address} 
-                  p #{deals_info[i].owner_contact} 
-                  if (deals_info[i].payment_method=='nal')
-                    p Наличные
-                  if (deals_info[i].payment_method=='beznal')
-                    p Безнал
-                  if (deals_info[i].payment_method=='bill')
-                    p Выставлен счет
-                  p Использовано бонусов: #{deals_info[i].bonuses} (Скидка: #{deals_info[i].bonuses/10} руб.)
-                  p Итого: #{deals_info[i].final_price}
-                  button(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
-                  div(id=deals_info[i].id)
                   
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
         #balance_wrap
           .in
-            p Ваш бонусный баланс составляет: 
-            p #{balance} б.
+            p Ваш бонусный баланс: 
+            p #{balance} &#8194;
             span.text-muted (10 бонусов = 1 рубль)
           .sales__block
             h4.sales__block__header.header Участие в акциях

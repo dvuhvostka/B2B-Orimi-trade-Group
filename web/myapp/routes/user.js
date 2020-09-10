@@ -200,7 +200,7 @@ user.route('/user')
           var d_data = [];
           for (var x = 0; x<data.length; x++){
             if(!dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id] = []; dealsdata[data[x].deal_id].id = data[x].deal_id; dealsdata[data[x].deal_id].deal_owner = data[x].deal_owner;}
-            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].product_id+":"+data[x].sort+":"+data[x].type+":"+data[x].price_of_one+":"+data[x].full_price)}
+            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].articul+":"+data[x].sort+":"+data[x].type+":"+data[x].price_of_one+":"+data[x].full_price+":"+data[x].subtype)}
           }
           for(key in dealsdata){
             d_data.push(dealsdata[key]);

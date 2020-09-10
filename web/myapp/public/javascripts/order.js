@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.onload = function(){
+  var region,reg;
   var input_check = $('.sym_none');
     for(let each of input_check){
       each.onkeypress=function(e){
@@ -58,11 +59,11 @@ window.onload = function(){
       }
     }
   if(localStorage.getItem('reg')){
-    var region = 0;
+    region = localStorage.getItem('reg');
     for (var i=0; i<array.length; i++){
-      if (array[i].id == localStorage.getItem('reg')) region = array[i].text;
+      if (array[i].id == region) reg = array[i].text;
     }
-    $('#input_addr').val(region+', ');
+    $('#input_addr').val(reg+', ');
   }
   $('.checkbox_bonuses').on('change',()=>{
     if ($('.checkbox_bonuses').prop('checked')){
@@ -76,15 +77,11 @@ window.onload = function(){
     e.preventDefault();
     var region = 0;
 
-    if(localStorage.getItem('reg')){
-      region = localStorage.getItem('reg');
-    }
-
     if(localStorage.getItem('cart')){
       $.ajax({
         type: 'POST',
         url: '/order',
-        data: {post_type: "delivery_info", formdata: $('#delivery_info').serialize(), cart: localStorage.getItem('cart'), region},
+        data: {post_type: "delivery_info", formdata: $('#delivery_info').serialize(), cart: localStorage.getItem('cart'), region: localStorage.getItem('reg')},
         success: function(r){
           switch(r.ok){
             case true: alert(r.message); localStorage.removeItem('cart'); window.location.href='/shop'; break;

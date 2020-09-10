@@ -79,7 +79,7 @@ var address, payment, bonuses, comments;
 
   data.fullcost -= bonuses/10; //Вычли бонусы из цены
   console.log(cart.fullcost);
-  db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact, bonuses, comments) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact}, ${bonuses}, ${comments})', {
+  db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact, bonuses, comments, timestamp, region) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact}, ${bonuses}, ${comments}, ${timestamp}, ${region})', {
     owner_id: userdata[0].id,
     confirmed: 0,
     date: new Date(),
@@ -91,7 +91,9 @@ var address, payment, bonuses, comments;
     payment_method: payment,
     owner_contact: userdata[0].number,
     bonuses: bonuses,
-    comments: comments
+    comments: comments,
+    timestamp: Date.now(),
+    region: region
   }).then(function(){
       // Записываем товары.
       if(bonuses){
@@ -99,7 +101,7 @@ var address, payment, bonuses, comments;
       }
       db.one('SELECT * FROM deals_info WHERE id=(SELECT MAX(id) FROM deals_info)').then(function(deal){
         for (var i = 0; i<cart.length; i++){
-        db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype})',{
+        db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype, articul) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype}, ${articul})',{
             product: cart[i].product,
             deal_owner: userdata[0].id,
             type: cart[i].type,
@@ -109,10 +111,17 @@ var address, payment, bonuses, comments;
             product_id: cart[i].id,
             price_of_one: cart[i].price_of_one,
             full_price: cart[i].full_price,
-            subtype: cart[i].subtype
+            subtype: cart[i].subtype,
+            articul: cart[i].articul
+          }).catch(error=>{
+            console.log(error);
           });
         }
+      }).catch(error => {
+        console.log(error);
       });
+  }).catch(error =>{
+    console.log(error);
   });
   var message = 'SUCCESS';
   res.json({
@@ -284,6 +293,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                           cart[i].sort = data.tea[x].sort;
                           cart[i].product = data.tea[x].item_name;
                           cart[i].subtype = 0;
+                          cart[i].articul = data.tea[x].articul;
                           fullcost += cart[i].full_price;
                         }
                       }
@@ -299,6 +309,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                          cart[i].sort = data.coffee[x].sort;
                          cart[i].product = data.coffee[x].item_name;
                          cart[i].subtype = 0;
+                         cart[i].articul = data.coffee[x].articul;
                          fullcost += cart[i].full_price;
                        }
                      }
@@ -315,6 +326,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                          cart[i].sort = data.horeca[x].sort;
                          cart[i].product = data.horeca[x].item_name;
                          cart[i].subtype = 'horeca';
+                         cart[i].articul = data.horeca[x].articul;
                          fullcost += cart[i].full_price;
                        }
                      }
@@ -330,6 +342,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                          cart[i].product = data.others[x].item_name;
                          cart[i].subtype = 0;
                          cart[i].sort = data.others[x].sort;
+                         cart[i].articul = data.others[x].articul;
                          fullcost += cart[i].full_price;
                        }
                      }
@@ -409,6 +422,7 @@ router.route('/order')
           if(req.body.cart!=''){
             var cart = JSON.parse(req.body.cart); // Получаем корзину
             var mycart = check_cart(cart); // Парсим и проверяем корзину
+            console.log(req.body);
             get_cart_cost(mycart, res, "ajax", 0, req.session.userId, req.body.region);
           }else{
             var error = "ERROR_CART_EMPTY";
