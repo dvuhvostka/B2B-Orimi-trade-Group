@@ -25,6 +25,7 @@ router.route('/deals')
           isRegistred: userinfo.user_id,
           title: 'Фирменный магазин Орими-трэйд',
           needFooter: false,
+          deals_info: 0
           });
       }else{
         res.redirect('/shop');
@@ -63,7 +64,7 @@ router.route('/deals')
             isRegistred: userinfo.user_id,
             title: 'Фирменный магазин Орими-трэйд',
             needFooter: false,
-            deals_info: deals
+            deals_info: deals,
             });
         });
       }else{

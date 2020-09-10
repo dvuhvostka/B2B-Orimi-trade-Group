@@ -25,8 +25,8 @@ block content
       option(value='2') Завершенные
     button(type='submit') Показать
   .container
-    if (deals_info==0)
-      p Ничего не найдено
+    if ((deals_info==0))
+        p Ничего не найдено
     else
     -for(var i=0; i<deals_info.length; i++)
       p 
