@@ -154,6 +154,44 @@ router.route('/add')
                   })
                 }
               } break;
+              case 'get_org_info': {
+                var sql = `SELECT * FROM organizations WHERE owner_id='`+req.body.id+`'`;
+                db.any(sql).then((orgs)=> {
+                  var sql_user = `SELECT * FROM users WHERE id='`+orgs[0].owner_id+`'`;
+                  db.one(sql_user).then((user) => {
+                    console.log(orgs);
+                    console.log(user);
+                    res.json({
+                      ok: true,
+                      data: orgs[0],
+                      user_info: user,
+                    });
+                  });
+                })
+                .catch((error)=>{
+                  res.json({
+                    ok:false,
+                    error
+                  })
+                });
+              }
+                break;
+              case 'delete_org':{
+                console.log(req.body);
+                var sql = `DELETE from requests_from_organizations where org_id='`+req.body.org_id+`' and id='`+req.body.req_id+`'`;
+                db.none(sql).then(()=>{
+                  res.json({
+                    ok:true,
+                  });
+                }).catch((error)=>{
+                  console.log(error);
+                  res.json({
+                    ok:false,
+                    error
+                  });
+                });
+              }
+              break;
               default: res.send('POST');
             }
             };

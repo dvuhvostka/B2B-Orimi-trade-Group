@@ -222,24 +222,28 @@ user.route('/user')
                     uncorgs[i].docs = fls;
                   }
                 db.any(`SELECT * FROM deals_info`).then(function(deals_info){
-                  res.render('user',{
-                    title: "Аккаунт",
-                    isRegistred: req.session.userId,
-                    user_name: response.rows[0].username,
-                    user_second_name: response.rows[0].second_name,
-                    user_third_name: response.rows[0].third_name,
-                    number: response.rows[0].number,
-                    phone_confirmed: response.rows[0].phone_confirmed,
-                    type: response.rows[0].client_type,
-                    permissions: response.rows[0].permissions,
-                    balance: response.rows[0].balance,
-                    org_info: org_info,
-                    info: info,
-                    deals: d_data,
-                    deals_info: deals_info,
-                    uncorgs: uncorgs,
-                    link_code: response.rows[0].link_code,
-                    attached_org: attachedorg
+                  db.any(`SELECT * FROM requests_from_organizations`).then((requests)=>{
+                    console.log(requests);
+                    res.render('user',{
+                      title: "Аккаунт",
+                      isRegistred: req.session.userId,
+                      user_name: response.rows[0].username,
+                      user_second_name: response.rows[0].second_name,
+                      user_third_name: response.rows[0].third_name,
+                      number: response.rows[0].number,
+                      phone_confirmed: response.rows[0].phone_confirmed,
+                      type: response.rows[0].client_type,
+                      permissions: response.rows[0].permissions,
+                      balance: response.rows[0].balance,
+                      org_info: org_info,
+                      info: info,
+                      deals: d_data,
+                      deals_info: deals_info,
+                      uncorgs: uncorgs,
+                      link_code: response.rows[0].link_code,
+                      attached_org: attachedorg,
+                      requests: requests
+                    });
                   });
                 });
               }).catch(error => {

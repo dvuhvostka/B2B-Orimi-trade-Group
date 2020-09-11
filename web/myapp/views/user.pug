@@ -81,7 +81,7 @@ block content
                     var textarea = $('textarea');
                     switch(value){
                       case 'oborud':
-                        textarea.val('В наше заведение требуется ваше фирменное оборудрвание');
+                        textarea.val('В наше заведение требуется ваше фирменное оборудование');
                       break;
                       case 'visit':
                         textarea.val('Нам требуется визит Вашего торгового представителя');
@@ -530,7 +530,19 @@ block content
                       img(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
                   button(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
                   button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
-            .tab-pane.fade#nav-mod-request(role='tabpanel' aria-labelledby='nav-mod-request').mod__content__item ЗАПРОСЫ ОТ ФИРМ
+            .tab-pane.fade#nav-mod-request(role='tabpanel' aria-labelledby='nav-mod-request').mod__content__item
+              .request__wrap
+                h4.header Запросы от фирм
+                - for (var i = 0; i < requests.length; i++)
+                  .requets__item
+                    h5.request__headder Обращение №
+                      span.request__id #{requests[i].id}
+                    label.request__org_id_wrap Организация: 
+                      span.request__org_id #{requests[i].org_id}
+                    p.request__text Текст запроса: #{requests[i].request}
+                    .request__btns
+                      button.btn.btn-primary.btn__request_info Подробнее об организации
+                      button.btn.btn-danger.btn__request_delete Удалить запрос
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
   if (permissions=='mod')
     script(src='moder.js')

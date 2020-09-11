@@ -97,3 +97,49 @@ select.addEventListener('change',()=>{
 
   }
 })
+
+$('.btn__request_info').on('click', function(){
+  var org_id = $(this).parent().siblings('.request__org_id_wrap').children('.request__org_id').html()
+  console.log(org_id);
+  $.ajax({
+    type: 'POST',
+    url: '/add',
+    data: {
+      post_type: 'get_org_info',
+      id: org_id,
+    },
+    success: (res) => {
+      if (res.ok){
+        var result = 'Имя организации: '+res.data.org_name+'\nИмя владельца: '
+        +res.data.owner_name+'\nФамилия владельца: '+res.data.owner_sname+
+        '\nОтчество владельца: '+res.data.owner_tname+'\nЭлектронная почта: '
+        +res.user_info.email+'\nТелефон: '+res.user_info.number;
+        alert(result);
+      }else {
+        alert('Внутренняя ошибка');
+      }
+    }
+  });
+});
+
+$('.btn__request_delete').on('click', function(){
+  var org1_id = $(this).parent().siblings('.request__org_id_wrap').children('.request__org_id').html();
+  var request_id = $(this).parent().siblings('.request__headder').children('.request__id').html();
+  $.ajax({
+    type: 'POST',
+    url: '/add',
+    data: {
+      post_type: 'delete_org',
+      org_id: org1_id,
+      req_id: request_id,
+    },
+    success: (res) => {
+      if (res.ok){
+        alert("Обращение удалено!");
+        document.location.reload();
+      } else {
+        alert("Внутренняя ошибка, повторите позже"+res.error);
+      }
+    }
+  });
+})
