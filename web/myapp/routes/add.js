@@ -57,6 +57,32 @@ router.route('/add')
                 });
                 break;
               }
+              case 'delete_deal': {
+                let del_deal_sql_1 = `DELETE FROM deals_info WHERE id='`+req.body.deal_id+`'`;
+                let del_deal_sql_2 = `DELETE FROM deals WHERE deal_id='`+req.body.deal_id+`'`;
+                db.none(del_deal_sql_1);
+                db.none(del_deal_sql_2);
+                res.json({
+                  ok: true
+                });
+                break;
+              }
+              case 'confirm_deal': {
+                let del_deal_sql_1 = `UPDATE deals_info SET confirmed=1 WHERE id='`+req.body.deal_id+`'`;
+                db.none(del_deal_sql_1);
+                res.json({
+                  ok: true
+                });
+                break;
+              }
+              case 'end_deal': {
+                let del_deal_sql_1 = `UPDATE deals_info SET confirmed=2 WHERE id='`+req.body.deal_id+`'`;
+                db.none(del_deal_sql_1);
+                res.json({
+                  ok: true
+                });
+                break;
+              }
               case 'getItem':
               var item_sql_tea = `SELECT * FROM tea WHERE articul=$1`;
               var item_sql_coffee = `SELECT * FROM coffee WHERE articul=$1`;

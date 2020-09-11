@@ -29,28 +29,35 @@ block content
         p Ничего не найдено
     else
     -for(var i=0; i<deals_info.length; i++)
-      p 
-        b № #{deals_info[i].id}
-      p
-        b #{deals_info[i].date}
-      p #{deals_info[i].owner_id}
-      if (deals_info[i].confirmed==0)
-        p Не подтверждена
-      else 
-        p Подтверждена
-      p #{deals_info[i].second_name_owner} #{deals_info[i].first_name_owner} #{deals_info[i].third_name_owner}
-      p #{deals_info[i].delivery_address} 
-      p #{deals_info[i].owner_contact} 
-      if (deals_info[i].payment_method=='nal')
-        p Наличные
-      if (deals_info[i].payment_method=='beznal')
-        p Безнал
-      if (deals_info[i].payment_method=='bill')
-        p Выставлен счет
-      p Использовано бонусов: #{deals_info[i].bonuses} (Скидка: #{deals_info[i].bonuses/10} руб.)
-      p Итого: #{deals_info[i].final_price}
-      button(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
       div(id=deals_info[i].id)
+        p 
+          b № #{deals_info[i].id}
+        p
+          b #{deals_info[i].date}
+        p #{deals_info[i].owner_id}
+        p #{deals_info[i].second_name_owner} #{deals_info[i].first_name_owner} #{deals_info[i].third_name_owner}
+        p #{deals_info[i].delivery_address} 
+        p #{deals_info[i].owner_contact} 
+        if (deals_info[i].payment_method=='nal')
+          p Наличные
+        if (deals_info[i].payment_method=='beznal')
+          p Безнал
+        if (deals_info[i].payment_method=='bill')
+          p Выставлен счет
+        p Использовано бонусов: #{deals_info[i].bonuses} (Скидка: #{deals_info[i].bonuses/10} руб.)
+        p Итого: #{deals_info[i].final_price}
+        if (deals_info[i].confirmed==0)
+          p Не подтверждена
+          button(deal_id=deals_info[i].id)#confirmDeal Подтвердить
+          button(deal_id=deals_info[i].id)#deleteDeal Удалить
+        else if(deals_info[i].confirmed==1)
+          p Подтверждена
+          button(deal_id=deals_info[i].id)#endDeal Завершить
+          button(deal_id=deals_info[i].id)#deleteDeal Удалить
+        else
+          p Завершена
+        button(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
+        div(id=deals_info[i].id)
       
     script.
       function showattachment(deal_id){
@@ -68,3 +75,40 @@ block content
           });
         }
       }
+      $('#deleteDeal').on('click', function(){
+          var item = $(this);
+          var deal_id = item.attr('deal_id');
+          $.post("/add",{post_type: "delete_deal", deal_id: deal_id}, (data)=>{
+              console.log("123");
+              var foo = $('#'+deal_id);
+              foo.detach();
+              alert('Сделка № '+deal_id+' успешно удалена');
+          });
+        });
+      $('#confirmDeal').on('click', function(){
+          var item = $(this);
+          var deal_id = item.attr('deal_id');
+          $.post("/add",{post_type: "confirm_deal", deal_id: deal_id}, (data)=>{
+              
+              if(data.ok){
+                var foo = $('#'+deal_id);
+                foo.detach();
+                alert('Сделка № '+deal_id+' успешно переведена в статус "ПОДТВЕРЖДЕНО"');
+              }else{
+                alert('Ошибка, попробуйте позже или свяжитесь с администрацией');
+              }
+          });
+        });
+      $('#endDeal').on('click', function(){
+          var item = $(this);
+          var deal_id = item.attr('deal_id');
+          $.post("/add",{post_type: "end_deal", deal_id: deal_id}, (data)=>{
+            if(data.ok){
+              var foo = $('#'+deal_id);
+              foo.detach();
+              alert('Сделка № '+deal_id+' успешно завершена');
+            }else{
+              alert('Ошибка, попробуйте позже или свяжитесь с администрацией');
+            }
+          });
+        });
