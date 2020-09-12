@@ -8,22 +8,22 @@ block content
   p Фильтры:
   form(action='/deals' method='POST')#showDeals
     label Регион:
-    select(name='city')
+    select(name='city')#city
       option(value='78') Санкт-Петербург и обл.
       option(value='77') Москва и обл.
       option(value='all') Все
     label Время:
-    select(name='time')
+    select(name='time')#time
       option(value='86400000') За сутки
       option(value='604800000') За неделю
       option(value='2592000000') За 30 дней
       option(value='all') За все время
     label Статус:
-    select(name='confirmed')
+    select(name='confirmed')#confirmed
       option(value='0') Не подтвержденные
       option(value='1') Подтвержденные
       option(value='2') Завершенные
-    button(type='submit') Показать
+    button(type='submit')#showDeals Показать
   .container
     if ((deals_info==0))
         p Ничего не найдено
@@ -60,6 +60,14 @@ block content
         div(id=deals_info[i].id)
       
     script.
+      if(localStorage.getItem('city')!=0){
+        var val1 = localStorage.getItem('time');
+        var val2 = localStorage.getItem('city');
+        var val3 = localStorage.getItem('confirmed');
+        $("select option[value=" + val1 + "]").attr('selected', 'true');
+        $("select option[value=" + val2 + "]").attr('selected', 'true');
+        $("select option[value=" + val3 + "]").attr('selected', 'true');
+      }
       function showattachment(deal_id){
         if($.trim($('#'+deal_id).text()) != "" ){
           $('#'+deal_id).html('');
@@ -75,6 +83,15 @@ block content
           });
         }
       }
+      $('#showDeals').on('click', function(){
+          var time, confirmed, city;
+          city = $('#city').val();
+          time = $('#time').val();
+          confirmed = $('#confirmed').val();
+          localStorage.setItem('time', time);
+          localStorage.setItem('confirmed', confirmed);
+          localStorage.setItem('city', city);
+        });
       $('#deleteDeal').on('click', function(){
           var item = $(this);
           var deal_id = item.attr('deal_id');

@@ -478,7 +478,9 @@ block content
                             input(type='file' name='documents' multiple required)
                             label.form__sublabel.text-muted Изображения товара только в формате .jpg
                           button(type='submit').btn.btn-success.btn__form_add Добавить товар
-                #delete_product.collapse 123123
+                #delete_product.collapse
+                  input(type='text' placeholder='Введите артикул').articul-del
+                  button.btn.btn-info.articul-delete Удалить
                 #edit_product.collapse
                   input(type='text' placeholder='Введите артикул').articul
                   button.btn.btn-info.articul-find Найти

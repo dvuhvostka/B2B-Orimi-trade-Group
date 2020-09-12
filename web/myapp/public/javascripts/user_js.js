@@ -42,4 +42,5 @@ $(function($){
     $(this).setCursorPosition(0);
   }).mask("9999999999",{autoclear: false, placeholder: ''});
 });
+
 document.addEventListener('DOMContentLoaded', ready);
