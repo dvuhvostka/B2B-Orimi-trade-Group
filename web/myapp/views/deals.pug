@@ -57,7 +57,7 @@ block content
         else
           p Завершена
         button(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
-        div(id=deals_info[i].id)
+        div(id=deals_info[i].id+"_attach")
       
     script.
       if(localStorage.getItem('city')!=0){
@@ -68,10 +68,12 @@ block content
         $("select option[value=" + val2 + "]").attr('selected', 'true');
         $("select option[value=" + val3 + "]").attr('selected', 'true');
       }
+      
       function showattachment(deal_id){
-        if($.trim($('#'+deal_id).text()) != "" ){
-          $('#'+deal_id).html('');
+        if($.trim($('#'+deal_id+'_attach').text()) != "" ){
+          $('#'+deal_id+'_attach').html('');
         }else{
+          console.log('123');
           $.post("/add",{post_type: "showattachment", deal_id: deal_id}, (data)=>{
             var out = "";
             var out_array = [];
@@ -79,7 +81,7 @@ block content
                 out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+"</p>";
               }
               console.log(out);
-              $('#'+deal_id).html(out);
+              $('#'+deal_id+'_attach').html(out);
           });
         }
       }
