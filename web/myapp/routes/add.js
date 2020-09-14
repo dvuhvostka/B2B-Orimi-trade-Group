@@ -124,6 +124,20 @@ router.route('/add')
                     });
                 },1000);
               break;
+              case "deleteItem": {
+                var fprsql = `SELECT item_name, type FROM tea WHERE articul=$1 UNION SELECT item_name, type FROM coffee WHERE articul = $1 UNION SELECT item_name, type FROM others WHERE articul =$1 UNION SELECT item_name, type FROM horeca WHERE articul = $1`;
+                db.any(fprsql, req.body.articul).then(function(response){
+                  if(response.length){
+                    db.none(`DELETE FROM `+response[0].type+` WHERE articul=$1`, req.body.articul);
+                    res.json({
+                      response
+                    });
+                  }else{
+                    res.json({response: {}});
+                  }
+                });
+                break;
+              }
               case 'edit_product': {
                 //console.log(JSON.parse(req.body.data));
                 let data = JSON.parse(req.body.data);

@@ -33,6 +33,25 @@ $('.articul-find').on('click', ()=>{
   });
 })
 
+$('.articul-delete').on('click', ()=>{
+  $.ajax({
+    type:'POST',
+    url:'/add',
+    data:{
+      post_type: 'deleteItem',
+      articul:$('.articul-del').val()
+    },
+    success: (res) => {
+      if(res.response.length){
+        var name = res.response[0].item_name;
+        alert('Товар успешно удален \n'+name);
+      }else{
+        alert('Такого товара нет');
+      }
+    }
+  });
+})
+
 $('.btn__item_edit').on('click', ()=>{
   var inputs = $('.found__item input');
   var data = {};
