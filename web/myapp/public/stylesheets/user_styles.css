@@ -286,4 +286,20 @@ margin: 5px 0 0 0;
 .minus_btn {
   font-size: 9px;
 }
+
+.text__promo {
+  line-height: 1;
+  font-size: 14px;
+  margin: auto 10px auto 0;
+  font-style: italic;
+}
+
+.promokod {
+  margin-bottom: 0 !important;
+  width: 273px;
+}
+
+.promo_wrap {
+  margin-bottom: 10px;
+}
 /* ----------- */
