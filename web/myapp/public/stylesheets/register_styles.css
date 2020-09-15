@@ -1,7 +1,8 @@
 .card#reg_page {
-  width: 40%;
+  width: 70%;
   margin: 20px 0;
   min-width: 280px;
+  max-width: 450px;
 }
 
 
@@ -27,8 +28,8 @@
 	margin:auto;
 }
 
-.card-body {
-  margin-top: 10px;
+.card-text {
+  margin-bottom:20px;
 }
 
 .noLink {

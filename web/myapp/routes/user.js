@@ -189,6 +189,7 @@ user.route('/user')
           info.position = resp.rows[0].owner_position;
           info.status = status;
           info.link_code = resp.rows[0].link_code;
+          info.type = resp.rows[0].type;
         }
         var deals = 0;
 
@@ -535,12 +536,13 @@ user.route('/user')
               default: {
                   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
                   var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+                  console.log(req.body);
                   pgPool.query(get_org,[], function(err, response){
                     pgPool.query(getUserData,[], function(error, resp){
                         if(!response.rows[0]){
-                          db.none('INSERT INTO organizations(org_name, org_address, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
+                          db.none('INSERT INTO organizations(org_name, org_address_ur, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address_ur}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
                             org_name: req.body.org_name,
-                            org_address: req.body.org_address,
+                            org_address_ur: req.body.org_address_ur,
                             owner_inn: req.body.inn,
                             owner_id: req.session.userId,
                             type: req.body.type,

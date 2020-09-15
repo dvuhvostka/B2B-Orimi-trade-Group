@@ -258,4 +258,32 @@ margin: 5px 0 0 0;
   text-align: center;
 }
 
+.org_address_fact {
+  width:96%;
+  margin-bottom: 0 !important;
+}
+.add__addres, .remove__addres {
+  width: 20px !important;
+  margin: auto 0 auto 10px;
+  border: 1px solid black;
+  padding: 5px;
+  height: 20px;
+  font-size: 10px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add__addres:hover, .remove__addres:hover{
+  background-color: #cbcbcb;
+  cursor: pointer;
+  border: 2px solid #9d9696;
+}
+.add_addres_wrap {
+  margin-bottom: 10px;
+}
+.minus_btn {
+  font-size: 9px;
+}
 /* ----------- */

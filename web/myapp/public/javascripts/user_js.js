@@ -43,4 +43,28 @@ $(function($){
   }).mask("9999999999",{autoclear: false, placeholder: ''});
 });
 
+
+
 document.addEventListener('DOMContentLoaded', ready);
+
+window.onload = function() {
+  var plus = document.querySelector('.add__addres');
+  plus.addEventListener('click', function(event){
+    var inputs = document.querySelectorAll('input[data-addres-id]');
+    var newDiv = document.createElement('div');
+    var target = event.currentTarget;
+    var number = inputs[inputs.length-1].getAttribute('data-addres-id');
+    newDiv.className = "in add_addres_wrap";
+    newDiv.innerHTML = "<input type='text' name='org_address_fact[]' required "
+    +"placeholder='Фактический адрес организации' data-addres-id="+(Number(number)+1)+" class='org_address_fact'>"
+    +"<a class='remove__addres btn'><i class='fas fa-minus minus_btn'></i></a>";
+    var prevElem = inputs[inputs.length-1].parentNode;
+    prevElem.after(newDiv);
+    var lastInput = document.querySelectorAll('input[data-addres-id]');
+    console.log(lastInput[lastInput.length-1].nextSibling);
+    lastInput[lastInput.length-1].nextSibling.addEventListener('click', (e)=>{
+      var parent = e.currentTarget.parentNode;
+      parent.remove();
+    })
+  });
+}

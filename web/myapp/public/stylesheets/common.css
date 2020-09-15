@@ -94,15 +94,16 @@ ul {
   }
 }
 
-@media (max-width: 320px){
-  .navbar-brand {
-    font-size: 0.83em;
-  }
-}
 
 @media (max-width: 425px){
   .navbar-brand {
     font-size: 0.9em;
+  }
+}
+
+@media (max-width: 320px){
+  .navbar-brand {
+    font-size: 0.74em;
   }
 }
 /* ------------- */
