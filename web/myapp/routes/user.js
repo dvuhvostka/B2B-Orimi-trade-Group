@@ -536,21 +536,27 @@ user.route('/user')
               default: {
                   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
                   var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
-                  console.log(req.body);
+                  console.log(req.body.custom_type);
+                  var custom_type = req.body.type;
+                  if(req.body.custom_type!=undefined){
+                    custom_type = req.body.custom_type;
+                  }
                   pgPool.query(get_org,[], function(err, response){
                     pgPool.query(getUserData,[], function(error, resp){
                         if(!response.rows[0]){
-                          db.none('INSERT INTO organizations(org_name, org_address_ur, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type) VALUES(${org_name}, ${org_address_ur}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type})',  {
+                          db.none('INSERT INTO organizations(org_name, org_address_ur, owner_inn, owner_id, org_confirmed, owner_position, owner_name, owner_sname, owner_tname, type, org_address_fact, promo) VALUES(${org_name}, ${org_address_ur}, ${owner_inn}, ${owner_id}, ${org_confirmed}, ${owner_position}, ${owner_name}, ${owner_sname}, ${owner_tname}, ${type}, ${org_address_fact}, ${promo})',  {
                             org_name: req.body.org_name,
                             org_address_ur: req.body.org_address_ur,
                             owner_inn: req.body.inn,
                             owner_id: req.session.userId,
-                            type: req.body.type,
+                            type: custom_type,
                             org_confirmed: 0,
                             owner_position: req.body.position,
                             owner_name: resp.rows[0].username,
                             owner_sname: resp.rows[0].second_name,
                             owner_tname: resp.rows[0].third_name,
+                            org_address_fact: req.body.org_address_fact,
+                            promo: req.body.promo
                           });
                         }
                     });

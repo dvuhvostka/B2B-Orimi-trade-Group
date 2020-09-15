@@ -76,6 +76,7 @@ window.onload = function() {
       input.className = 'custom_type';
       input.setAttribute('placeholder','Укажите тип вашей организации');
       input.setAttribute('required', 'true');
+      input.setAttribute('name', 'custom_type');
       e.currentTarget.after(input);
     } else {
       var showText = document.querySelector('.custom_type');
