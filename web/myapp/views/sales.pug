@@ -61,7 +61,7 @@ block content
               - for (var i = 0; i < salesInfo.length; i++)
                 .card_set
                   h5.set__headder Акционный набор №#{salesInfo[i].set_id}
-                  img.set__img(src='sales/sets/'+salesInfo[i].set_id+'logo.png')
+                  img.set__img(src='/sales/sets/'+salesInfo[i].set_id+'logo.png')
                   a.btn.btn-primary(href='/sales/set?id='+salesInfo[i].set_id) Перейти
             .sale__info
               p.sale__info_text
@@ -105,7 +105,7 @@ block content
               - for (var i = 0; i < salesInfo.length; i++)
                 .card_set
                   h5.set__headder Кейс №#{salesInfo[i].weekly_id}
-                  img.set__img(src='sales/weekly/'+salesInfo[i].weekly_id+'logo.png')
+                  img.set__img(src='/sales/weekly/'+salesInfo[i].weekly_id+'logo.png')
                   a.btn.btn-primary(href='/sales/weekly?id='+salesInfo[i].weekly_id) Перейти
             .sale__info
               p.sale__info_text
