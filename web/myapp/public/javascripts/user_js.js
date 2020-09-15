@@ -67,4 +67,21 @@ window.onload = function() {
       parent.remove();
     })
   });
+  var select = document.querySelector('.type_of_org')
+  select.addEventListener('change',(e)=>{
+    var value = e.currentTarget.value;
+    console.log(value);
+    if (value == 'Другое') {
+      var input = document.createElement('input');
+      input.className = 'custom_type';
+      input.setAttribute('placeholder','Укажите тип вашей организации');
+      input.setAttribute('required', 'true');
+      e.currentTarget.after(input);
+    } else {
+      var showText = document.querySelector('.custom_type');
+      if (showText){
+        showText.remove();
+      }
+    }
+  });
 }

@@ -12,11 +12,11 @@ $('.articul-find').on('click', ()=>{
         var item = res.response[0];
         $('.found__item').removeClass('d-none');
         $('.found__item_none').addClass('d-none');
-
         $('.item__id span').html(item.id);
         $('.item__name').attr('value', item.item_name);
         $('.item__price').attr('value', item.item_price)
-        $('.item__articul span').html(item.articul);
+        $('.item__articul').attr('value', item.articul);
+        $('.item__shtrixkod').attr('shtrixkod', item.shtrihkod);
         $('.item__package').attr('value', item.packaging?item.packaging:'none');
         $('.item__box_count').attr('value', item.box_count);
         $('.item__weight').attr('value', item.weight?item.weight:'none');
