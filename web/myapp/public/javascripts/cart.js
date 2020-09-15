@@ -2,18 +2,20 @@
     var cart = 'hello';
     cart = JSON.parse(localStorage.getItem('cart'));
     $.post("/cart", cart).done(function(data){
+      var final_price_result = 0;
       console.log(data.other,data.coffee,data.tea);
       var out = '';
           if(data.other)
             for(var i = 0; i<data.other.length; i++){
               var price = data.other[i].item_price;
               if (data.other[i].sale_price!=0) price = data.other[i].sale_price;
+              final_price_result+= Math.round((price*cart[data.other[i].type+data.other[i].id])*100)/100;
               out +=
                 '<div type='+data.other[i].type+' class = "'+data.other[i].id+' good_cart">'
                   +'<img class="img_good_cart" src=/store_prods/'+data.other[i].type+'/'+data.other[i].sort+'/'+data.other[i].articul+'/'+'1.jpg>'
                   +'<a href="/shop/other?id='+data.other[i].id+'" class="item_name_cart">'+data.other[i].item_name+'</a>'
                   +'<div class="info_wrap">'
-                    +'<p class="price"> Цена: '+Math.ceil((price*cart[data.other[i].type+data.other[i].id])*100)/100+' р.</p>'
+                    +'<p class="price" price="'+price+'"> Цена: '+Math.ceil((price*cart[data.other[i].type+data.other[i].id])*100)/100+' р.</p>'
                     +'<p class="item_count"> Кол-во: '+cart[data.other[i].type+data.other[i].id]+' шт.</p>'
                     +'<a class="change__amount_link" href="#range_other_'+data.other[i].id+'" data-toggle="collapse">Изменить</a>'
                     +'<div class="collapse change__amount_wrap" id="range_other_'+data.other[i].id+'">'
@@ -21,12 +23,12 @@
                         +'<button class="btn btn-secondary minus">'
                           +'<i class="fas fa-minus controls"></i>'
                         +'</button>'
-                        +'<input type="text" value='+cart[data.other[i].type+data.other[i].id]+' class="input count_input_pack">'
+                        +'<input type="text" value='+cart[data.other[i].type+data.other[i].id]+' class="input count_input_pack sym_none">'
                         +'<button class="btn btn-secondary plus">'
                           +'<i class="fas fa-plus controls"></i>'
                         +'</button>'
                       +'</div>'
-                      +'<button class="btn btn-success change__amount_button_success">Подтвердить</button>'
+                      +'<button type="'+data.other[i].type+'" data-id="'+data.other[i].id+'" class="addtocart btn btn-success change__amount_button_success">Подтвердить</button>'
                     +'</div>'
                   +'</div>'
                   +'<button onclick=delfromcart("'+data.other[i].type+data.other[i].id+'") class="btn btn-danger del_btn">Удалить</button>'
@@ -37,12 +39,13 @@
             for(var i = 0; i<data.tea.length; i++){
               var price = data.tea[i].item_price;
               if (data.tea[i].sale_price!=0) price = data.tea[i].sale_price;
+              final_price_result+= Math.round((price*cart[data.tea[i].type+data.tea[i].id])*100)/100;
               out +=
                 '<div type='+data.tea[i].type+' class = "'+data.tea[i].id+' good_cart">'
                   +'<img class="img_good_cart" src=/store_prods/'+data.tea[i].type+'/'+data.tea[i].sort+'/'+data.tea[i].articul+'/'+'1.jpg>'
                   +'<a href="/shop/tea?id='+data.tea[i].id+'" class="item_name_cart">'+data.tea[i].item_name+'</a>'
                   +'<div class="info_wrap">'
-                    +'<p class="price"> Цена: '+Math.ceil((price*cart[data.tea[i].type+data.tea[i].id])*100)/100+' р.</p>'
+                    +'<p class="price" price="'+price+'"> Цена: '+Math.ceil((price*cart[data.tea[i].type+data.tea[i].id])*100)/100+' р.</p>'
                     +'<p class="item_count"> Кол-во: '+cart[data.tea[i].type+data.tea[i].id]+' шт.</p>'
                     +'<a class="change__amount_link" href="#range_tea_'+data.tea[i].id+'" data-toggle="collapse">Изменить</a>'
                     +'<div class="collapse change__amount_wrap" id="range_tea_'+data.tea[i].id+'">'
@@ -50,12 +53,12 @@
                         +'<button class="btn btn-secondary minus">'
                           +'<i class="fas fa-minus controls"></i>'
                         +'</button>'
-                        +'<input type="text" value='+cart[data.tea[i].type+data.tea[i].id]+' class="input count_input_pack">'
+                        +'<input type="text" value='+cart[data.tea[i].type+data.tea[i].id]+' class="input count_input_pack sym_none">'
                         +'<button class="btn btn-secondary plus">'
                           +'<i class="fas fa-plus controls"></i>'
                         +'</button>'
                       +'</div>'
-                      +'<button class="btn btn-success change__amount_button_success">Подтвердить</button>'
+                      +'<button type="'+data.tea[i].type+'" data-id="'+data.tea[i].id+'" class="addtocart btn btn-success change__amount_button_success">Подтвердить</button>'
                     +'</div>'
                   +'</div>'
                 +'<button onclick=delfromcart("'+data.tea[i].type+data.tea[i].id+'") class="btn btn-danger del_btn">Удалить</button>'
@@ -66,12 +69,13 @@
             for(var i = 0; i<data.coffee.length; i++){
               var price = data.coffee[i].item_price;
               if (data.coffee[i].sale_price!=0) price = data.coffee[i].sale_price;
+              final_price_result+= Math.round((price*cart[data.coffee[i].type+data.coffee[i].id])*100)/100;
               out +=
                 '<div type='+data.coffee[i].type+' class = "'+data.coffee[i].id+' good_cart">'
                   +'<img class="img_good_cart" src=/store_prods/'+data.coffee[i].type+'/'+data.coffee[i].sort+'/'+data.coffee[i].articul+'/'+'1.jpg>'
                   +'<a href="/shop/coffee?id='+data.coffee[i].id+'" class="item_name_cart"> '+data.coffee[i].item_name+'</a>'
                   +'<div class="info_wrap">'
-                    +'<p class="price"> Цена: '+Math.ceil((price*cart[data.coffee[i].type+data.coffee[i].id])*100)/100+' р.</p>'
+                    +'<p class="price" price="'+price+'"> Цена: '+Math.ceil((price*cart[data.coffee[i].type+data.coffee[i].id])*100)/100+' р.</p>'
                     +'<p class="item_count"> Кол-во: '+cart[data.coffee[i].type+data.coffee[i].id]+' шт.</p>'
                     +'<a class="change__amount_link" href="#range_coffee_'+data.coffee[i].id+'" data-toggle="collapse">Изменить</a>'
                     +'<div class="collapse change__amount_wrap" id="range_coffee_'+data.coffee[i].id+'">'
@@ -79,12 +83,12 @@
                         +'<button class="btn btn-secondary minus">'
                           +'<i class="fas fa-minus controls"></i>'
                         +'</button>'
-                        +'<input type="text" value='+cart[data.tea[i].type+data.coffee[i].id]+' class="input count_input_pack">'
+                        +'<input type="text" value='+cart[data.coffee[i].type+data.coffee[i].id]+' class="input count_input_pack sym_none">'
                         +'<button class="btn btn-secondary plus">'
                           +'<i class="fas fa-plus controls"></i>'
                         +'</button>'
                       +'</div>'
-                      +'<button class="btn btn-success change__amount_button_success">Подтвердить</button>'
+                      +'<button type="'+data.coffee[i].type+'" data-id="'+data.coffee[i].id+'" class="addtocart btn btn-success change__amount_button_success">Подтвердить</button>'
                     +'</div>'
                   +'</div>'
                   +'<button onclick=delfromcart("'+data.coffee[i].type+data.coffee[i].id+'") class="btn btn-danger del_btn">Удалить</button>'
@@ -95,12 +99,13 @@
             for(var i = 0; i<data.horeca.length; i++){
               var price = data.horeca[i].item_price;
               if (data.horeca[i].sale_price!=0) price = data.horeca[i].sale_price;
+              final_price_result+= Math.round((price*cart[data.horeca[i].subtype+data.horeca[i].id])*100)/100;
               out +=
                 '<div type='+data.horeca[i].type+' class = "'+data.horeca[i].id+' good_cart">'
                 +'<img class="img_good_cart" src=/store_prods/horeca/'+data.horeca[i].sort+'/'+data.horeca[i].articul+'/'+'1.jpg>'
                 +'<a href="/shop/horeca?id='+data.horeca[i].id+'" class="item_name_cart"> '+data.horeca[i].item_name+'</a>'
                 +'<div class="info_wrap">'
-                  +'<p class="price"> Цена: '+Math.ceil((price*cart[data.horeca[i].subtype+data.horeca[i].id])*100)/100+' р.</p>'
+                  +'<p class="price" price="'+price+'"> Цена: '+Math.ceil((price*cart[data.horeca[i].subtype+data.horeca[i].id])*100)/100+' р.</p>'
                   +'<p class="item_count"> Кол-во: '+cart[data.horeca[i].subtype+data.horeca[i].id]+' шт.</p>'
                   +'<a class="change__amount_link" href="#range_horeca_'+data.horeca[i].id+'" data-toggle="collapse">Изменить</a>'
                   +'<div class="collapse change__amount_wrap" id="range_horeca_'+data.horeca[i].id+'">'
@@ -108,34 +113,84 @@
                       +'<button class="btn btn-secondary minus">'
                         +'<i class="fas fa-minus controls"></i>'
                       +'</button>'
-                      +'<input type="text" value='+cart[data.horeca[i].subtype+data.horeca[i].id]+' class="input count_input_pack">'
+                      +'<input type="text" value='+cart[data.horeca[i].subtype+data.horeca[i].id]+' class="input count_input_pack sym_none">'
                       +'<button class="btn btn-secondary plus">'
                         +'<i class="fas fa-plus controls"></i>'
                       +'</button>'
                     +'</div>'
-                    +'<button class="btn btn-success change__amount_button_success">Подтвердить</button>'
+                    +'<button type="'+data.horeca[i].subtype+'" data-id="'+data.horeca[i].id+'" class="addtocart btn btn-success change__amount_button_success">Подтвердить</button>'
                   +'</div>'
                 +'</div>'
                 +'<button onclick=delfromcart("'+data.horeca[i].subtype+data.horeca[i].id+'") class="btn btn-danger del_btn">Удалить</button>'
                 +'</div>'
               console.log(data.horeca);
             }
+            var rc = Math.round((final_price_result)*100)/100;
+            var rc2 = 4000-rc;
             out +=
               "<div class='final_price_wrap'>"
                 +"<p class='delivery_text'> До бесплатной доставки осталось: "
-                  +"<span class='delivery_price'>123</span>"
+                  +"<span class='delivery_price'>"+Math.round((rc2)*100)/100+"</span>"
                   +" р."
                 +"</p>"
                 +"<p class='price_text'> Итоговая стоимость: "
-                  +"<span class='final_price'>123</span>"
+                  +"<span class='final_price'>"+Math.round((final_price_result)*100)/100+"</span>"
                   +" р."
                 +"</p>"
               +"</div>";
             $('.all_li').html(out+"<button class='btn btn-success submit_cart'>Оформить заказ</button>");
 
+            if(rc>4000){
+              $('.delivery_text').html('Ваш заказ будет доставлен бесплатно!');
+            }
+
             $('.submit_cart').on('click', function(){
               window.location.href = '/order';
             });
+
+            var input_check = $('.sym_none');
+              for(let each of input_check){
+                each.onkeypress=function(e){
+                  e = e || event;
+                  if (e.ctrlKey || e.altKey || e.metaKey) return;
+                  var chr = String.fromCharCode(e.which);
+                  if (chr == null) return;
+                  if (chr < '0' || chr > '9') {
+                    return false;
+                  }
+                }
+              }
+
+              $('.addtocart').on('click', function(){
+                var item = $(this);
+                var data_id = item.attr('data-id');
+                var data_type = item.attr('type');
+                var input =  item.siblings('.range_items').children('.input');
+                var wrap = item.closest('.info_wrap');
+                var articul = data_type+data_id;
+                  if(input.val()*1>0){
+                    cart[articul] = input.val();
+                    var price = Math.round((wrap.children('.price').attr('price')*input.val())*100)/100;
+                    wrap.children('.item_count').html('Кол-во: '+input.val()+' шт.');
+                    wrap.children('.price').html('Цена: '+price+' р.');
+                  }
+                  localStorage.setItem('cart', JSON.stringify(cart));
+                  $.ajax({
+                    type: 'POST',
+                    url: '/order',
+                    data: {post_type: "getcartcost", cart: localStorage.getItem('cart')},
+                    success: function(r){
+                        var rounded_cost = Math.round((r.fullcost)*100)/100;
+                        $('.final_price').html(rounded_cost+' ');
+                        if(rounded_cost<4000){
+                          var rc3 = Math.round((4000-rounded_cost)*100)/100;
+                          $('.delivery_text').html('До бесплатной доставки осталось: <span class="delivery_price">'+rc3+'</span> р.');
+                        }else {
+                          $('.delivery_text').html('Ваш заказ будет доставлен бесплатно!');
+                        }
+                    }
+                  });
+              });
 
             $('.minus').on('click', function(){
               var item = $(this);
@@ -160,4 +215,5 @@
       }
       document.location.reload(true);
     }
+
   }else {$('.all_li').html("<p class='null_cart'>Товаров в корзине нет!</p>");}

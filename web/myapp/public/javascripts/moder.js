@@ -16,7 +16,7 @@ $('.articul-find').on('click', ()=>{
         $('.item__name').attr('value', item.item_name);
         $('.item__price').attr('value', item.item_price)
         $('.item__articul').attr('value', item.articul);
-        $('.item__shtrixkod').attr('shtrixkod', item.shtrihkod);
+        $('.item__shtrixkod').attr('value', item.barcode);
         $('.item__package').attr('value', item.packaging?item.packaging:'none');
         $('.item__box_count').attr('value', item.box_count);
         $('.item__weight').attr('value', item.weight?item.weight:'none');

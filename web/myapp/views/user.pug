@@ -167,13 +167,13 @@ block content
                 .deal_wrap
                   -var final_sum = Number(0)
                   -for (var x=0; x<deals[i].length; x++)
-                    - final_sum = Number(final_sum) + Number(deals[i][x].split(':')[6])
+                    - final_sum = Math.round((Number(deals[i][x].split(':')[6]))*100)/100;
                     .in.deal
                       if(deals[i][x].split(':')[7]!=0)
                         img(src="/store_prods/"+deals[i][x].split(':')[7]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+"/1.jpg")
                       else
                         img(src="/store_prods/"+deals[i][x].split(':')[4]+"/"+deals[i][x].split(':')[3]+"/"+deals[i][x].split(':')[2]+"/1.jpg")
-                      a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1] } шт. -  (#{deals[i][x].split(':')[6]}р.)
+                      a(href='#') #{deals[i][x].split(':')[0]} #{deals[i][x].split(':')[1] } шт. -  (#{deals[i][x].split(':')[8]}р.)
                   p Итоговая стоимость: #{final_sum}
                   
       .tab-pane.fade#nav-balance.panel(role='tabpanel' area-labelledby='nav-balance-tab')
@@ -293,7 +293,7 @@ block content
                             input.form__input(name='articul' required)
                           .d-in
                             label.form__label Штрихкод
-                            input.form__input(name='shtrixkod' required)
+                            input.form__input(name='barcode' required)
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
@@ -348,7 +348,7 @@ block content
                             input.form__input(name='articul' required)
                           .d-in
                             label.form__label Штрихкод
-                            input.form__input(name='shtrixkod' required)
+                            input.form__input(name='barcode' required)
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
@@ -381,7 +381,7 @@ block content
                             input.form__input(name='articul' required)
                           .d-in
                             label.form__label Штрихкод
-                            input.form__input(name='shtrixkod' required)
+                            input.form__input(name='barcode' required)
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
@@ -444,7 +444,7 @@ block content
                             input.form__input(name='articul' required)
                           .d-in
                             label.form__label Штрихкод
-                            input.form__input(name='shtrixkod' required)
+                            input.form__input(name='barcode' required)
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
@@ -499,7 +499,7 @@ block content
                             input.form__input(name='articul' required)
                           .d-in
                             label.form__label Штрихкод
-                            input.form__input(name='shtrixkod' required)
+                            input.form__input(name='barcode' required)
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
@@ -519,7 +519,7 @@ block content
                       input(type='text' value='' name='articul').item__articul
                     .d-in
                       label.form__label Штрихкод
-                      input(type='text' value='' name='shtrixkod').item__shtrixkod
+                      input(type='text' value='' name='barcode').item__barcode
                     .d-in
                       label.form__label Тип
                       input(type='text' value='' name='type').item__type

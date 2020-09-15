@@ -44,7 +44,7 @@ block content
           p Безнал
         if (deals_info[i].payment_method=='bill')
           p Выставлен счет
-        p Использовано бонусов: #{deals_info[i].bonuses} (Скидка: #{deals_info[i].bonuses/10} руб.)
+        p Использовано бонусов: #{deals_info[i].bonuses} (Скидка: #{deals_info[i].bonuses} руб.)
         p Итого: #{deals_info[i].final_price}
         if (deals_info[i].confirmed==0)
           p Не подтверждена

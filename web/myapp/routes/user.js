@@ -201,7 +201,7 @@ user.route('/user')
           var d_data = [];
           for (var x = 0; x<data.length; x++){
             if(!dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id] = []; dealsdata[data[x].deal_id].id = data[x].deal_id; dealsdata[data[x].deal_id].deal_owner = data[x].deal_owner;}
-            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].articul+":"+data[x].sort+":"+data[x].type+":"+data[x].price_of_one+":"+data[x].full_price+":"+data[x].subtype)}
+            if(dealsdata[data[x].deal_id]){dealsdata[data[x].deal_id].push(data[x].product+":"+data[x].count+":"+data[x].articul+":"+data[x].sort+":"+data[x].type+":"+data[x].price_of_one+":"+Math.round((data[x].deal_summ)*100)/100+":"+data[x].subtype+":"+Math.round((data[x].full_price)*100)/100)}
           }
           for(key in dealsdata){
             d_data.push(dealsdata[key]);
@@ -372,7 +372,7 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO coffee(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
+                    db.none('INSERT INTO coffee(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'coffee',
@@ -383,6 +383,7 @@ user.route('/user')
                       box_count: req.body.box_count,
                       description: req.body.description,
                       articul: req.body.articul,
+                      barcode: req.body.barcode,
                       sale_price: 0,
                       pic_count: fls.length
                     }).catch(error => {
@@ -406,7 +407,7 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count})',  {
+                    db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'tea',
@@ -418,6 +419,7 @@ user.route('/user')
                       box_count: req.body.box_count,
                       description: req.body.description,
                       articul: req.body.articul,
+                      barcode: req.body.barcode,
                       sale_price: 0,
                       pic_count: fls.length
                     }).catch(error => {
@@ -441,7 +443,7 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO others(item_name, item_price, type, sort, description, box_count, articul, sale_price, pic_count) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${description}, ${box_count}, ${articul}, ${sale_price}, ${pic_count})',  {
+                    db.none('INSERT INTO others(item_name, item_price, type, sort, description, box_count, articul, sale_price, pic_count, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${description}, ${box_count}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'other',
@@ -450,6 +452,7 @@ user.route('/user')
                       description: req.body.description,
                       articul: req.body.articul,
                       sale_price: 0,
+                      barcode: req.body.barcode,
                       pic_count: fls.length
                     }).catch(error => {
                       console.log('ERROR_OTHERS_ADDING_TO_DB:', error);
@@ -472,7 +475,8 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, subtype) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype})',  {
+                    console.log(req.body.barcode);
+                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'tea',
@@ -486,6 +490,7 @@ user.route('/user')
                       articul: req.body.articul,
                       sale_price: 0,
                       pic_count: fls.length,
+                      barcode: req.body.barcode,
                       subtype: 'horeca'
                     }).catch(error => {
                       console.log('ERROR_HORECA_TEA_ADDING_TO_DB:', error);
@@ -508,7 +513,7 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, subtype) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype})',  {
+                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'coffee',
@@ -521,6 +526,7 @@ user.route('/user')
                       articul: req.body.articul,
                       sale_price: 0,
                       pic_count: fls.length,
+                      barcode: req.body.barcode,
                       subtype: 'horeca'
                     }).catch(error => {
                       console.log('ERROR_HORECA_COFFEE_ADDING_TO_DB:', error);

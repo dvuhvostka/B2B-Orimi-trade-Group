@@ -28,13 +28,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           }else {
             $('.price').html(r.fullcost+' ');
-            $('.order__final_price').html(r.fullcost+' ');
+            $('.order__final_price').html(Math.round((r.fullcost)*100)/100+' ');
           }
           var price = Number($('.order__final_price').html());
           $('.bonuses__input').on('change',()=>{
             var bonuses = $('.bonuses__input').val();
-            $('.order__final_price').html(price-(bonuses/10)+' ');
-            if(price-(bonuses/10) < 2000){
+            $('.order__final_price').html(Math.round((price-(bonuses))*100)/100+' ');
+            if(price-(bonuses) < 2000){
               $('.order_min').removeClass('d-none');
             } else {
               $('.order_min').addClass('d-none');

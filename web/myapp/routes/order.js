@@ -77,7 +77,7 @@ var address, payment, bonuses, comments;
     default: break;
   }
 
-  data.fullcost -= bonuses/10; //Вычли бонусы из цены
+  cart.fullcost -= Math.floor(bonuses); //Вычли бонусы из цены
   console.log(cart.fullcost);
   db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact, bonuses, comments, timestamp, region) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact}, ${bonuses}, ${comments}, ${timestamp}, ${region})', {
     owner_id: userdata[0].id,
@@ -90,7 +90,7 @@ var address, payment, bonuses, comments;
     final_price: cart.fullcost,
     payment_method: payment,
     owner_contact: userdata[0].number,
-    bonuses: bonuses,
+    bonuses: Math.floor(bonuses),
     comments: comments,
     timestamp: Date.now(),
     region: region
@@ -101,7 +101,7 @@ var address, payment, bonuses, comments;
       }
       db.one('SELECT * FROM deals_info WHERE id=(SELECT MAX(id) FROM deals_info)').then(function(deal){
         for (var i = 0; i<cart.length; i++){
-        db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype, articul) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype}, ${articul})',{
+        db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype, articul, deal_summ) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype}, ${articul}, ${deal_summ})',{
             product: cart[i].product,
             deal_owner: userdata[0].id,
             type: cart[i].type,
@@ -112,7 +112,8 @@ var address, payment, bonuses, comments;
             price_of_one: cart[i].price_of_one,
             full_price: cart[i].full_price,
             subtype: cart[i].subtype,
-            articul: cart[i].articul
+            articul: cart[i].articul,
+            deal_summ: cart.fullcost
           }).catch(error=>{
             console.log(error);
           });
@@ -160,7 +161,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
 
       db.any(getuserbalance_sql).then(function(balance_response){
         if(balance_response[0].balance>=bonuses){
-          if(bonuses/10>data.fullcost){
+          if(bonuses>data.fullcost){
             var error = "ERROR_BONUS_COUNT"; //Пользователь прислал пустую корзину
             res.json({
               ok: false,
@@ -168,7 +169,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
             });
           }else{
             //Пользователь прошел проверку. У него на балансе достаточно бонусов. Он ввел меньше бонусов, чем стоит товар.
-            var min_price = data.fullcost - bonuses/10;
+            var min_price = data.fullcost - bonuses;
             if(bonuses<10){
               var error = "ERROR_MIN_10_BONUS"; //Пользователь прислал пустую корзину
               res.json({
@@ -184,7 +185,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
                     case 'bill': break;
                     default: console.log("NO_PAYMENT_METHOD_ERROR");
                   }
-                  add_deal_with_bonuses(data, payment_method, balance_response, bonuses, res, region);
+                  add_deal_with_bonuses(data, payment_method, balance_response, Math.floor(bonuses), res, region);
                   console.log('!SUCCESS!');
                 }else{
                   var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
@@ -349,13 +350,13 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                      break;
                    }
                    default: {
-                     returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, bonuses, userId, payment_method, region);
+                     returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, Math.floor(bonuses), userId, payment_method, region);
                      break;
                    }
                  }
                }
                cart.fullcost = Math.ceil((fullcost)*100)/100;
-               returnCartCost(cart, res, response_type,bonuses, userId, payment_method, region); //Передаем обновленную и пересчитанную корзину на вывод
+               returnCartCost(cart, res, response_type, Math.floor(bonuses), userId, payment_method, region); //Передаем обновленную и пересчитанную корзину на вывод
            })
             .catch(error => {
             });
