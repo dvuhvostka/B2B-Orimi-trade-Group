@@ -324,23 +324,28 @@ user.route('/user')
     }else if(req.body.post_type=="confirm_org_askdjfhl123123kaGFDGdfhFsdf3123"){
       db.none("UPDATE organizations SET org_confirmed=1 WHERE owner_id='"+req.body.org_owner_id+"'");
       db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'");
+      db.any("SELECT * FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'").then(function(data){
+        if(data[0].promo.length!=0){
+          db.any("SELECT * FROM promo WHERE code='"+data[0].promo+"'").then(function(promo_data){
+            if(promo_data[0].length!=0){
+              console.log("PROMO SUCCESS!");
+            }
+          });
+        }
+      });
       ncp.limit = 16;
       var srcPath = './public/images/uploads/'+req.body.org_owner_id; //current folder
       //fs.mkdir('./public/images/confirmed_uploads/'+req.body.org_owner_id, err=>{});
       //console.log('confirmed_uploads created: done');
       var destPath = './public/images/confirmed_uploads/'+req.body.org_owner_id; //Any destination folder
       ncp(srcPath, destPath, function (err) {
-        if (err) {
-          return console.error(err);
-        }else{
           console.log('Copying files: done');
           rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('uploads deleted: done'); });
-        }
       });
       console.log("org confirmed: "+req.body.org_owner_id+" done");
       var link_code = crypto.randomBytes(20).toString('hex');
-      console.log("link code generated: " +link_code);
       db.none("UPDATE organizations SET link_code='"+link_code+"' WHERE owner_id='"+req.body.org_owner_id+"'");
+      console.log("link code generated: " +link_code);
     }else if (req.body.post_type == 'request') {
       console.log('add request')
       db.none("INSERT INTO requests_from_organizations(request, org_id) VALUES (${request},${org_id})",{
