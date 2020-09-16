@@ -184,7 +184,8 @@ user.route('/user')
           if(resp.rows[0].org_confirmed == 0){org_info=1; var status = 'Организация ожидает подтверждения модератором.'}else{org_info=2; var status = 'Организация подтверждена.'}
           var info = {};
           info.org_name = resp.rows[0].org_name;
-          info.org_address = resp.rows[0].org_address;
+          info.org_address = resp.rows[0].org_address_ur;
+          info.org_address_fact = resp.rows[0].org_address_fact;
           info.owner_inn = resp.rows[0].owner_inn;
           info.position = resp.rows[0].owner_position;
           info.status = status;

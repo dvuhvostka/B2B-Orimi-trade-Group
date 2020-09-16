@@ -56,8 +56,12 @@ block content
                 p Название:
                 p #{info.org_name}
               .in
-                p Адрес: 
+                p Юридический адрес: 
                 p #{info.org_address}
+              - for(var i = 0;i<info.org_address_fact.length ;i++)
+                .in
+                  p Фактический адрес #{i+1}:
+                  p #{info.org_address_fact[i]}
               .in
                 p ИНН: 
                 p #{info.owner_inn}
