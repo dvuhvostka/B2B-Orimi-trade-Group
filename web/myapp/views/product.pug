@@ -45,8 +45,12 @@ block content
                   a(href="/shop/"+products[0].type+"?"+products[0].sort+"=on") Принцесса Гита
                 when 'horeca'
                   a(href="/shop/"+products[0].type) HoReCa
-                default
-                  a(href="/shop/"+products[0].type) Сопутствующие товары
+                when 'sugar'
+                  a(href="/shop/"+products[0].type) Сахар
+                when 'cups'
+                  a(href="/shop/"+products[0].type) Стаканчики
+                when 'lit'
+                  a(href="/shop/"+products[0].type) Крышки
             li.breadcrumb-item.active(aria-current='page')  #{products[0].item_name}
         hr
       #photo_area
@@ -71,6 +75,8 @@ block content
                   p Зеленый
                 when "green_1"
                   p Зеленый с добавками
+                when 'assorti'
+                  p Ассорти
             .in.p
               p Число пакетиков
               p #{products[0].tea_bags}
@@ -85,9 +91,11 @@ block content
                 when 'package'
                   p Пакет
                 when 'present'
-                  p Подарочная упаковка
+                  p Подарочная упаковка шкатулка
                 when 'capsule'
                   p Капсулы
+                when 'soft_pack'
+                  p Мягкая упаковка
           when 'coffee'
             .in.p
               p Тип
@@ -129,6 +137,14 @@ block content
                   p Мягкая упакаовка
                 when 'capsule'
                   p Капсулы
+          when 'other'
+            .in.p
+              p Фасовка
+              case products[0].sort
+                when 'cups'||'lit'
+                  p #{products[0].weight} мл.
+                default
+                  p #{products[0].weight} г.
       #price_product
         #price_wrap
           .amount 
@@ -178,7 +194,39 @@ block content
             when 'Piazza'
               a(href="https://jardincoffee.com/views/home" target='_blank')
                 img(src="../logos/"+products[0].sort+".png")
-        #sen
-          h5.header Описание
-          p #{products[0].description}
+      else
+        if products[0].brand
+          #logo
+            span Перейти на сайт бренда
+            case products[0].brand
+              when  'tess'
+                a(href="https://www.tesstea.co.uk/ru/" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+              when  'greenfield'
+                a(href="http://greenfieldtea.co.uk" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+              when  'nuri'
+                a(href="https://noori-tea.ru/" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+              when  'java'
+                a(href="http://www.java-tea.ru/" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+              when  'candy'
+                a(href="http://www.orimi.com/products/#princess_kandi/" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+              when 'shah'
+                a(href="http://shahtea.ru/" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+              when 'jardin'
+                a(href="https://jardincoffee.com/views/home" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+              when 'jokey'
+                a(href="http://coffeejockey.ru/" target='_blank')
+                  img(src="../logos/"+products[0].brand+".webp")
+              when 'Piazza'
+                a(href="https://jardincoffee.com/views/home" target='_blank')
+                  img(src="../logos/"+products[0].brand+".png")
+      #sen
+        h5.header Описание
+        p #{products[0].description}
     script(src='../product.js')

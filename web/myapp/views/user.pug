@@ -373,9 +373,30 @@ block content
                             select(name='type' required)
                               option(disabled selected value='') Выберите тип
                               option(value='sugar') Сахар
+                              option(value='cups') Стаканчики
+                              option(value='lid') Крышка
+                          .d-in
+                            label.form__label Брэнд
+                            select(name='brand' required).form__input
+                              option(disabled selected value='') Выберите Брэнд
+                              option(value='greenfield') Greenfield
+                              option(value='tess') Tess
+                              option(value='shah') Шах
+                              option(value='nila') Жемчужина Нила
+                              option(value='nuri') Принцесса Нури
+                              option(value='java') Принцесса Ява
+                              option(value='candy') Принцесса Канди
+                              option(value='gita') Принцесса Гита
+                              option(value='jardin') Jardin
+                              option(value='jokey') Jokey
+                              option(value='piazza') Piazza del Caffe
+                              option(value='') Без бренда
                           .d-in
                             label.form__label Кол-во в гофра-ящике
                             input.form__input(name='box_count' required)
+                          .d-in
+                            label.form__label Вес
+                            input.form__input(name='weight' required)
                           .d-in
                             label.form__label Описание
                             textarea.form__input(name='description' required)
@@ -431,8 +452,9 @@ block content
                               option(disabled selected value='') Выберите упаковку
                               option(value='box') Коробка
                               option(value='package') Пакет
-                              option(value='present') Подарочная упаковка
+                              option(value='present') Подарочная упаковка шкатулка
                               option(value='capsule') В капсулах
+                              option(value='soft_pack') Мягкая упаковка
                           .d-in
                             label.form__label Кол-во пакетиков
                             input.form__input(name='tea_bags' required)
@@ -693,7 +715,7 @@ block content
                   alert(r.error);
                 }else{
                   alert("Товар успешно добавлен.");
-                  document.location.href='/shop';
+                  window.location.reload();
                 }
               }
             })
