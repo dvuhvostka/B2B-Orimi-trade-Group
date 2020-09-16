@@ -328,7 +328,8 @@ user.route('/user')
         if(data[0].promo.length!=0){
           db.any("SELECT * FROM promo WHERE code='"+data[0].promo+"'").then(function(promo_data){
             if(promo_data[0].length!=0){
-              console.log("PROMO SUCCESS!");
+              db.none("UPDATE users SET balance=balance+"+promo_data[0].bonuses+" WHERE id='"+req.body.org_owner_id+"'");
+              db.none("UPDATE promo SET used=used+1 WHERE code='"+data[0].promo+"'");
             }
           });
         }
