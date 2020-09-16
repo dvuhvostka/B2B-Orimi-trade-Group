@@ -86,6 +86,9 @@ $('.minus').on('click', function(){
   var item = $(this);
   if (item.siblings('.input').val() > 1){
     item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
+    var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
+    var get_box_count = input_kor.attr('box_count');
+    input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
   } else {
     return 0;
   }
@@ -93,6 +96,9 @@ $('.minus').on('click', function(){
 $('.plus').on('click', function(){
   var item = $(this);
   item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+  var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
+  var get_box_count = input_kor.attr('box_count');
+  input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
 })
 
 $('.kor .range_items .input').on('change',function(){
@@ -122,6 +128,13 @@ $('.box_count_minus').on('click', function(){
   } else {
     return 0;
   }
+});
+
+$('.count_input_pack').on('change paste keyup',function(){
+  var item = $(this);
+  var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
+  var get_box_count = input_kor.attr('box_count');
+  input_kor.val(Math.round((item.val()/get_box_count)*10)/10);
 });
 
 var input_check = $('.input');
