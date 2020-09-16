@@ -170,8 +170,8 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
           }else{
             //Пользователь прошел проверку. У него на балансе достаточно бонусов. Он ввел меньше бонусов, чем стоит товар.
             var min_price = data.fullcost - bonuses;
-            if(bonuses<10){
-              var error = "ERROR_MIN_10_BONUS"; //Пользователь прислал пустую корзину
+            if(bonuses<1){
+              var error = "ERROR_MIN_1_BONUS"; //Пользователь прислал пустую корзину
               res.json({
                 ok: false,
                 error

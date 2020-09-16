@@ -443,15 +443,17 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO others(item_name, item_price, type, sort, description, box_count, articul, sale_price, pic_count, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${description}, ${box_count}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
+                    db.none('INSERT INTO others(item_name, item_price, type, sort, description, box_count, articul, sale_price, pic_count, barcode, weight,brand) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${description}, ${box_count}, ${articul}, ${sale_price}, ${pic_count}, ${barcode}, ${weight},${brand})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'other',
                       sort: req.body.type,
+                      brand:req.body.brand,
                       box_count: req.body.box_count,
                       description: req.body.description,
                       articul: req.body.articul,
                       sale_price: 0,
+                      weight: req.body.weight,
                       barcode: req.body.barcode,
                       pic_count: fls.length
                     }).catch(error => {

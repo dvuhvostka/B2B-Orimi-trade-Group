@@ -28,7 +28,7 @@ var pgPool = new Pool({
 function checkFilters (data){
   var brand_tea = ['greenfield','nuri','tess','java','candy','shah','nila','gita'];
   var tea_type = ['black','black_1','green','green_1','herbal'];
-  var teabag = ['20','25','30','50','100','120'];
+  var teabag = ['0','20','25','30','50','100','120'];
   var tea_pack = ['box','package','present','capsule'];
   var collection = 'in_one_collection';
   var filters = Object.keys(data);
@@ -148,7 +148,7 @@ router.route('/shop/:type?')
                 var prods_triple = prods_double.concat(prods_others);
                 var prods = prods_triple.concat(prods_horeca);
                 // console.log(prods);
-                res.render('shop.pug', {
+                res.status(200).render('shop.pug', {
                   isRegistred: userinfo.user_id,
                   products: prods,
                   prod_count: prods.length,

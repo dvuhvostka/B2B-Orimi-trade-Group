@@ -2,7 +2,7 @@ $('.minus').on('click', function(){
   var item = $(this);
   if (item.siblings('.input').val() > 1){
     item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
-    $("#span_change").html(item.siblings('.input').val()*start_price);
+    $("#span_change").html((item.siblings('.input').val()*start_price).toFixed(2));
   } else {
     return 0;
   }
@@ -12,7 +12,7 @@ $('.plus').on('click', function(){
   var item = $(this);
   if (item.siblings('.input').val() < 100){
     item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
-    $("#span_change").html(item.siblings('.input').val()*start_price);
+    $("#span_change").html((item.siblings('.input').val()*start_price).toFixed(2));
   } else {
     return 0;
   }
@@ -25,7 +25,7 @@ $('.input').on('change', function(){
   } else if (parseInt($(this).val()) < 1){
     $(this).val(1);
   }
-    $("#span_change").html($(this).val()*start_price);
+    $("#span_change").html(($(this).val()*start_price).toFixed(2));
 })
 var cart;
 
