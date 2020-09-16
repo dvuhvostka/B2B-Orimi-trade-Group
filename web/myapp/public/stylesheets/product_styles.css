@@ -1,3 +1,7 @@
+.sale_wrap{
+  width:80%;
+  margin:0 auto;
+}
 #product_wrap {
   display:grid;
   grid-template-rows: auto auto auto auto;
@@ -6,12 +10,10 @@
     "a a a"
     "f i p"
     "hr hr hr"
-    "l s s "
+    "l s . "
   ;
-  width:60%;
+  width:100%;
   grid-gap:2em;
-  margin-left: auto;
-  margin-right: auto;
   margin-top:20px;
   align-items: center;
 }
@@ -101,6 +103,7 @@
 
 #photo_area img {
   max-width: 300px;
+  max-height: 350px;
 }
 
 

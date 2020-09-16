@@ -35,10 +35,10 @@ router.get('/sales/:type?', function(req, res) {
         var getSale = `SELECT * FROM sets WHERE set_id='`+req.query.id+`'`;
         db.one(getSale).then((response)=>{
           console.table(response);
-          var tea_sql = `select item_name,id,type,sort from tea where`;
-          var coffee_sql = `select item_name,id,type,sort from coffee where`;
-          var horeca_sql = `select item_name,id,subtype,sort from horeca where`;
-          var others_sql = `select item_name,id,type,sort from others where`;
+          var tea_sql = `select item_name,id,type,sort,articul from tea where`;
+          var coffee_sql = `select item_name,id,type,sort,articul from coffee where`;
+          var horeca_sql = `select item_name,id,subtype,sort,articul from horeca where`;
+          var others_sql = `select item_name,id,type,sort,articul from others where`;
 
           for(let each of response.products_id){
             tea_sql += ` articul='`+each+`' or`;
@@ -51,7 +51,7 @@ router.get('/sales/:type?', function(req, res) {
           horeca_sql = horeca_sql.slice(0,-3);
           others_sql = others_sql.slice(0,-3);
           var final_sql = tea_sql+' union '+coffee_sql+' union '+horeca_sql+' union '+others_sql;
-          // console.log(final_sql);
+          console.log(final_sql);
           db.any(final_sql).then((r) =>{
             console.log(r);
             res.render('sales.pug',{
@@ -91,10 +91,10 @@ router.get('/sales/:type?', function(req, res) {
       if(req.query.id){
         var getSale = `SELECT * FROM weekly WHERE weekly_id='`+req.query.id+`'`;
         db.one(getSale).then((response)=>{
-          var tea_sql = `select item_name,id,type,sort from tea where`;
-          var coffee_sql = `select item_name,id,type,sort from coffee where`;
-          var horeca_sql = `select item_name,id,subtype,sort from horeca where`;
-          var others_sql = `select item_name,id,type,sort from others where`;
+          var tea_sql = `select item_name,id,type,sort,articul from tea where`;
+          var coffee_sql = `select item_name,id,type,sort,articul from coffee where`;
+          var horeca_sql = `select item_name,id,subtype,sort,articul from horeca where`;
+          var others_sql = `select item_name,id,type,sort,articul from others where`;
 
           for(let each of response.products_id){
             tea_sql += ` articul='`+each+`' or`;

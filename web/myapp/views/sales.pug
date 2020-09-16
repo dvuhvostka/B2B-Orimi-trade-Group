@@ -136,7 +136,7 @@ block content
             .content__items_wrap
               - for(var i = 0; i < saleInfo.products_id.length; i++)
                 .item_product_weekly
-                  img(src="../store_prods/"+products_info[i].type+"/"+products_info[i].sort+"/"+products_info[i].id+".jpg").item_product__img_weekly
+                  img(src="/store_prods/"+products_info[i].type+"/"+products_info[i].sort+"/"+products_info[i].articul+"/1.jpg").item_product__img_weekly
                   a(href='/shop/'+products_info[i].type+'?id='+products_info[i].id).item_product__name #{products_info[i].item_name}
             .content__footer              
             hr
