@@ -8,6 +8,9 @@ function ready(){
     setTimeout(deals,3000);
   });
 
+  var options = { id : 'js-AddressField' };
+  AhunterSuggest.Address.Solid( options );
+
   var input = document.querySelector('#docs');
   var label = input.nextElementSibling,
       labelValue = label.innerHTML;

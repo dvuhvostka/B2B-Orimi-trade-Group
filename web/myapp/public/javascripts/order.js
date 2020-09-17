@@ -1,5 +1,6 @@
 var cart = JSON.parse(localStorage.getItem('cart'));
-
+var options = { id : 'js-AddressField' };
+AhunterSuggest.Address.Solid( options );
 document.addEventListener('DOMContentLoaded', function () {
       $.ajax({
         type: 'POST',
@@ -63,7 +64,7 @@ window.onload = function(){
     for (var i=0; i<array.length; i++){
       if (array[i].id == region) reg = array[i].text;
     }
-    $('#input_addr').val(reg+', ');
+    $('#js-AddressField').val(reg+', ');
   }
   $('.checkbox_bonuses').on('change',()=>{
     if ($('.checkbox_bonuses').prop('checked')){

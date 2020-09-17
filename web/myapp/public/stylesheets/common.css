@@ -77,6 +77,39 @@ ul {
   color: black;
 }
 
+.u-AhunterSuggestions
+{
+  border: 1px solid #AAAAAA;
+  background: white;
+  overflow: auto;
+  border-radius: 2px;
+}
+
+.u-AhunterSuggestion
+{
+  padding: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.u-AhunterEmptySuggestion
+{
+  padding: 5px;
+  font-style: italic;
+  color: #b8661f;
+}
+
+.u-AhunterSelectedSuggestion
+{
+  background: #E7E7E7;
+}
+
+.u-AhunterSuggestions strong
+{
+  font-weight: bold;
+  color: #1B7BB1;
+}
+
 @media (max-width: 990px){
   .info a {
     text-align: center;

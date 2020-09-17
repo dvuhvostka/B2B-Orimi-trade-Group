@@ -3,6 +3,7 @@ block scripts
   link(href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet")
   link(href='user_styles.css' rel='stylesheet')
   link(href='moder.css' rel='stylesheet')
+  script(src="ahunter_suggest.js")
   script(src='user_js.js')
   script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
   script(src="https://unpkg.com/@popperjs/core@2")
@@ -125,7 +126,7 @@ block content
               #org_confirm.collapse
                 form(method='POST' enctype='multipart/form-data')#org_form
                   input(type='text' name='org_name' required placeholder='Название организации' id='org_name' )
-                  input(type='text' name='org_address_ur' required placeholder='Юридический адрес' id='org_address_ur')
+                  input(type='text' name='org_address_ur' required placeholder='Юридический адрес' id='js-AddressField')
                   .in.add_addres_wrap
                     input(type='text' name='org_address_fact[]' required placeholder='Фактический адрес организации' class='org_address_fact' data-addres-id='1')
                     i.fas.fa-plus.add__addres.btn

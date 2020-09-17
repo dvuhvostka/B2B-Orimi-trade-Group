@@ -3,6 +3,7 @@ block scripts
   link(rel='stylesheet' href='../order.css')
 block content
   script(src='cities.js')
+  script(src='ahunter_suggest.js')
   if !isRegistred
     p Зарегистрируйся
   else
@@ -38,7 +39,7 @@ block content
               label.order__label Рассчетный счёт
         .order__delivery.mb
           h5.delivery__header.header Адрес доставки
-          input(type='text' id="input_addr" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input
+          input(type='text' id="js-AddressField" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input
         .order__comments.mb
           h5.header.comments__headder Комментарии к заказу
           textarea(name='comments').comments__area
