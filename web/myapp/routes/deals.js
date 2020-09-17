@@ -30,6 +30,8 @@ router.route('/deals')
       }else{
         res.redirect('/shop');
       }
+    }).catch(function(err){
+      res.redirect('/shop');
     });
   }).post(function(req,res){
     db.one(`SELECT * FROM users WHERE id='`+req.session.userId+`'`).then(function(data){
