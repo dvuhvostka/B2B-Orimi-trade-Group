@@ -5,7 +5,7 @@ block scripts
   link(rel='stylesheet' href='cart_styles.css')
 block content
   script(src="../jquery-3.5.1.js")
-  p Фильтры:
+  p Фильтры
   form(action='/deals' method='POST')#showDeals
     label Регион:
     select(name='city')#city
@@ -24,6 +24,9 @@ block content
       option(value='1') Подтвержденные
       option(value='2') Завершенные
     button(type='submit')#showDeals Показать
+  p 
+    button(style="position: absolute; margin-left: 760px; margin-top: -35px;")#downloadDeals Выгрузить в exel
+  p
   .container
     if ((deals_info==0))
         p Ничего не найдено
@@ -60,14 +63,12 @@ block content
         div(id=deals_info[i].id+"_attach")
       
     script.
-      if(localStorage.getItem('city')!=0){
         var val1 = localStorage.getItem('time');
         var val2 = localStorage.getItem('city');
         var val3 = localStorage.getItem('confirmed');
-        $("select option[value=" + val1 + "]").attr('selected', 'true');
-        $("select option[value=" + val2 + "]").attr('selected', 'true');
-        $("select option[value=" + val3 + "]").attr('selected', 'true');
-      }
+        $("#time option[value=" + val1 + "]").attr('selected', 'true');
+        $("#city option[value=" + val2 + "]").attr('selected', 'true');
+        $("#confirmed option[value=" + val3 + "]").attr('selected', 'true');
       
       function showattachment(deal_id){
         if($.trim($('#'+deal_id+'_attach').text()) != "" ){
@@ -78,7 +79,7 @@ block content
             var out = "";
             var out_array = [];
             for (var i=0; i<data.length; i++){
-                out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+"</p>";
+                out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+", Артикул: "+data[i].articul+"</p>";
               }
               console.log(out);
               $('#'+deal_id+'_attach').html(out);
@@ -116,6 +117,18 @@ block content
               }else{
                 alert('Ошибка, попробуйте позже или свяжитесь с администрацией');
               }
+          });
+        });
+      $('#downloadDeals').on('click', function(){
+          var item = $(this);
+          var deal_id = item.attr('deal_id');
+          var city = $('#city').val();
+          var time = $('#time').val();
+          var confirmed = $('#confirmed').val();
+          console.log(city, time, confirmed);
+          $.post("/add",{post_type: "download_deals", city: city, time: time, confirmed: confirmed}, (data)=>{
+              if(!data.ok) alert("По текущим фильтрам сделок не найдено!");
+              if(data.ok) document.location.href = data.src;
           });
         });
       $('#endDeal').on('click', function(){

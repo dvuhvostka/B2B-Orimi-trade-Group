@@ -582,11 +582,14 @@ block content
             .tab-pane.fade#nav-mod-firms(role='tabpanel' aria-labelledby='nav-mod-firms').mod__content__item
               p В списке #{uncorgs.length} фирм(а).
                 -for (var u=0; u<uncorgs.length; u++)
-                  p #{uncorgs[u].org_name}
-                  p #{uncorgs[u].org_address}
-                  p #{uncorgs[u].owner_inn}
-                  p #{uncorgs[u].owner_id}
-                  p #{uncorgs[u].owner_position} #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
+                  p Название: #{uncorgs[u].org_name}
+                  p Юридический адрес: #{uncorgs[u].org_address_ur}
+                  - for(var i = 0;i<uncorgs[u].org_address_fact.length ;i++)
+                    p Фактический адрес #{i+1}: #{uncorgs[u].org_address_fact[i]}
+                  p ИНН: #{uncorgs[u].owner_inn}
+                  p #{uncorgs[u].owner_position}: #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
+                  label Запретить участвовать в акции фото полок: &#8194;
+                  input(type='checkbox' id=uncorgs[u].owner_id)
                   p Сканы документов:
                   - for(var z=0; z<uncorgs[u].docs.length; z++)
                       img(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
@@ -684,27 +687,17 @@ block content
       function confirm_org(owner_id){
         var conf = confirm("Вы действительно хотите ПОДТВЕРДИТЬ организацию?\n"+owner_id);
         if(conf){
-          $.post("/user",{post_type: "confirm_org_askdjfhl123123kaGFDGdfhFsdf3123", org_owner_id: owner_id});
+          var stock_access = true;
+          var checkbox = $('#'+owner_id);
+          if (checkbox.prop('checked')){
+            stock_access = false;
+          }
+          $.post("/user",{post_type: "confirm_org_askdjfhl123123kaGFDGdfhFsdf3123", org_owner_id: owner_id, stock_access: stock_access});
           showModal("Организация успешно подтверждена.\n"+owner_id);
           window.location.reload();
         }
       }
     
-      function showattachment(deal_id){
-          if($.trim($('#'+deal_id).text()) != "" ){
-            $('#'+deal_id).html('');
-          }else{
-            $.post("/add",{post_type: "showattachment", deal_id: deal_id}, (data)=>{
-              var out = "";
-              var out_array = [];
-              for (var i=0; i<data.length; i++){
-                  out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+"</p>";
-                }
-                console.log(out);
-                $('#'+deal_id).html(out);
-            });
-          }
-      }
       $('#add_tea_form, #add_coffee_form, #add_other_form, #add_horeca_tea_form, #add_horeca_coffee_form').on('submit', function(e) {
           e.preventDefault();
           var formData = new FormData(this);

@@ -5,6 +5,8 @@ const session = require('express-session');
 var bodyParser = require('body-parser')
 var config = require('../config');
 var {Pool, Client} = require('pg');
+var xlsx = require('xlsx-populate');
+const rimraf = require('rimraf');
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -80,6 +82,117 @@ router.route('/add')
                 db.none(del_deal_sql_1);
                 res.json({
                   ok: true
+                });
+                break;
+              }
+              case 'download_deals': {
+                //console.log(req.body.city, req.body.time, req.body.confirmed);
+                rimraf('./public/xlsx/*', function () {});
+                var timeNow = Date.now();
+                var time = Date.now() - req.body.time;
+                var sql = 0;
+
+                if(req.body.time=='all'){
+                  time = 0;
+                }
+
+                if(req.body.city=='all'){
+                  sql = `SELECT * FROM deals_info WHERE confirmed='`+req.body.confirmed+`' AND (timestamp>`+Number(time)+`)`;
+                }else{
+                  sql = `SELECT * FROM deals_info WHERE region='`+req.body.city+`' AND confirmed='`+req.body.confirmed+`' AND (timestamp>`+Number(time)+`)`;
+                }
+
+                db.any(sql).then(function(deals){
+                  if(deals.length == 0){
+                    res.json({
+                      ok: false
+                    });
+                  }else{
+                    xlsx.fromBlankAsync()
+                    .then(workbook => {
+                        // Modify the workbook.
+                        let counter;
+                        let worksheet = workbook.sheet("Sheet1");
+
+                        worksheet.column("A").width(5); //Ширина столбца
+                        worksheet.column("B").width(22);
+                        worksheet.column("C").width(30);
+                        worksheet.column("D").width(50);
+                        worksheet.column("E").width(18);
+                        worksheet.column("F").width(17);
+                        worksheet.column("G").width(17);
+                        worksheet.column("H").width(15);
+                        worksheet.column("I").width(150);
+                        worksheet.cell("A1").value("№");
+                        worksheet.cell("B1").value("Дата");
+                        worksheet.cell("C1").value("ФИО");
+                        worksheet.cell("D1").value("Адрес получения");
+                        worksheet.cell("E1").value("Контакты");
+                        worksheet.cell("F1").value("Тип оплаты");
+                        worksheet.cell("G1").value("Статус");
+                        worksheet.cell("H1").value("Итого к оплате");
+                        worksheet.cell("I1").value("Товары");
+
+                          db.task(async (t) => {
+                                const q1 = new Array();
+                                for(var x = 0; x<deals.length; x++){
+                                  q1[x] = await t.any("SELECT * FROM deals WHERE deal_id='"+deals[x].id+"'");
+                                }
+                              return {q1};
+                          })
+                              .then(data => {
+                                for(var i=0; i<deals.length; i++){
+                                    deals[i].delivery_address = deals[i].delivery_address.replace('%2C', ',');
+                                    deals[i].delivery_address = deals[i].delivery_address.replace('%2D', '-');
+                                    deals[i].delivery_address = deals[i].delivery_address.replace('%2E', '.');
+                                    deals[i].delivery_address = deals[i].delivery_address.replace('%2F', '/');
+
+                                    let date = deals[i].date.split('.')[0];
+                                    let payment_method;
+                                    let confirm_status;
+
+                                    switch (deals[i].payment_method) {
+                                      case 'nal': payment_method = 'Наличные'; break;
+                                      case 'beznal': payment_method = 'Онлайн оплата'; break;
+                                      case 'bill': payment_method = 'Выставлен счет'; break;
+                                    }
+
+                                    switch (deals[i].confirmed) {
+                                      case 0: confirm_status = 'Не подтверждена'; break;
+                                      case 1: confirm_status = 'Подтверждена'; break;
+                                      case 2: confirm_status = 'Завершена'; break;
+                                    }
+                                    for (var x=0; x<data.q1[i].length; x++){
+                                      counter = worksheet.usedRange().value().length+1;
+                                      worksheet.cell("A"+counter).value(deals[i].id);
+                                      worksheet.cell("B"+counter).value(date);
+                                      worksheet.cell("C"+counter).value(deals[i].second_name_owner+" "+deals[i].first_name_owner+" "+deals[i].third_name_owner);
+                                      worksheet.cell("D"+counter).value(deals[i].delivery_address);
+                                      worksheet.cell("E"+counter).value(deals[i].owner_contact);
+                                      worksheet.cell("F"+counter).value(payment_method);
+                                      worksheet.cell("G"+counter).value(confirm_status);
+                                      worksheet.cell("H"+counter).value(deals[i].final_price);
+                                      worksheet.cell("I"+counter).value(data.q1[i][x].product+", кол-во: "+data.q1[i][x].count+", Цена: "+data.q1[i][x].full_price+", Артикул: "+data.q1[i][x].articul);
+                                    }
+                                  }
+                                  var date = new Date();
+                                  var dategetmonth = date.getMonth()+1;
+                                  if(dategetmonth<10){
+                                    dategetmonth = "0" + dategetmonth.toString();
+                                  }
+                                  var src = date.getDate()+"."+dategetmonth+"."+date.getFullYear()+"-"+Date.now()+".xlsx";
+                                  workbook.toFileAsync("./public/xlsx/"+src);
+                                  console.log('Deals downloaded SUCCESS');
+                                  res.json({
+                                    ok: true,
+                                    src: "./xlsx/"+src
+                                  })
+                              })
+                              .catch(error => {
+                                  // failure, ROLLBACK was executed
+                              });
+                    });
+                  }
                 });
                 break;
               }

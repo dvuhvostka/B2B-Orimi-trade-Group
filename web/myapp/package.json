@@ -25,7 +25,8 @@
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
     "typescript": "^3.9.5",
-    "uuid": "^8.1.0"
+    "uuid": "^8.1.0",
+    "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.3",
