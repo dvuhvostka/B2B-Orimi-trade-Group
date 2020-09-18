@@ -19,3 +19,12 @@
 .showdeals {
   margin: 0 20px;
 }
+
+.filter_select {
+  height: 38px;
+}
+
+.deals_info_wrap {
+  display: flex;
+  justify-content: center;
+}

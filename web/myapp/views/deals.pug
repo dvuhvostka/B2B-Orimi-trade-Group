@@ -9,18 +9,18 @@ block content
     h5.header Фильтры
     form(action='/deals' method='POST')#showDeals.filters_wrap
       label.filter_label Регион:
-      select(name='city')#city
+      select(name='city').filter_select#city
         option(value='78') Санкт-Петербург и обл.
         option(value='77') Москва и обл.
         option(value='all') Все
       label.filter_label Время:
-      select(name='time')#time
+      select(name='time').filter_select#time
         option(value='86400000') За сутки
         option(value='604800000') За неделю
         option(value='2592000000') За 30 дней
         option(value='all') За все время
       label.filter_label Статус:
-      select(name='confirmed')#confirmed
+      select(name='confirmed').filter_select#confirmed
         option(value='0') Не подтвержденные
         option(value='1') Подтвержденные
         option(value='2') Завершенные
@@ -31,7 +31,7 @@ block content
           p.deals__no Ничего не найдено
       else
       -for(var i=0; i<deals_info.length; i++)
-        div(id=deals_info[i].id)
+        div(id=deals_info[i].id).deal_item
           p 
             b № #{deals_info[i].id}
           p
