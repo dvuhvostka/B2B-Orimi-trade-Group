@@ -125,8 +125,9 @@ block content
             var confirmed = $('#confirmed').val();
             console.log(city, time, confirmed);
             $.post("/add",{post_type: "download_deals", city: city, time: time, confirmed: confirmed}, (data)=>{
-                if(!data.ok) alert("По текущим фильтрам сделок не найдено!");
-                if(data.ok) document.location.href = data.src;
+                if(!data.ok){alert("По текущим фильтрам сделок не найдено!");}else{
+                  setTimeout(document.location.href = data.src, 1000);
+                }
             });
           });
         $('#endDeal').on('click', function(){
