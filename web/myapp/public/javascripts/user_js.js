@@ -12,9 +12,6 @@ function ready(){
   AhunterSuggest.Address.Solid( options );
 
   var input = document.querySelector('#docs');
-  var input_photo = document.querySelector('#photo');
-  var label_photo = input_photo.nextElementSibling,
-      label_photo_value = label_photo.innerHTML;
   var label = input?input.nextElementSibling:'',
       labelValue = label.innerHTML;
   console.log(labelValue);
@@ -32,6 +29,9 @@ function ready(){
       else
         label.innerHTML = labelValue;
     });
+    var input_photo = document.querySelector('#photo');
+    var label_photo = input_photo.nextElementSibling,
+        label_photo_value = label_photo.innerHTML;
   input_photo.addEventListener('change', function(e){
     var fileName = '';
     console.log(this.files);
