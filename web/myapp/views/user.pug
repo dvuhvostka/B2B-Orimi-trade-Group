@@ -684,6 +684,7 @@ block content
     $('#org_form').on('submit', function(e) {
         e.preventDefault();
         var formData = new FormData(this);
+        console.log("123");
         $.ajax({
             type: "POST",
             url: "/user",

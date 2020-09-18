@@ -69,15 +69,16 @@ block content
           if (deals_info[i].confirmed==0)
             h6.header Не подтверждена
             .btn-row
-              button.btn-success.btn(deal_id=deals_info[i].id)#confirmDeal Подтвердить
-              button.btn-danger.btn(deal_id=deals_info[i].id)#deleteDeal Удалить
+              button.btn-success.btn(deal_id=deals_info[i].id).confirmDeal Подтвердить
+              button.btn-danger.btn(deal_id=deals_info[i].id).deleteDeal Удалить
           else if(deals_info[i].confirmed==1)
             h6.header Подтверждена
             .btn-row
-              button.btn.btn-primary(deal_id=deals_info[i].id)#endDeal Завершить
-              button.btn-danger.btn(deal_id=deals_info[i].id)#deleteDeal Удалить
+              button.btn.btn-primary(deal_id=deals_info[i].id).endDeal Завершить
+              button.btn-danger.btn(deal_id=deals_info[i].id).deleteDeal Удалить
           else
             p Завершена
+            button.btn-danger.btn(deal_id=deals_info[i].id).deleteDeal Удалить
           .btn-row-print
             button.btn.btn-secondary.btn_attach(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
             button.btn.btn-secondary.btn_print
@@ -116,7 +117,7 @@ block content
             localStorage.setItem('confirmed', confirmed);
             localStorage.setItem('city', city);
           });
-        $('#deleteDeal').on('click', function(){
+        $('.deleteDeal').on('click', function(){
             var item = $(this);
             var deal_id = item.attr('deal_id');
             $.post("/add",{post_type: "delete_deal", deal_id: deal_id}, (data)=>{
@@ -127,7 +128,7 @@ block content
                 location.reload();
             });
           });
-        $('#confirmDeal').on('click', function(){
+        $('.confirmDeal').on('click', function(){
             var item = $(this);
             var deal_id = item.attr('deal_id');
             $.post("/add",{post_type: "confirm_deal", deal_id: deal_id}, (data)=>{
@@ -150,11 +151,12 @@ block content
             console.log(city, time, confirmed);
             $.post("/add",{post_type: "download_deals", city: city, time: time, confirmed: confirmed}, (data)=>{
                 if(!data.ok){alert("По текущим фильтрам сделок не найдено!");}else{
-                  document.location.href=data.src;
+                  setTimeout(document.location.href=data.src, 1000);
                 }
             });
           });
-        $('#endDeal').on('click', function(){
+        $('.endDeal').on('click', function(){
+            console.log("123");
             var item = $(this);
             var deal_id = item.attr('deal_id');
             $.post("/add",{post_type: "end_deal", deal_id: deal_id}, (data)=>{
