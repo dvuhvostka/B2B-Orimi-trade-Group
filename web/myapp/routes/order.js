@@ -79,14 +79,28 @@ var address, payment, bonuses, comments;
 
   cart.fullcost -= Math.floor(bonuses); //Вычли бонусы из цены
   console.log(cart.fullcost);
+  var dateNow = new Date();
+  address = address.replace(/%2C/g, ',');
+  address = address.replace('%2D', '-');
+  address = address.replace('%2E', '.');
+  address = address.replace(/%2F/g, '/');
+  var dategetmonth = dateNow.getMonth()+1;
+  var dategetminutes = dateNow.getMinutes();
+  if(dategetminutes<10){
+    dategetminutes = "0"+dategetminutes.toString();
+  }
+  if(dategetmonth<10){
+    dategetmonth = "0" + dategetmonth.toString();
+  }
+  var getdatenow = dateNow.getDate()+"."+dategetmonth+"."+dateNow.getFullYear()+" "+dateNow.getHours()+":"+dategetminutes+":"+dateNow.getSeconds();
   db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact, bonuses, comments, timestamp, region) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact}, ${bonuses}, ${comments}, ${timestamp}, ${region})', {
     owner_id: userdata[0].id,
     confirmed: 0,
-    date: new Date(),
+    date: getdatenow,
     first_name_owner: userdata[0].username,
     second_name_owner: userdata[0].second_name,
     third_name_owner: userdata[0].third_name,
-    delivery_address: address,
+    delivery_address: decodeURI(address),
     final_price: cart.fullcost,
     payment_method: payment,
     owner_contact: userdata[0].number,

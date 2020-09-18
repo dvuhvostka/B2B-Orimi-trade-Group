@@ -25,7 +25,7 @@ block content
         option(value='1') Подтвержденные
         option(value='2') Завершенные
       button.btn.btn-primary.showdeals(type='submit')#showDeals Показать
-      button.btn.btn-success.btn-excel#downloadDeals Выгрузить в exel
+    button.btn.btn-success.btn-excel#downloadDeals Выгрузить в exel
     .deals_info_wrap
       if ((deals_info==0))
           p.deals__no Ничего не найдено
@@ -101,6 +101,7 @@ block content
                 var foo = $('#'+deal_id);
                 foo.detach();
                 alert('Сделка № '+deal_id+' успешно удалена');
+                location.reload();
             });
           });
         $('#confirmDeal').on('click', function(){
@@ -126,7 +127,7 @@ block content
             console.log(city, time, confirmed);
             $.post("/add",{post_type: "download_deals", city: city, time: time, confirmed: confirmed}, (data)=>{
                 if(!data.ok){alert("По текущим фильтрам сделок не найдено!");}else{
-                  setTimeout(document.location.href = data.src, 1000);
+                  document.location.href=data.src;
                 }
             });
           });
