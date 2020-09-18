@@ -112,7 +112,7 @@
   margin: 5rem 47.4%;
 }
 
-#docs {
+#docs,#photo {
   position: absolute;
   width:0.1px;
   height:0.1px;
@@ -301,5 +301,71 @@ margin: 5px 0 0 0;
 
 .promo_wrap {
   margin-bottom: 10px;
+}
+
+.label_photo {
+  width: 50%;
+  min-width: 200px;
+  margin: 20px auto;
+}
+
+.photo_submit {
+  width: 50%;
+  min-width: 200px;
+  margin: 0 auto;
+
+}
+
+.weekly_sale_wrap, .wrap {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #cbcbcb;
+  border-radius: .25rem;
+  margin-top: 10px;
+  padding: 10px;
+}
+.weekly_statuses {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  width:100%;
+}
+
+.status {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.start_weekly {
+  width: 100%;
+  border-top: 1px solid #cbcbcb;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.start_header {
+  font-size: 18px;
+  font-style: italic;
+}
+
+.radio_weekly {
+  justify-content: center;
+  display: flex;
+}
+
+.radio_set {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 20px;
+}
+.radio_input {
+  margin: 0 auto;
+}
+.capsule_status {
+  text-align: center;
+}
+.capsule_min_amount {
+  margin: 0 5px;
 }
 /* ----------- */

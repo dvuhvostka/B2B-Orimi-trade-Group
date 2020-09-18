@@ -1,0 +1,21 @@
+.wrap {
+  width: 70%;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  text-align:center;
+}
+
+.filters_wrap {
+  margin: 20px auto;
+}
+
+.filter_label {
+  margin: 0 10px;
+}
+
+.showdeals {
+  margin: 0 20px;
+}

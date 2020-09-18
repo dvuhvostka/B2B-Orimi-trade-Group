@@ -190,16 +190,46 @@ block content
           .sales__block
             h4.sales__block__header.header Участие в акциях
           if (type=='ur_type' && org_info==2)
-            div#link_code_wrap Код для продавцов
+            #link_code_wrap Код для продавцов
               .in
                 input(type="text" id="link_code" value=""+info.link_code+"" )
                 button.btn.btn-primary(onclick="copylinkcode()") Копировать
-            .sale__item
-              h5.item__header.header Поддержи ассортимент
-              a(href='/sales/weekly' target='_blank').item__info Подробнее об акции
+            if info.access
+              .sale__item
+                h5.item__header.header Продержи получи
+                a(href='/sales/weekly' target='_blank').item__info Подробнее об акции
+                .weekly_sale_wrap
+                  .weekly_statuses
+                    h6.header.start_header Участие
+                    span.status Кейс 1:
+                      span.status_text нет информации
+                    span.status Кейс 2:
+                      span.status_text нет информации
+                    span.status Кейс 3:
+                      span.status_text нет информации
+                  .start_weekly
+                    h6.header.start_header Выберите кейс
+                    .radio_weekly
+                      .radio_set
+                        label.radio_label Кейс 1
+                        input(type='radio' name='cases' value='case1').radio_input
+                      .radio_set
+                        label.radio_label Кейс 2
+                        input(type='radio' name='cases' value='case2').radio_input
+                      .radio_set
+                        label.radio_label Кейс 3
+                        input(type='radio' name='cases' value='case3').radio_input
+                    input(type='file' name='photo' id='photo' multiple data-multiple-caption='{count} файлов выбрано' required)
+                    label.btn.btn-outline-info.label_photo(type='button' id='photo_label' for='photo')
+                      span Прикрепить фото
+                    button.btn.btn-success.photo_submit Отправить
             .sale__item
               h5.item__header.header Кофемашина BORK
               a(href='/sales/capsule' target='_blank').item__info Подробнее об акции
+              .wrap
+                span.capsule_status Приобретите продукции еще на
+                  span.capsule_min_amount 3000
+                  span р.
           if (type=='phys_type')
             if (!link_code)
               a#code_link(data-toggle='collapse' href='#code' aria-expanded='false' aria-controls='code').btn.btn-info Участие в акции для продавцов

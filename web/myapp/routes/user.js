@@ -191,6 +191,7 @@ user.route('/user')
           info.status = status;
           info.link_code = resp.rows[0].link_code;
           info.type = resp.rows[0].type;
+          info.access = resp.rows[0].stock_access;
         }
         var deals = 0;
 
@@ -244,7 +245,8 @@ user.route('/user')
                       uncorgs: uncorgs,
                       link_code: response.rows[0].link_code,
                       attached_org: attachedorg,
-                      requests: requests
+                      requests: requests,
+                      access:response.stock_access
                     });
                   });
                 });
@@ -252,7 +254,7 @@ user.route('/user')
                 console.log('ERROR:', error);
               });
             }else{
-              console.log(response.rows[0].permissions);
+              console.log(response.rows[0].permissions,123);
               res.render('user',{
                 title: "Аккаунт",
                 isRegistred: req.session.userId,
@@ -268,7 +270,9 @@ user.route('/user')
                 info: info,
                 deals: d_data,
                 link_code: response.rows[0].link_code,
-                attached_org: attachedorg
+                attached_org: attachedorg,
+                access:response.stock_access
+
               });
             }
           });

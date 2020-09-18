@@ -23,9 +23,9 @@ block content
             h3.content__header Акционный набор №#{saleInfo.set_id}
             p.content__title Включает в себя:
             .content__items_wrap
-              - for(var i = 0; i < saleInfo.products_id.length; i++)
+              - for(var i = 0; i < products_info.length; i++)
                 .item_product
-                  img(src="../store_prods/"+products_info[i].type+"/"+products_info[i].sort+"/"+products_info[i].id+".jpg").item_product__img
+                  img(src="../store_prods/"+products_info[i].type+"/"+products_info[i].sort+"/"+products_info[i].articul+"/1.jpg").item_product__img
                   a(href='/shop/'+products_info[i].type+'?id='+products_info[i].id).item_product__name #{products_info[i].item_name}
                   p.item_product__amount Количество #{saleInfo.amount[i]} шт.
             .content__footer
