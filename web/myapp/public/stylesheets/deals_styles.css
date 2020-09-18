@@ -9,7 +9,7 @@
 }
 
 .filters_wrap {
-  margin: 20px auto;
+  margin: 20px 0 20px auto;
 }
 
 .filter_label {
@@ -72,4 +72,44 @@
 
 .attach_info {
   margin: 10px auto;
+}
+
+.head-row {
+  display: flex;
+}
+
+.btn-excel {
+  height: 38px;
+  margin: auto auto auto 0;
+}
+.btn-row-print{
+  display: flex;
+  margin: 0 auto
+}
+
+.btn-row-print button:nth-child(1){
+  margin-right: 10px;
+}
+
+.print_window {
+  width:500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+#print{
+  display: none;
+}
+@media print {
+  nav, .deals_wrap {
+    display: none;
+  }
+  #print {
+    display: flex;
+    visibility: visible;
+    font-size:25px;
+  }
+  .in > p:nth-child(1){
+    min-width:100px;
+  }
 }

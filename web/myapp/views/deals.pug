@@ -3,30 +3,33 @@ extends layout2
 
 block scripts
   link(rel='stylesheet' href='deals_styles.css')
+  link(href="print.min.css" rel="stylesheet")
+  script(src="print.min.js")
 block content
   script(src="../jquery-3.5.1.js")
-  .print_window
+  .print_window#print
   .wrap.deals_wrap
     h5.header Фильтры
-    form(action='/deals' method='POST')#showDeals.filters_wrap
-      label.filter_label Регион:
-      select(name='city').filter_select#city
-        option(value='78') Санкт-Петербург и обл.
-        option(value='77') Москва и обл.
-        option(value='all') Все
-      label.filter_label Время:
-      select(name='time').filter_select#time
-        option(value='86400000') За сутки
-        option(value='604800000') За неделю
-        option(value='2592000000') За 30 дней
-        option(value='all') За все время
-      label.filter_label Статус:
-      select(name='confirmed').filter_select#confirmed
-        option(value='0') Не подтвержденные
-        option(value='1') Подтвержденные
-        option(value='2') Завершенные
-      button.btn.btn-primary.showdeals(type='submit')#showDeals Показать
-    button.btn.btn-success.btn-excel#downloadDeals Выгрузить в exel
+    .head-row
+      form(action='/deals' method='POST')#showDeals.filters_wrap
+        label.filter_label Регион:
+        select(name='city').filter_select#city
+          option(value='78') Санкт-Петербург и обл.
+          option(value='77') Москва и обл.
+          option(value='all') Все
+        label.filter_label Время:
+        select(name='time').filter_select#time
+          option(value='86400000') За сутки
+          option(value='604800000') За неделю
+          option(value='2592000000') За 30 дней
+          option(value='all') За все время
+        label.filter_label Статус:
+        select(name='confirmed').filter_select#confirmed
+          option(value='0') Не подтвержденные
+          option(value='1') Подтвержденные
+          option(value='2') Завершенные
+        button.btn.btn-primary.showdeals(type='submit')#showDeals Показать
+      button.btn.btn-success.btn-excel#downloadDeals Выгрузить в exel
     .deals_info_wrap
       if ((deals_info==0))
           p.deals__no Ничего не найдено
@@ -62,7 +65,7 @@ block content
             p #{deals_info[i].bonuses}
           .in
             p Итого:
-            p #{deals_info[i].final_price}
+            p #{deals_info[i].final_price} р.
           if (deals_info[i].confirmed==0)
             h6.header Не подтверждена
             .btn-row
@@ -164,3 +167,13 @@ block content
               }
             });
           });
+        $('.btn_print').on('click',(e)=>{
+          var btn = e.currentTarget;
+          data = btn.parentNode.parentNode.innerHTML;
+          var print = document.querySelector('#print');
+          print.innerHTML = data;
+          print.querySelector('.btn-row').remove();
+          print.querySelector('.btn-row-print').remove();
+          window.print();
+          print.innerHTML='';
+        });

@@ -12,6 +12,7 @@ const pgp = require("pg-promise")(/*options*/);
 var config = require('./config');
 
 
+
 //var for sessions and connecting to databse
 const {
   SESS_LIFETIME = config.SESS_TIME,

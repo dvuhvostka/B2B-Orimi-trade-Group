@@ -22,6 +22,7 @@
 }
 .card__header{
   text-align: center;
+  min-width: 285px;
 }
 .card__img {
   width:250px;
