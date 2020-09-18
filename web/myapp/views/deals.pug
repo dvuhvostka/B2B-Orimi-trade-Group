@@ -5,6 +5,7 @@ block scripts
   link(rel='stylesheet' href='deals_styles.css')
 block content
   script(src="../jquery-3.5.1.js")
+  .print_window
   .wrap.deals_wrap
     h5.header Фильтры
     form(action='/deals' method='POST')#showDeals.filters_wrap
@@ -32,34 +33,53 @@ block content
       else
       -for(var i=0; i<deals_info.length; i++)
         div(id=deals_info[i].id).deal_item
-          p 
-            b № #{deals_info[i].id}
-          p
-            b #{deals_info[i].date}
-          p #{deals_info[i].owner_id}
-          p #{deals_info[i].second_name_owner} #{deals_info[i].first_name_owner} #{deals_info[i].third_name_owner}
-          p #{deals_info[i].delivery_address} 
-          p #{deals_info[i].owner_contact} 
-          if (deals_info[i].payment_method=='nal')
-            p Наличные
-          if (deals_info[i].payment_method=='beznal')
-            p Безнал
-          if (deals_info[i].payment_method=='bill')
-            p Выставлен счет
-          p Использовано бонусов: #{deals_info[i].bonuses} (Скидка: #{deals_info[i].bonuses} руб.)
-          p Итого: #{deals_info[i].final_price}
+          h6.header № #{deals_info[i].id}
+          .in
+            p Дата:
+            p #{deals_info[i].date}
+          .in
+            p Id:
+            p #{deals_info[i].owner_id}
+          .in
+            p ФИО:
+            p #{deals_info[i].second_name_owner} #{deals_info[i].first_name_owner} #{deals_info[i].third_name_owner}
+          .in
+            p Адрес:
+            p #{deals_info[i].delivery_address} 
+          .in 
+            p Контакты:
+            p #{deals_info[i].owner_contact} 
+          .in
+            p Оплата
+            if (deals_info[i].payment_method=='nal')
+              p Наличные
+            if (deals_info[i].payment_method=='beznal')
+              p Безнал
+            if (deals_info[i].payment_method=='bill')
+              p Выставлен счет
+          .in
+            p Использовано бонусов:
+            p #{deals_info[i].bonuses}
+          .in
+            p Итого:
+            p #{deals_info[i].final_price}
           if (deals_info[i].confirmed==0)
-            p Не подтверждена
-            button(deal_id=deals_info[i].id)#confirmDeal Подтвердить
-            button(deal_id=deals_info[i].id)#deleteDeal Удалить
+            h6.header Не подтверждена
+            .btn-row
+              button.btn-success.btn(deal_id=deals_info[i].id)#confirmDeal Подтвердить
+              button.btn-danger.btn(deal_id=deals_info[i].id)#deleteDeal Удалить
           else if(deals_info[i].confirmed==1)
-            p Подтверждена
-            button(deal_id=deals_info[i].id)#endDeal Завершить
-            button(deal_id=deals_info[i].id)#deleteDeal Удалить
+            h6.header Подтверждена
+            .btn-row
+              button.btn.btn-primary(deal_id=deals_info[i].id)#endDeal Завершить
+              button.btn-danger.btn(deal_id=deals_info[i].id)#deleteDeal Удалить
           else
             p Завершена
-          button(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
-          div(id=deals_info[i].id+"_attach")        
+          .btn-row-print
+            button.btn.btn-secondary.btn_attach(deal_id=deals_info[i].id id='deal_'+deals_info[i].id onclick="showattachment('"+deals_info[i].id+"')") Показать вложения
+            button.btn.btn-secondary.btn_print
+              i.fas.fa-print
+          div(id=deals_info[i].id+"_attach").attach_info
       script.
         var val1 = localStorage.getItem('time');
         var val2 = localStorage.getItem('city');

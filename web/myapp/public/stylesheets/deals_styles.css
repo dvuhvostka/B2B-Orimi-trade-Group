@@ -1,5 +1,5 @@
 .wrap {
-  width: 70%;
+  width: 80%;
   margin: 20px auto;
   display: flex;
   flex-direction: column;
@@ -26,5 +26,50 @@
 
 .deals_info_wrap {
   display: flex;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  width: 100%;
   justify-content: center;
+}
+
+.in{
+  display: flex;
+  margin-bottom: 10px;
+}
+.in > p:nth-child(1){
+  color: rgb(108, 112, 112);
+  margin-right:10px;
+  margin-bottom: 0;
+  min-width:40px;
+}
+.in > p:nth-child(2){
+  margin: auto 0;
+}
+.deal_item {
+  width:300px;
+  margin: 20px 15px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+}
+.btn-row{
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+}
+.btn-row button {
+  width: 45%;
+
+}
+.btn-row button:nth-child(1){
+  margin-right: 10px;
+}
+
+.btn_attach {
+  margin: 0 auto;
+  width:180px;
+}
+
+.attach_info {
+  margin: 10px auto;
 }
