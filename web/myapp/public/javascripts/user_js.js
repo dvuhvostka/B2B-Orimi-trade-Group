@@ -77,7 +77,7 @@ window.onload = function() {
       var number = inputs[inputs.length-1].getAttribute('data-addres-id');
       newDiv.className = "in add_addres_wrap";
       newDiv.innerHTML = "<input type='text' name='org_address_fact[]' required "
-      +"placeholder='Фактический адрес организации' data-addres-id="+(Number(number)+1)+" class='org_address_fact'>"
+      +"placeholder='Фактический адрес организации' data-addres-id="+(Number(number)+1)+" class='org_address_fact js-AddressField'>"
       +"<a class='remove__addres btn'><i class='fas fa-minus minus_btn'></i></a>";
       var prevElem = inputs[inputs.length-1].parentNode;
       prevElem.after(newDiv);

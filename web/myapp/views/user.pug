@@ -126,9 +126,9 @@ block content
               #org_confirm.collapse
                 form(method='POST' enctype='multipart/form-data')#org_form
                   input(type='text' name='org_name' required placeholder='Название организации' id='org_name' )
-                  input(type='text' name='org_address_ur' required placeholder='Юридический адрес' id='js-AddressField')
+                  input(type='text' name='org_address_ur' required placeholder='Юридический адрес' id='org_address_ur')
                   .in.add_addres_wrap
-                    input(type='text' name='org_address_fact[]' required placeholder='Фактический адрес организации' class='org_address_fact' data-addres-id='1')
+                    input(type='text' name='org_address_fact[]' required placeholder='Фактический адрес организации' class='org_address_fact js-AddressField' data-addres-id='1')
                     i.fas.fa-plus.add__addres.btn
                   input(type='text' name='inn' required placeholder='ИНН' pattern='[0-9]{10,}' id='inn')
                   select(name='position' placeholder='Должность' required)
