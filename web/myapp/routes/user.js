@@ -556,6 +556,7 @@ user.route('/user')
                 break;
               }
               default: {
+                  console.log(123123);
                   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
                   var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
                   console.log(req.body.custom_type);

@@ -12,9 +12,6 @@ function ready(){
   AhunterSuggest.Address.Solid( options );
 
   var input = document.querySelector('#docs');
-  var input_photo = document.querySelector('#photo');
-  var label_photo = input_photo.nextElementSibling,
-      label_photo_value = label_photo.innerHTML;
   var label = input?input.nextElementSibling:'',
       labelValue = label.innerHTML;
   console.log(labelValue);
@@ -32,19 +29,23 @@ function ready(){
       else
         label.innerHTML = labelValue;
     });
-  input_photo.addEventListener('change', function(e){
-    var fileName = '';
-    console.log(this.files);
-    if (this.files && this.files.length > 1)
-      fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}',this.files.length);
-    else
-      fileName = this.files[0].name;
+    var input_photo = document.querySelector('#photo');
+    var label_photo = input_photo?input_photo.nextElementSibling:'',
+        label_photo_value = label_photo?label_photo.innerHTML:'';
+    if (input_photo)
+    input_photo.addEventListener('change', function(e){
+      var fileName = '';
+      console.log(this.files);
+      if (this.files && this.files.length > 1)
+        fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}',this.files.length);
+      else
+        fileName = this.files[0].name;
 
-    if (fileName)
-      label_photo.querySelector('span').innerHTML = fileName;
-    else
-      label_photo.innerHTML = label_photo_value;
-  });
+      if (fileName)
+        label_photo.querySelector('span').innerHTML = fileName;
+      else
+        label_photo.innerHTML = label_photo_value;
+    });
 }
 $.fn.setCursorPosition = function(pos) {
   if ($(this).get(0).setSelectionRange) {
