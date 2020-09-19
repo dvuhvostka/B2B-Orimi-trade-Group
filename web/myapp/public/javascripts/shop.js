@@ -11,6 +11,20 @@ function showModalCity(mssg){
     data: array,
   })
 
+  $('.count_input_pack').on('keyup', function(){
+    var item = $(this);
+    if(item.val()>1000){
+      item.val(1000);
+    }
+  });
+
+  $('.count_input_box').on('keyup', function(){
+    var item = $(this);
+    if(item.val()>100){
+      item.val(100);
+    }
+  });
+
   var range_price = document.getElementById('range_price');
   var input_range_price = document.getElementById('input_range_price');
   var range_weight = document.getElementById('range_weight');
@@ -95,10 +109,12 @@ $('.minus').on('click', function(){
 })
 $('.plus').on('click', function(){
   var item = $(this);
-  item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
-  var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
-  var get_box_count = input_kor.attr('box_count');
-  input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
+  if(item.siblings('.input').val()<1000){
+    item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+    var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
+    var get_box_count = input_kor.attr('box_count');
+    input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
+  }
 })
 
 $('.kor .range_items .input').on('change',function(){
@@ -114,9 +130,11 @@ if(!localStorage.getItem('cart')){
 
 $('.box_count_plus').on('click', function(){
   var item = $(this);
-  item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
-  var input_sht = item.parentsUntil('.footer_item').siblings('.sht').children('.range_items').children('.input');
-  input_sht.val(item.attr('box_count')*item.siblings('.input').val());
+  if(item.siblings('.input').val()<100){
+    item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+    var input_sht = item.parentsUntil('.footer_item').siblings('.sht').children('.range_items').children('.input');
+    input_sht.val(item.attr('box_count')*item.siblings('.input').val());
+  }
 });
 
 $('.box_count_minus').on('click', function(){
