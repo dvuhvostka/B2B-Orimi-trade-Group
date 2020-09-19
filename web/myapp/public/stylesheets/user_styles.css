@@ -80,7 +80,7 @@
 
 #org_info {
   margin-top:5px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
 }
 
 #org_form {
@@ -372,5 +372,36 @@ margin: 5px 0 0 0;
 .btn-column {
   display: flex;
   flex-direction: column;
+}
+
+.settings_wrap {
+  display: flex;
+  flex-direction: column;
+  padding:10px;
+  border-top: 1px solid #cbcbcb;
+  margin-right: auto;
+}
+
+.pass_label {
+  color: #7e7979;
+  font-size: 14px;
+  min-width: 210px;
+  text-align: right;
+  margin: auto 15px auto 0;
+}
+.pass {
+  margin-bottom: 10px;
+}
+.pass_input {
+  min-width: 150px;
+  padding-left: 15px;
+}
+.pass_change {
+  margin: 0 auto;
+}
+.password_change {
+  display: flex;
+  flex-direction: column;
+
 }
 /* ----------- */
