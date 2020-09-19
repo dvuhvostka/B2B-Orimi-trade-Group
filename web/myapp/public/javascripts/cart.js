@@ -202,6 +202,13 @@
                 }
               }
 
+              $('.count_input_pack').on('keyup', function(){
+                var item = $(this);
+                if(item.val()>1000){
+                  item.val(1000);
+                }
+              });
+
               $('.addtocart').on('click', function(){
                 var item = $(this);
                 var data_id = item.attr('data-id');
@@ -228,9 +235,7 @@
                           $('.final_price').html(rounded_cost+' ');
                           if(rounded_cost<4000){
                             if(rounded_cost<2000){
-                              if(Math.round((final_price_result)*100)/100<2000){
                                 $('.submit_cart').prop("disabled", true);
-                              }
                             }else{
                               $('.submit_cart').prop("disabled", false);
                             }
@@ -271,7 +276,7 @@
                 } else {
                   return 0;
                 }
-              }else{
+              }else if((item.siblings('.input').val() > 1)&&(item.siblings('.input').val() < 1000)){
                 item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
               }
             })
