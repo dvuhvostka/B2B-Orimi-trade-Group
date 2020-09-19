@@ -345,6 +345,43 @@ router.route('/add')
                 });
               }
               break;
+              case 'search_firm': {
+                var sql = `
+                  SELECT * FROM organizations WHERE org_name='`+req.body.value+`' or org_address_ur='`+req.body.value+`' or
+                  owner_inn='`+req.body.value+`' or owner_id='`+req.body.value+`' or '`+req.body.value+`' = any(org_address_fact) or
+                  owner_sname='`+req.body.value+`' and org_confirmed='1'
+                `;
+                console.log(sql);
+                db.any(sql).then(function(resp){
+                  if (resp.length){
+                    res.json(resp);
+                  }
+                  else{
+                    res.json('Ничего не найдено')
+                  }
+                })
+                .catch(function(err){
+                  res.json({
+                    ok: false,
+                    err
+                  });
+                })
+              }
+                break;
+              case 'add_to_sale':{
+                var sql = `UPDATE organizations SET stock_access=true WHERE id='`+req.body.id+`'`;
+                db.none(sql).then(()=>{
+                  res.json({
+                    ok:true
+                  })
+                })
+                .catch((err)=>{
+                  res.json({
+                    ok:false,
+                    err
+                  })
+                })
+              }
               default: res.send('POST');
             }
             };

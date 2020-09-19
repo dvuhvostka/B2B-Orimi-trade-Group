@@ -648,7 +648,13 @@ block content
                       button(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
                       button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
                 .tab-pane.fade#nav-mod-firms-info
-                  h4.header Информация о фирме
+                  .firm_search_wrap
+                    h5.header Информация о фирме
+                      .search_wrap
+                        i.fas.fa-question.tooltip_sign(data-toggle='tooltip' title='Поиск по точному совпадению: название организации, фамилия владельца, адреса, ИНН')
+                        input(type='text').search_input
+                        button.btn.btn-primary.search_btn Искать 
+                      .results_wrap
             .tab-pane.fade#nav-mod-request(role='tabpanel' aria-labelledby='nav-mod-request').mod__content__item
               nav.mod__nav
                 .nav.nav-pills.nav-fill#nav-mod(role='tablist')
