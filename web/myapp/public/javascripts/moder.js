@@ -218,7 +218,7 @@ $('.search_btn').on('click', (e)=>{
           `+addres_div+`
           <div class='editing_btns'>
           <button class='btn btn-primary print_btn' data-id='`+elem.owner_id+`'>Распечатать док-ты</button>
-          <button class='btn btn-primary sale_btn' data-id='`+elem.id+`'>Дать доступ к акции</button>
+          <button class='btn btn-primary sale_btn' data-id='`+elem.id+`' data-status='`+elem.stock_access+`'>Изменить доступ к акции</button>
           <button class='btn btn-danger del_btn' data-id='`+elem.owner_id+`'>Удалить организацию</button>
           </div>
         `;
@@ -226,7 +226,6 @@ $('.search_btn').on('click', (e)=>{
         placement.append(div);
       });
       $('.print_btn').on('click', (e)=>{
-        showModal('123','12314')
         var item = e.currentTarget;
         var id = item.getAttribute('data-id');
         $.ajax({
@@ -258,18 +257,20 @@ $('.search_btn').on('click', (e)=>{
       $('.sale_btn').on('click', (e)=>{
         var item = e.currentTarget;
         var id = item.getAttribute('data-id');
+        var status = item.getAttribute('data-status');
         $.ajax({
           type:'POST',
           url:'/add',
           data:{
-            post_type: 'add_to_sale',
-            id: id
+            post_type: 'toggle_sale',
+            id: id,
+            status: status,
           },
           success: (res)=>{
             if (res.ok){
-              alert('Доступ к акции выдан');
+              alert('Доступ к акции изменен');
             } else {
-              alert('Ошибка! Невозможно выдать доступ\n',res.err);
+              alert('Ошибка! Невозможно изменить доступ\n',res.err);
             }
           }
         });

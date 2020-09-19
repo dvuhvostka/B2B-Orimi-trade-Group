@@ -369,8 +369,12 @@ router.route('/add')
                 })
               }
                 break;
-              case 'add_to_sale':{
-                var sql = `UPDATE organizations SET stock_access=true WHERE id='`+req.body.id+`'`;
+              case 'toggle_sale':{
+                if(!req.body.status){
+                  var sql = `UPDATE organizations SET stock_access=true WHERE id='`+req.body.id+`'`;
+                } else {
+                  var sql = `UPDATE organizations SET stock_access=false WHERE id='`+req.body.id+`'`;
+                }
                 db.none(sql).then(()=>{
                   res.json({
                     ok:true

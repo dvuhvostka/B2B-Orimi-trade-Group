@@ -209,13 +209,14 @@
                   cart[articul] = input.val();
                   var price = Math.round((wrap.children('.price').attr('price')*input.val())*100)/100;
                 }
-                  localStorage.setItem('cart', JSON.stringify(cart));
+                localStorage.setItem('cart', JSON.stringify(cart));
                   $.ajax({
                     type: 'POST',
                     url: '/order',
                     data: {post_type: "getcartcost", cart: localStorage.getItem('cart')},
                     success: function(r){
                         if(r.ok){
+                            localStorage.setItem('cart', JSON.stringify(cart));
                             $('.submit_cart').prop("disabled", false);
                             wrap.children('.item_count').html('Кол-во: '+input.val()+' шт.');
                             wrap.children('.price').html('Цена: '+price+' р.');
