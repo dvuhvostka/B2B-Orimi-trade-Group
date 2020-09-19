@@ -348,9 +348,9 @@ router.route('/add')
               break;
               case 'search_firm': {
                 var sql = `
-                  SELECT * FROM organizations WHERE org_name='`+req.body.value+`' or org_address_ur='`+req.body.value+`' or
+                  SELECT * FROM organizations WHERE (org_name='`+req.body.value+`' or org_address_ur='`+req.body.value+`' or
                   owner_inn='`+req.body.value+`' or owner_id='`+req.body.value+`' or '`+req.body.value+`' = any(org_address_fact) or
-                  owner_sname='`+req.body.value+`' and org_confirmed='1'
+                  owner_sname='`+req.body.value+`') and org_confirmed='1'
                 `;
                 console.log(sql);
                 db.any(sql).then(function(resp){
@@ -370,10 +370,12 @@ router.route('/add')
               }
                 break;
               case 'toggle_sale':{
-                if(!req.body.status){
-                  var sql = `UPDATE organizations SET stock_access=true WHERE id='`+req.body.id+`'`;
+                console.log(req.body);
+                var sql;
+                if(req.body.status == 'false'){
+                  sql = `UPDATE organizations SET stock_access=true WHERE id='`+req.body.id+`'`;
                 } else {
-                  var sql = `UPDATE organizations SET stock_access=false WHERE id='`+req.body.id+`'`;
+                  sql = `UPDATE organizations SET stock_access=false WHERE id='`+req.body.id+`'`;
                 }
                 db.none(sql).then(()=>{
                   res.json({
