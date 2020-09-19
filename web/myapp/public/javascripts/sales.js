@@ -57,7 +57,7 @@ $('.item_btn_addToCart').on('click', function(){
         }else{
           delete cart[articul];
           localStorage.setItem('cart', JSON.stringify(cart));
-          alert(r.error);
+          showModal(r.error, 'Ошибка');
         }
   }});
 });
