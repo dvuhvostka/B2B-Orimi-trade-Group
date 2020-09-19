@@ -373,8 +373,11 @@ user.route('/user')
         })
       });
     }else{
+        console.log(12313);
         upload(req, res, err => {
+          console.log(err);
           if (err == undefined){
+            console.log('here2');
             switch(req.body.post_type){
               case "add_coffee": {
                 var fls = fs.readdirSync('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul+'/');

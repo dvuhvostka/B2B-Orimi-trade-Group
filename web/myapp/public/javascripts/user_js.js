@@ -70,25 +70,28 @@ document.addEventListener('DOMContentLoaded', ready);
 
 window.onload = function() {
   var plus = document.querySelector('.add__addres');
-  if (plus)
-    plus.addEventListener('click', function(event){
-      var inputs = document.querySelectorAll('input[data-addres-id]');
-      var newDiv = document.createElement('div');
-      var target = event.currentTarget;
-      var number = inputs[inputs.length-1].getAttribute('data-addres-id');
-      newDiv.className = "in add_addres_wrap";
-      newDiv.innerHTML = "<input type='text' name='org_address_fact[]' required "
-      +"placeholder='Фактический адрес организации' data-addres-id="+(Number(number)+1)+" class='org_address_fact js-AddressField'>"
-      +"<a class='remove__addres btn'><i class='fas fa-minus minus_btn'></i></a>";
-      var prevElem = inputs[inputs.length-1].parentNode;
-      prevElem.after(newDiv);
-      var lastInput = document.querySelectorAll('input[data-addres-id]');
-      console.log(lastInput[lastInput.length-1].nextSibling);
-      lastInput[lastInput.length-1].nextSibling.addEventListener('click', (e)=>{
-        var parent = e.currentTarget.parentNode;
-        parent.remove();
-      })
-    });
+  console.log(plus);
+  plus.addEventListener('click', function(event){
+    console.log(123);
+    var inputs = document.querySelectorAll('input[data-addres-id]');
+    var newDiv = document.createElement('div');
+    var target = event.currentTarget;
+    var value = target.previousSibling.value;
+    console.log(value);
+    var number = inputs[inputs.length-1].getAttribute('data-addres-id');
+    newDiv.className = "in add_addres_wrap";
+    newDiv.innerHTML = "<input type='text' name='org_address_fact[]' required "
+    +"placeholder='Фактический адрес организации' data-addres-id="+(Number(number)+1)+" class='org_address_fact js-AddressField'>"
+    +"<a class='remove__addres btn'><i class='fas fa-minus minus_btn'></i></a>";
+    var prevElem = inputs[inputs.length-1].parentNode;
+    prevElem.after(newDiv);
+    var lastInput = document.querySelectorAll('input[data-addres-id]');
+    console.log(lastInput[lastInput.length-1].nextSibling);
+    lastInput[lastInput.length-1].nextSibling.addEventListener('click', (e)=>{
+      var parent = e.currentTarget.parentNode;
+      parent.remove();
+    })
+  });
   var select = document.querySelector('.type_of_org');
   if (select)
     select.addEventListener('change',(e)=>{
