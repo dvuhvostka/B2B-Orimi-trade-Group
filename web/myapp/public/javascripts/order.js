@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
             $('.order__final_price').html(Math.round((r.fullcost)*100)/100+' ');
           }
           var price = Number($('.order__final_price').html());
+          if(price < 2000){
+            $('.order_min').removeClass('d-none');
+          } else {
+            $('.order_min').addClass('d-none');
+          }
           $('.bonuses__input').on('change',()=>{
             var bonuses = $('.bonuses__input').val();
             $('.order__final_price').html(Math.round((price-(bonuses))*100)/100+' ');
