@@ -368,4 +368,9 @@ margin: 5px 0 0 0;
 .capsule_min_amount {
   margin: 0 5px;
 }
+
+.btn-column {
+  display: flex;
+  flex-direction: column;
+}
 /* ----------- */

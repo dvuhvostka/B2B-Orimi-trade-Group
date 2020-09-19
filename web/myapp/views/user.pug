@@ -188,8 +188,8 @@ block content
             p #{balance} &#8194;
             span.text-muted (10 бонусов = 1 рубль)
           .sales__block
-            h4.sales__block__header.header Участие в акциях
           if (type=='ur_type' && org_info==2)
+            h4.sales__block__header.header Участие в акциях
             #link_code_wrap Код для продавцов
               .in
                 input(type="text" id="link_code" value=""+info.link_code+"" )
@@ -209,20 +209,22 @@ block content
                       span.status_text нет информации
                   .start_weekly
                     h6.header.start_header Выберите кейс
-                    .radio_weekly
-                      .radio_set
-                        label.radio_label Кейс 1
-                        input(type='radio' name='cases' value='case1').radio_input
-                      .radio_set
-                        label.radio_label Кейс 2
-                        input(type='radio' name='cases' value='case2').radio_input
-                      .radio_set
-                        label.radio_label Кейс 3
-                        input(type='radio' name='cases' value='case3').radio_input
-                    input(type='file' name='photo' id='photo' multiple data-multiple-caption='{count} файлов выбрано' required)
-                    label.btn.btn-outline-info.label_photo(type='button' id='photo_label' for='photo')
-                      span Прикрепить фото
-                    button.btn.btn-success.photo_submit Отправить
+                    form(method='POST' enctype='multipart/form-data')#form_photo
+                      .radio_weekly
+                        .radio_set
+                          label.radio_label Кейс 1
+                          input(type='radio' name='cases' value='case1').radio_input
+                        .radio_set
+                          label.radio_label Кейс 2
+                          input(type='radio' name='cases' value='case2').radio_input
+                        .radio_set
+                          label.radio_label Кейс 3
+                          input(type='radio' name='cases' value='case3').radio_input
+                      .btn-column
+                        input(type='file' name='photo' id='photo' multiple data-multiple-caption='{count} файлов выбрано' required)
+                        label.btn.btn-outline-info.label_photo(type='button' id='photo_label' for='photo')
+                          span Прикрепить фото
+                        button.btn.btn-success.photo_submit(type='submit') Отправить
             .sale__item
               h5.item__header.header Кофемашина BORK
               a(href='/sales/capsule' target='_blank').item__info Подробнее об акции
