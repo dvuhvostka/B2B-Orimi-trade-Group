@@ -323,13 +323,32 @@ user.route('/user')
         });
       }
     }else if(req.body.post_type=="delete_org_skdjfgh213asRQadSKSFD3123244"){
-      db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'");
-      rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('done'); });
-      console.log("Organiztion deleted from user: "+req.body.org_owner_id);
+      db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'").then(function(){
+        rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('done'); });
+        console.log("Organiztion deleted from user: "+req.body.org_owner_id);
+        res.json({
+          ok: true
+        });
+      }).catch(function(err){
+        res.json({
+          ok: false,
+          err
+        });
+      });
     }else if(req.body.post_type=="confirm_org_askdjfhl123123kaGFDGdfhFsdf3123"){
-      db.none("UPDATE organizations SET org_confirmed=1, stock_access="+req.body.stock_access+" WHERE owner_id='"+req.body.org_owner_id+"'");
-      db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'");
       db.any("SELECT * FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'").then(function(data){
+        db.none("UPDATE organizations SET org_confirmed=1, stock_access="+req.body.stock_access+" WHERE owner_id='"+req.body.org_owner_id+"'").catch(function(err){
+          res.json({
+            ok: false,
+            err: "Не удалось подтвердить организацию."
+          });
+        });
+        db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'").catch(function(err){
+          res.json({
+            ok: false,
+            err: "Не удалось пополнить баланс."
+          });
+        });
         if(data[0].promo.length!=0){
           db.any("SELECT * FROM promo WHERE code='"+data[0].promo+"'").then(function(promo_data){
             if(promo_data[0].length!=0){
@@ -355,6 +374,9 @@ user.route('/user')
       var link_code = crypto.randomBytes(10).toString('hex');
       db.none("UPDATE organizations SET link_code='"+link_code+"' WHERE owner_id='"+req.body.org_owner_id+"'");
       console.log("link code generated: " +link_code);
+      res.json({
+        ok: true
+      });
     }else if (req.body.post_type == 'request') {
       console.log('add request')
       db.none("INSERT INTO requests_from_organizations(request, org_id) VALUES (${request},${org_id})",{
