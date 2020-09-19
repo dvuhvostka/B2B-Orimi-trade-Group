@@ -221,14 +221,12 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
   }else if(response_type=="check_bonus_with_cost"){
 
     if (bonuses*1){
-      //console.log("BONUS INPUT IS VALID");
-      console.log(userId)
       var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
 
       db.any(getuserbalance_sql).then(function(balance_response){
         if(balance_response[0].balance>=bonuses){
           if(bonuses>data.fullcost){
-            var error = "ERROR_BONUS_COUNT"; //Пользователь прислал пустую корзину
+            var error = "При использовании бонусных баллов, сумма заказа должна оставаться не меньше 2000 руб";
             res.json({
               ok: false,
               error
@@ -237,7 +235,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
             //Пользователь прошел проверку. У него на балансе достаточно бонусов. Он ввел меньше бонусов, чем стоит товар.
             var min_price = data.fullcost - bonuses;
             if(bonuses<1){
-              var error = "ERROR_MIN_1_BONUS"; //Пользователь прислал пустую корзину
+              var error = "Вы можете использовать не меньше 1 бонуса";
               res.json({
                 ok: false,
                 error
@@ -251,17 +249,46 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
                     case 'bill': break;
                     default: console.log("NO_PAYMENT_METHOD_ERROR");
                   }
-                  add_deal_with_bonuses(data, payment_method, balance_response, Math.floor(bonuses), res, region);
-                  console.log('!SUCCESS!');
+                  db.one(`SELECT sets FROM users WHERE id='`+userId+`'`).then(function(usr_sets_data){
+                    for (var i = 0; i<data.products.length; i++){
+                      if(data.products[i].type=='sets'){
+                        for(var x =0; x<usr_sets_data.sets.length; x++){
+                          if(usr_sets_data.sets[x].id == data.products[i].id){
+                            if(usr_sets_data.sets[x].rest < data.products[i].count){
+                              if(usr_sets_data.sets[x].rest == 0){
+                                error = "В этом месяце вы больше не можете приобрести Акционный набор  №"+data.products[i].id;
+                                res.json({
+                                  ok: false,
+                                  error: error
+                                });
+                              }else{
+                                error = "В этом месяце вам осталось доступно "+usr_sets_data.sets[x].rest+"шт. (Акционный набор №"+data.products[i].id+")";
+                                res.json({
+                                  ok: false,
+                                  error: error
+                                });
+                              }
+                            }else{
+                              var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
+                              db.any(getuserbalance_sql).then(function(balance_response){
+                                add_deal_with_bonuses(data, payment_method, balance_response, Math.floor(bonuses), res, region);
+                                console.log('!SUCCESS!');
+                              });
+                            }
+                          }
+                        }
+                      }
+                    }
+                  });
                 }else{
-                  var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
+                  var error = "Минимальная сумма заказа 2000 руб.";
                   res.json({
                     ok: false,
                     error
                   });
                 }
               }else{
-                var error = "ERROR_ONLY_INT_COUNT"; //Пользователь прислал пустую корзину
+                var error = "Введено неверное значение в поле бонусных баллов";
                 res.json({
                   ok: false,
                   error
@@ -289,14 +316,39 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
     }
   }else if(response_type=='without_bonus'){
         if(data.fullcost>=2000){
-          console.log(data);
-          // var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
-          // db.any(getuserbalance_sql).then(function(balance_response){
-          //   add_deal_with_bonuses(data, payment_method, balance_response, 0, res, region);
-          //   console.log('!SUCCESS!');
-          // });
+          db.one(`SELECT sets FROM users WHERE id='`+userId+`'`).then(function(usr_sets_data){
+            for (var i = 0; i<data.products.length; i++){
+              if(data.products[i].type=='sets'){
+                for(var x =0; x<usr_sets_data.sets.length; x++){
+                  if(usr_sets_data.sets[x].id == data.products[i].id){
+                    if(usr_sets_data.sets[x].rest < data.products[i].count){
+                      if(usr_sets_data.sets[x].rest == 0){
+                        error = "В этом месяце вы больше не можете приобрести Акционный набор  №"+data.products[i].id;
+                        res.json({
+                          ok: false,
+                          error: error
+                        });
+                      }else{
+                        error = "В этом месяце вам осталось доступно "+usr_sets_data.sets[x].rest+"шт. (Акционный набор №"+data.products[i].id+")";
+                        res.json({
+                          ok: false,
+                          error: error
+                        });
+                      }
+                    }else{
+                      var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
+                      db.any(getuserbalance_sql).then(function(balance_response){
+                        add_deal_with_bonuses(data, payment_method, balance_response, 0, res, region);
+                        console.log('!SUCCESS!');
+                      });
+                    }
+                  }
+                }
+              }
+            }
+          });
         }else{
-          var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
+          var error = "Минимальная сумма заказа 2000 руб.";
           res.json({
             ok: false,
             error
@@ -513,7 +565,6 @@ router.route('/order')
             db.one(`SELECT sets FROM users WHERE id='`+req.session.userId+`'`).then(function(usr_sets_data){
               var cart = JSON.parse(req.body.cart); // Получаем корзину
               var mycart = check_cart(cart, usr_sets_data); // Парсим и проверяем корзину
-              console.log(req.body);
               get_cart_cost(mycart, res, "ajax", 0, req.session.userId, req.body.region);
             });
           }else{

@@ -2,6 +2,16 @@
     var cart = 'hello';
     cart = JSON.parse(localStorage.getItem('cart'));
     $.post("/cart", cart).done(function(data){
+      $.ajax({
+        type: 'POST',
+        url: '/order',
+        data: {post_type: "getcartcost", cart: localStorage.getItem('cart')},
+        success: function(r){
+          if(!r.ok){
+            $('.submit_cart').prop("disabled", "true");
+          }
+        }
+      });
       var final_price_result = 0;
       var out = '';
           if(data.other)
@@ -206,9 +216,9 @@
                     data: {post_type: "getcartcost", cart: localStorage.getItem('cart')},
                     success: function(r){
                         if(r.ok){
+                            $('.submit_cart').prop("disabled", false);
                             wrap.children('.item_count').html('Кол-во: '+input.val()+' шт.');
                             wrap.children('.price').html('Цена: '+price+' р.');
-                          console.log(r);
                           var rounded_cost = Math.round((r.fullcost)*100)/100;
                           $('.final_price').html(rounded_cost+' ');
                           if(rounded_cost<4000){

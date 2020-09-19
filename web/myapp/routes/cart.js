@@ -29,7 +29,6 @@ router.route('/cart')
       title: 'Корзина'
     })
   }).post(function(req, res) {
-    console.log(req.body)
     var sql_tea_result = "SELECT * FROM tea WHERE id=0 "
     var sql_coffee_result = "SELECT * FROM coffee WHERE id=0"
     var sql_others_result = "SELECT * FROM others WHERE id=0"
