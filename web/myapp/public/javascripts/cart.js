@@ -228,7 +228,16 @@
                             $('.delivery_text').html('Ваш заказ будет доставлен бесплатно!');
                           }
                         }else{
-                          alert(r.error);
+                          if(r.rest!=0){
+                            cart[articul] = r.rest;
+                            localStorage.setItem('cart', JSON.stringify(cart));
+                            input.val(r.rest);
+                            showModal(r.error, 'Ошибка');
+                          }else{
+                            delete cart[articul];
+                            showModal(r.error, 'Ошибка');
+                            location.reload();
+                          }
                         }
                     }
                   });

@@ -24,6 +24,7 @@ function isInteger(num) {
 
 function check_cart(cart, usr_sets_data) {
   var result = 1;
+  var res = {};
   var error;
   var object_product = [];
   for (key in cart){
@@ -45,9 +46,6 @@ function check_cart(cart, usr_sets_data) {
       result = 0;
     }else{
       object_product.push(obj);
-    }
-
-    if(result){
       if(product_type=='sets'){
         for(var i =0; i<usr_sets_data.sets.length; i++){
           console.log(usr_sets_data.sets[i]);
@@ -55,32 +53,34 @@ function check_cart(cart, usr_sets_data) {
             if(usr_sets_data.sets[i].rest < product_count){
               if(usr_sets_data.sets[i].rest == 0){
                 error = "В этом месяце вы больше не можете приобрести Акционный набор  №"+product_id;
-                return {
+                result = 1;
+                res = {
                   ok: false,
                   err: "ERROR_NO_REST",
                   err_txt: error,
-                  products: object_product
+                  products: object_product,
+                  rest: 0
                 }
               }else{
                 error = "В этом месяце вам осталось доступно "+usr_sets_data.sets[i].rest+"шт. (Акционный набор №"+product_id+")";
-                return {
+                result = 1;
+                res = {
                   ok: false,
                   err: "ERROR_REST",
                   err_txt: error,
-                  products: object_product
+                  products: object_product,
+                  rest: usr_sets_data.sets[i].rest
                 }
               }
             }
           }
         }
       }
-      var res = {};
-      res.ok = true;
-      res.products = object_product;
-      return res;
-    }else{
-      return 0;
     }
+  }
+  switch (result) {
+    case 0: return 0;
+    case 1: res.products = object_product; return res;
   }
 }
 
@@ -110,12 +110,12 @@ var address, payment, bonuses, comments;
   }
 
   cart.fullcost -= Math.floor(bonuses); //Вычли бонусы из цены
-  console.log(cart.fullcost);
   var dateNow = new Date();
   address = address.replace(/%2C/g, ',');
   address = address.replace('%2D', '-');
   address = address.replace('%2E', '.');
   address = address.replace(/%2F/g, '/');
+  var cashback = 0;
   var dategetmonth = dateNow.getMonth()+1;
   var dategetminutes = dateNow.getMinutes();
   if(dategetminutes<10){
@@ -125,7 +125,11 @@ var address, payment, bonuses, comments;
     dategetmonth = "0" + dategetmonth.toString();
   }
   var getdatenow = dateNow.getDate()+"."+dategetmonth+"."+dateNow.getFullYear()+" "+dateNow.getHours()+":"+dategetminutes+":"+dateNow.getSeconds();
-  db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact, bonuses, comments, timestamp, region) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact}, ${bonuses}, ${comments}, ${timestamp}, ${region})', {
+  if(cart.cashback){
+    cashback = cart.cashback;
+  }
+  console.log(cart.cashback);
+  db.none('INSERT INTO deals_info(owner_id, confirmed, date, first_name_owner, second_name_owner, third_name_owner, delivery_address, final_price, payment_method, owner_contact, bonuses, comments, timestamp, region, cashback) VALUES(${owner_id}, ${confirmed}, ${date}, ${first_name_owner}, ${second_name_owner}, ${third_name_owner}, ${delivery_address}, ${final_price}, ${payment_method}, ${owner_contact}, ${bonuses}, ${comments}, ${timestamp}, ${region}, ${cashback})', {
     owner_id: userdata[0].id,
     confirmed: 0,
     date: getdatenow,
@@ -139,14 +143,15 @@ var address, payment, bonuses, comments;
     bonuses: Math.floor(bonuses),
     comments: comments,
     timestamp: Date.now(),
-    region: region
+    region: region,
+    cashback: cashback
   }).then(function(){
       // Записываем товары.
       if(bonuses){
         db.none("UPDATE users SET balance=balance-"+Math.floor(bonuses)+" WHERE id='"+userdata[0].id+"'");
       }
       db.one('SELECT * FROM deals_info WHERE id=(SELECT MAX(id) FROM deals_info)').then(function(deal){
-        for (var i = 0; i<cart.length; i++){
+        for (var i = 0; i<cart.products.length; i++){
         db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype, articul, deal_summ) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype}, ${articul}, ${deal_summ})',{
             product: cart.products[i].product,
             deal_owner: userdata[0].id,
@@ -194,7 +199,8 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
         res.json({
           ok: false,
           error: error,
-          fullcost: fullcost
+          fullcost: fullcost,
+          rest: 0
         });
         break;
       }
@@ -204,7 +210,8 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
         res.json({
           ok: false,
           error: error,
-          fullcost: fullcost
+          fullcost: fullcost,
+          rest: data.rest
         });
         break;
       }
@@ -235,7 +242,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
             //Пользователь прошел проверку. У него на балансе достаточно бонусов. Он ввел меньше бонусов, чем стоит товар.
             var min_price = data.fullcost - bonuses;
             if(bonuses<1){
-              var error = "Вы можете использовать не меньше 1 бонуса";
+              var error = "Вы не можете использовать меньше 1 бонуса";
               res.json({
                 ok: false,
                 error
@@ -249,6 +256,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
                     case 'bill': break;
                     default: console.log("NO_PAYMENT_METHOD_ERROR");
                   }
+                  var goodset = [];
                   db.one(`SELECT sets FROM users WHERE id='`+userId+`'`).then(function(usr_sets_data){
                     for (var i = 0; i<data.products.length; i++){
                       if(data.products[i].type=='sets'){
@@ -257,29 +265,44 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
                             if(usr_sets_data.sets[x].rest < data.products[i].count){
                               if(usr_sets_data.sets[x].rest == 0){
                                 error = "В этом месяце вы больше не можете приобрести Акционный набор  №"+data.products[i].id;
-                                res.json({
+                                var response = {
                                   ok: false,
                                   error: error
-                                });
+                                };
                               }else{
                                 error = "В этом месяце вам осталось доступно "+usr_sets_data.sets[x].rest+"шт. (Акционный набор №"+data.products[i].id+")";
-                                res.json({
+                                var response = {
                                   ok: false,
                                   error: error
-                                });
+                                };
                               }
-                            }else{
-                              var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
-                              db.any(getuserbalance_sql).then(function(balance_response){
-                                add_deal_with_bonuses(data, payment_method, balance_response, Math.floor(bonuses), res, region);
-                                console.log('!SUCCESS!');
-                              });
+                            }else {
+                              goodset.push({id: usr_sets_data.sets[x].id, count: data.products[i].count});
                             }
                           }
                         }
                       }
                     }
-                  });
+                    if(response){
+                      res.json(response);
+                    }else{
+                      var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
+                      db.any(getuserbalance_sql).then(function(balance_response){
+                        var userSets = balance_response[0].sets;
+                        for (var i = 0; i<goodset.length; i++){
+                          for (var x = 0; x < userSets.length; x++){
+                            if(goodset[i].id==userSets[x].id){
+                              userSets[x].rest -= goodset[i].count;
+                            }
+                          }
+                        }
+                        userSets = "'"+JSON.stringify(userSets)+"'";
+                        db.none(`UPDATE users SET sets=`+userSets+`WHERE id='`+userId+`'`);
+                        add_deal_with_bonuses(data, payment_method, balance_response, Math.floor(bonuses), res, region);
+                        console.log('!SUCCESS!');
+                        });
+                      }
+                    });
                 }else{
                   var error = "Минимальная сумма заказа 2000 руб.";
                   res.json({
@@ -316,6 +339,7 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
     }
   }else if(response_type=='without_bonus'){
         if(data.fullcost>=2000){
+          var goodset = [];
           db.one(`SELECT sets FROM users WHERE id='`+userId+`'`).then(function(usr_sets_data){
             for (var i = 0; i<data.products.length; i++){
               if(data.products[i].type=='sets'){
@@ -324,27 +348,43 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
                     if(usr_sets_data.sets[x].rest < data.products[i].count){
                       if(usr_sets_data.sets[x].rest == 0){
                         error = "В этом месяце вы больше не можете приобрести Акционный набор  №"+data.products[i].id;
-                        res.json({
+                        var response = {
                           ok: false,
                           error: error
-                        });
+                        };
                       }else{
                         error = "В этом месяце вам осталось доступно "+usr_sets_data.sets[x].rest+"шт. (Акционный набор №"+data.products[i].id+")";
-                        res.json({
+                        var response = {
                           ok: false,
                           error: error
-                        });
+                        };
                       }
-                    }else{
-                      var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
-                      db.any(getuserbalance_sql).then(function(balance_response){
-                        add_deal_with_bonuses(data, payment_method, balance_response, 0, res, region);
-                        console.log('!SUCCESS!');
-                      });
+                    }else {
+                      goodset.push({id: usr_sets_data.sets[x].id, count: data.products[i].count});
                     }
                   }
                 }
               }
+            }
+            if(response){
+              res.json(response);
+            }else{
+              var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
+              db.any(getuserbalance_sql).then(function(balance_response){
+                console.log(goodset);
+                var userSets = balance_response[0].sets;
+                for (var i = 0; i<goodset.length; i++){
+                  for (var x = 0; x < userSets.length; x++){
+                    if(goodset[i].id==userSets[x].id){
+                      userSets[x].rest -= goodset[i].count;
+                    }
+                  }
+                }
+                userSets = "'"+JSON.stringify(userSets)+"'";
+                db.none(`UPDATE users SET sets=`+userSets+`WHERE id='`+userId+`'`);
+                add_deal_with_bonuses(data, payment_method, balance_response, 0, res, region);
+                console.log('!SUCCESS!');
+              });
             }
           });
         }else{
@@ -407,6 +447,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
         })
            .then(data => {
               var fullcost = 0;
+              var cashback = 0;
                for(var i=0; i<cart.products.length; i++){
                  switch(cart.products[i].type){
                    case "tea":{
@@ -423,7 +464,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                           fullcost += cart.products[i].full_price;
                         }
                       }
-                     break;
+                      break;
                    }
                    case "coffee":{
                      for(var x=0; x<data.coffee.length; x++){
@@ -477,6 +518,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                    case "sets": {
                      for(var x=0; x<data.sets.length; x++){
                        if(data.sets[x].set_id==cart.products[i].id){
+                         console.log(data.sets[x].cashback);
                          var price = data.sets[x].set_price;
                          cart.products[i].price_of_one = price;
                          cart.products[i].full_price = Math.ceil((price*cart.products[i].count)*100)/100;
@@ -484,6 +526,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                          cart.products[i].subtype = 0;
                          cart.products[i].sort = 'sets';
                          cart.products[i].articul = 0;
+                         cashback += cart.products[i].full_price/100*data.sets[x].cashback;
                          fullcost += cart.products[i].full_price;
                        }
                      }
@@ -495,7 +538,9 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                    }
                  }
                }
+               cart.cashback = Math.round(cashback);
                cart.fullcost = Math.ceil((fullcost)*100)/100;
+               console.log(cart);
                returnCartCost(cart, res, response_type, Math.floor(bonuses), userId, payment_method, region); //Передаем обновленную и пересчитанную корзину на вывод
            })
             .catch(error => {
