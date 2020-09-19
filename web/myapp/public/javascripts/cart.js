@@ -185,6 +185,10 @@
               window.location.href = '/order';
             });
 
+            if(Math.round((final_price_result)*100)/100<2000){
+              $('.submit_cart').prop("disabled", true);
+            }
+
             var input_check = $('.sym_none');
               for(let each of input_check){
                 each.onkeypress=function(e){
@@ -223,6 +227,13 @@
                           var rounded_cost = Math.round((r.fullcost)*100)/100;
                           $('.final_price').html(rounded_cost+' ');
                           if(rounded_cost<4000){
+                            if(rounded_cost<2000){
+                              if(Math.round((final_price_result)*100)/100<2000){
+                                $('.submit_cart').prop("disabled", true);
+                              }
+                            }else{
+                              $('.submit_cart').prop("disabled", false);
+                            }
                             var rc3 = Math.round((4000-rounded_cost)*100)/100;
                             $('.delivery_text').html('До бесплатной доставки осталось: <span class="delivery_price">'+rc3+'</span> р.');
                           }else {
