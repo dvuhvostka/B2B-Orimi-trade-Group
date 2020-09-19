@@ -404,4 +404,18 @@ margin: 5px 0 0 0;
   flex-direction: column;
 
 }
+#print{
+  display: none;
+}
+@media print {
+  #user_page{
+    display: none;
+  }
+  nav{
+    display: none;
+  }
+  #print{
+    display: block;
+  }
+}
 /* ----------- */

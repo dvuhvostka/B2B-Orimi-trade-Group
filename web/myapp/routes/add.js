@@ -7,6 +7,7 @@ var config = require('../config');
 var {Pool, Client} = require('pg');
 var xlsx = require('xlsx-populate');
 const rimraf = require('rimraf');
+const fs = require('fs')
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -343,6 +344,61 @@ router.route('/add')
                     error
                   });
                 });
+              }
+              break;
+              case 'search_firm': {
+                var sql = `
+                  SELECT * FROM organizations WHERE org_name='`+req.body.value+`' or org_address_ur='`+req.body.value+`' or
+                  owner_inn='`+req.body.value+`' or owner_id='`+req.body.value+`' or '`+req.body.value+`' = any(org_address_fact) or
+                  owner_sname='`+req.body.value+`' and org_confirmed='1'
+                `;
+                console.log(sql);
+                db.any(sql).then(function(resp){
+                  if (resp.length){
+                    res.json(resp);
+                  }
+                  else{
+                    res.json('Ничего не найдено')
+                  }
+                })
+                .catch(function(err){
+                  res.json({
+                    ok: false,
+                    err
+                  });
+                })
+              }
+                break;
+              case 'add_to_sale':{
+                var sql = `UPDATE organizations SET stock_access=true WHERE id='`+req.body.id+`'`;
+                db.none(sql).then(()=>{
+                  res.json({
+                    ok:true
+                  })
+                })
+                .catch((err)=>{
+                  res.json({
+                    ok:false,
+                    err
+                  })
+                })
+              }
+              break;
+              case 'get_images':{
+                var dir = './public/images/confirmed_uploads/'+req.body.id;
+                fs.readdir(dir, (err,files) => {
+                  if(!err){
+                    res.json({
+                      ok:true,
+                      files
+                    });
+                  } else {
+                    res.json({
+                      ok:false,
+                      err
+                    })
+                  }
+                  });
               }
               break;
               default: res.send('POST');
