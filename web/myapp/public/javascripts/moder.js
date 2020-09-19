@@ -226,6 +226,7 @@ $('.search_btn').on('click', (e)=>{
         placement.append(div);
       });
       $('.print_btn').on('click', (e)=>{
+        showModal('123','12314')
         var item = e.currentTarget;
         var id = item.getAttribute('data-id');
         $.ajax({
