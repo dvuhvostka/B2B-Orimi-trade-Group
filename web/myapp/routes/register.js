@@ -90,7 +90,7 @@ router.route('/register')
             });
           } else {
             userinfo.user_id = uuidv4();
-            db.none('INSERT INTO users(username, second_name , third_name, email, password, ip_addr, balance, permissions, client_type, number, id, phone_confirmed) VALUES(${username}, ${second_name}, ${third_name}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, ${id}, ${phone_confirmed})',  {
+            db.none('INSERT INTO users(username, second_name , third_name, email, password, ip_addr, balance, permissions, client_type, number, id) VALUES(${username}, ${second_name}, ${third_name}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, ${id})',  {
                 username: req.body.name,
                 second_name: req.body.second_name,
                 third_name: req.body.third_name,
@@ -101,8 +101,7 @@ router.route('/register')
                 permissions: 'user',
                 client_type: req.body.customRadioInline1,
                 number: req.body.phone_number,
-                id: userinfo.user_id,
-                phone_confirmed: "0"
+                id: userinfo.user_id
             });
             res.json({
               ok:true,

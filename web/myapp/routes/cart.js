@@ -34,12 +34,14 @@ router.route('/cart')
     var sql_coffee_result = "SELECT * FROM coffee WHERE id=0"
     var sql_others_result = "SELECT * FROM others WHERE id=0"
     var sql_horeca_result = "SELECT * FROM horeca WHERE id=0"
+    var sql_sets_result = "SELECT * FROM sets WHERE set_id=0"
 
-    var pattern = /tea|coffee|other|horeca/g;
+    var pattern = /tea|coffee|other|horeca|sets/g;
     var sql_tea = [];
     var sql_coffee = [];
     var sql_others = [];
     var sql_horeca = [];
+    var sql_sets = [];
     for (key in req.body) {
       if (key.match(pattern)[0] == 'tea') {
         var id = key.replace(pattern, "");
@@ -57,22 +59,28 @@ router.route('/cart')
         var id = key.replace(pattern, "");
           sql_horeca.push("OR id='" + id + "' ");
           sql_horeca_result = sql_horeca_result + "OR id='" + id + "' ";
+      }else if (key.match(pattern)[0] == 'sets'){
+        var id = key.replace(pattern, "");
+          sql_sets.push("OR set_id='" + id + "' ");
+          sql_sets_result = sql_sets_result + "OR set_id='" + id + "' ";
       }
     }
 
     var products_data = {
       tea: {},
       coffee: {},
-      other: {}
+      other: {},
+      sets: {}
     }
 
-    if ((sql_coffee.length == 0) && (sql_tea.length == 0) && (sql_others.length == 0) && (sql_horeca.length == 0)) {
+    if ((sql_coffee.length == 0) && (sql_tea.length == 0) && (sql_others.length == 0) && (sql_horeca.length == 0) && (sql_sets.length == 0)) {
       res.send("POST");
-    } else if ((sql_coffee.length != 0) || (sql_tea.length != 0) || (sql_others.length!=0) || (sql_horeca.length!=0)) {
+    } else if ((sql_coffee.length != 0) || (sql_tea.length != 0) || (sql_others.length!=0) || (sql_horeca.length!=0) || (sql_sets.length!=0)) {
       db.any(sql_coffee_result).then(function(data) {
         db.any(sql_tea_result).then(function(data2) {
           db.any(sql_others_result).then(function(data3) {
             db.any(sql_horeca_result).then(function(data4) {
+              db.any(sql_sets_result).then(function(data5){
                 if (data) {
                   products_data.coffee = data;
                 }
@@ -85,10 +93,14 @@ router.route('/cart')
                 if (data4) {
                   products_data.horeca = data4;
                 }
+                if (data5) {
+                  products_data.sets = data5;
+                }
                 res.send(products_data);
               });
             });
           });
+        });
       }).catch(error => {
         console.log('ERROR:', error);
       });

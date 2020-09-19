@@ -22,18 +22,23 @@ function isInteger(num) {
   return Number.isInteger(num);
 }
 
-function check_cart(cart) {
+function check_cart(cart, req) {
   var result = 1;
   var object_product = [];
   for (key in cart){
     //Паттерны регулярных выражений
-    var p1 = /tea|coffee|other|horeca/g;
-    var p2 = /[^tea|coffee|other|horeca]/g;
-
+    var p1 = /tea|coffee|other|horeca|sets/g;
+    var p2 = /[^tea|coffee|other|horeca|sets]/g;
     // определение переменных для товара (парсинг корзины)
     var product_id = key.replace(p1, "");
     var product_type = key.replace(p2, "");
     var product_count = cart[key]*1;
+
+    if(product_type=='sets'){
+      db.any('SELECT sets FROM users').then(function(data){
+        console.log(data);
+      });
+    }
 
     var obj = {
       id: product_id*1,
@@ -262,6 +267,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
         var coffee_sql = `SELECT * FROM coffee WHERE id=0`;
         var horeca_sql = `SELECT * FROM horeca WHERE id=0`;
         var other_sql = `SELECT * FROM others WHERE id=0`;
+        var sets_sql = `SELECT * FROM sets WHERE set_id=0`;
 
         for (var i=0; i<cart.length; i++){
           switch(cart[i].type){
@@ -281,6 +287,10 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
               other_sql += ` OR id=`+cart[i].id;
               break;
             }
+            case "sets": {
+              sets_sql += ` OR set_id=`+cart[i].id;
+              break;
+            }
             default: {
               returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, userId, payment_method, region);
               break;
@@ -292,7 +302,8 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
             let coffee= await t.any(coffee_sql);
             let horeca= await t.any(horeca_sql);
             let others= await t.any(other_sql);
-            return {tea,coffee,horeca,others};
+            let sets= await t.any(sets_sql);
+            return {tea,coffee,horeca,others,sets};
         })
            .then(data => {
               var fullcost = 0;
@@ -363,6 +374,21 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                      }
                      break;
                    }
+                   case "sets": {
+                     for(var x=0; x<data.sets.length; x++){
+                       if(data.sets[x].set_id==cart[i].id){
+                         var price = data.sets[x].set_price;
+                         cart[i].price_of_one = price;
+                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
+                         cart[i].product = data.sets[x].item_name;
+                         cart[i].subtype = 0;
+                         cart[i].sort = 'sets';
+                         cart[i].articul = 0;
+                         fullcost += cart[i].full_price;
+                       }
+                     }
+                     break;
+                   }
                    default: {
                      returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, Math.floor(bonuses), userId, payment_method, region);
                      break;
@@ -373,6 +399,7 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
                returnCartCost(cart, res, response_type, Math.floor(bonuses), userId, payment_method, region); //Передаем обновленную и пересчитанную корзину на вывод
            })
             .catch(error => {
+              console.log(error);
             });
 
       break;
@@ -436,7 +463,7 @@ router.route('/order')
         case "getcartcost": { // ЗАПРОС НА ПОЛУЧЕНИЕ ОБЩЕЙ СУММЫ КОРЗИНЫ
           if(req.body.cart!=''){
             var cart = JSON.parse(req.body.cart); // Получаем корзину
-            var mycart = check_cart(cart); // Парсим и проверяем корзину
+            var mycart = check_cart(cart, req); // Парсим и проверяем корзину
             console.log(req.body);
             get_cart_cost(mycart, res, "ajax", 0, req.session.userId, req.body.region);
           }else{
@@ -451,7 +478,7 @@ router.route('/order')
         case "delivery_info": {
           if(req.body.cart!=''){
             var cart = JSON.parse(req.body.cart);
-            var mycart = check_cart(cart); //Проверка корзины
+            var mycart = check_cart(cart, req); //Проверка корзины
             var error;
             if(!mycart){
               error = "ERROR_CART_CONTENT"; // Корзина была изменена вручную из браузера.

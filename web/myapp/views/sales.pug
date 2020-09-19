@@ -41,9 +41,9 @@ block content
                     i.fas.fa-plus.controls
               .item_price_wrap
                 p.item_price_wrap 
-                  span.item_price #{saleInfo.set_price}
+                  span(setsprice=saleInfo.set_price).item_price #{saleInfo.set_price}
                     i.fas.fa-ruble-sign
-                  button.btn.btn-primary.item_btn_addToCart Добавить в корзину
+                  button(set-id=saleInfo.set_id).btn.btn-primary.item_btn_addToCart Добавить в корзину
               
             hr
         script(src='../sales.js')

@@ -74,6 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
     } else {
       e.preventDefault();
+      var radio;
+      if($(".phys").is('checked')){
+        radio = $(".phys").val();
+      }else{
+        radio = $(".ur").val();
+      }
       $.ajax({
         type: "POST",
         url:  "/register",
@@ -85,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
           phone_number: $(".phone").val(),
           password: $(".pass").val(),
           confirm_password: $(".conf_pass").val(),
-          customRadioInline1: $(".phys").val(),
+          customRadioInline1: radio
         },
         success: function(r){
           if(!r.ok){

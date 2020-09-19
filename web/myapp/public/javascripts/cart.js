@@ -3,7 +3,6 @@
     cart = JSON.parse(localStorage.getItem('cart'));
     $.post("/cart", cart).done(function(data){
       var final_price_result = 0;
-      console.log(data.other,data.coffee,data.tea);
       var out = '';
           if(data.other)
             for(var i = 0; i<data.other.length; i++){
@@ -125,6 +124,34 @@
                 +'</div>'
               console.log(data.horeca);
             }
+          if(data.sets)
+            for(var i = 0; i<data.sets.length; i++){
+              var price = data.sets[i].set_price;
+              final_price_result+= Math.round((price*cart['sets'+data.sets[i].set_id])*100)/100;
+              out +=
+                '<div type=sets class = "'+data.sets[i].sets_id+' good_cart">'
+                +'<img class="img_good_cart" src=/sales/sets/'+data.sets[i].set_id+'logo.png>'
+                +'<a href="/sales/set?id='+data.sets[i].set_id+'" class="item_name_cart"> '+data.sets[i].item_name+'</a>'
+                +'<div class="info_wrap">'
+                  +'<p class="price" price="'+price+'"> Цена: '+Math.ceil((price*cart['sets'+data.sets[i].set_id])*100)/100+' р.</p>'
+                  +'<p class="item_count"> Кол-во: '+cart['sets'+data.sets[i].set_id]+' шт.</p>'
+                  +'<a class="change__amount_link" href="#range_horeca_'+data.sets[i].set_id+'" data-toggle="collapse">Изменить</a>'
+                  +'<div class="collapse change__amount_wrap" id="range_horeca_'+data.sets[i].set_id+'">'
+                    +'<div class="range_items">'
+                      +'<button class="btn btn-secondary minus">'
+                        +'<i class="fas fa-minus controls"></i>'
+                      +'</button>'
+                      +'<input type="text" value='+cart['sets'+data.sets[i].set_id]+' class="input count_input_pack sym_none">'
+                      +'<button class="btn btn-secondary plus" type="sets">'
+                        +'<i class="fas fa-plus controls"></i>'
+                      +'</button>'
+                    +'</div>'
+                    +'<button type="sets" data-id="'+data.sets[i].set_id+'" class="addtocart btn btn-success change__amount_button_success">Подтвердить</button>'
+                  +'</div>'
+                +'</div>'
+                +'<button onclick=delfromcart("sets'+data.sets[i].set_id+'") class="btn btn-danger del_btn">Удалить</button>'
+                +'</div>'
+            }
             var rc = Math.round((final_price_result)*100)/100;
             var rc2 = 4000-rc;
             out +=
@@ -202,7 +229,15 @@
             })
             $('.plus').on('click', function(){
               var item = $(this);
-              item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+              if(item.attr('type')=='sets'){
+                if (item.siblings('.input').val() < 3){
+                  item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+                } else {
+                  return 0;
+                }
+              }else{
+                item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+              }
             })
 
     });
