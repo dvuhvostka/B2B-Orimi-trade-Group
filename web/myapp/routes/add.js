@@ -7,6 +7,7 @@ var config = require('../config');
 var {Pool, Client} = require('pg');
 var xlsx = require('xlsx-populate');
 const rimraf = require('rimraf');
+const fs = require('fs')
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -382,6 +383,24 @@ router.route('/add')
                   })
                 })
               }
+              break;
+              case 'get_images':{
+                var dir = './public/images/confirmed_uploads/'+req.body.id;
+                fs.readdir(dir, (err,files) => {
+                  if(!err){
+                    res.json({
+                      ok:true,
+                      files
+                    });
+                  } else {
+                    res.json({
+                      ok:false,
+                      err
+                    })
+                  }
+                  });
+              }
+              break;
               default: res.send('POST');
             }
             };

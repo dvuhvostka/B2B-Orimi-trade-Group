@@ -324,11 +324,23 @@ user.route('/user')
       }
     }else if(req.body.post_type=="delete_org_skdjfgh213asRQadSKSFD3123244"){
       db.none("DELETE FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'").then(function(){
-        rimraf('./public/images/uploads/'+req.body.org_owner_id, function () { console.log('done'); });
-        console.log("Organiztion deleted from user: "+req.body.org_owner_id);
-        res.json({
-          ok: true
-        });
+        if(!req.body.confirmed){
+        rimraf('./public/images/uploads/'+req.body.org_owner_id, function (){
+           console.log('done');
+           });
+         console.log("Organiztion deleted from user: "+req.body.org_owner_id);
+         res.json({
+           ok: true
+         });
+       } else {
+         rimraf('./public/images/confirmed_uploads/'+req.body.org_owner_id, function (){
+            console.log('done');
+            });
+          console.log("Organiztion deleted from user: "+req.body.org_owner_id);
+          res.json({
+            ok: true
+          });
+       }
       }).catch(function(err){
         res.json({
           ok: false,

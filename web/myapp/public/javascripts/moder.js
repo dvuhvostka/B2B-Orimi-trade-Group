@@ -217,55 +217,82 @@ $('.search_btn').on('click', (e)=>{
           </div>
           `+addres_div+`
           <div class='editing_btns'>
-          <button class='btn btn-primary print_btn'>Распечатать док-ты</button>
+          <button class='btn btn-primary print_btn' data-id='`+elem.owner_id+`'>Распечатать док-ты</button>
           <button class='btn btn-primary sale_btn' data-id='`+elem.id+`'>Дать доступ к акции</button>
           <button class='btn btn-danger del_btn' data-id='`+elem.owner_id+`'>Удалить организацию</button>
           </div>
         `;
 
         placement.append(div);
-        $('.print_btn').on('click', (e)=>{
-
-        });
-        $('.sale_btn').on('click', (e)=>{
-          var item = e.currentTarget;
-          var id = item.getAttribute('data-id');
-          $.ajax({
-            type:'POST',
-            url:'/add',
-            data:{
-              post_type: 'add_to_sale',
-              id: id
-            },
-            success: (res)=>{
-              if (res.ok){
-                alert('Доступ к акции выдан');
-              } else {
-                alert('Ошибка! Невозможно выдать доступ\n',res.err);
-              }
+      });
+      $('.print_btn').on('click', (e)=>{
+        var item = e.currentTarget;
+        var id = item.getAttribute('data-id');
+        $.ajax({
+          type:'POST',
+          url:'/add',
+          data:{
+            post_type: 'get_images',
+            id: id
+          },
+          success: (res)=>{
+            if (res.ok){
+              var print = document.querySelector('#print');
+              var html = ``;
+              res.files.forEach((elem)=>{
+                html += `<img class='docs' src='confirmed_uploads/`+id+`/`+elem+`'>`;
+              })
+              // console.log(html);
+              print.innerHTML = html;
+              setTimeout(()=>{
+                window.print();
+                print.innerHTML = "";
+              },1500);
+            } else {
+              alert('Ошибка! Невозможно выдать доступ\n',res.err);
             }
-          });
+          }
         });
-        $('.del_btn').on('click', (e)=>{
-          var item = e.currentTarget;
-          var id = item.getAttribute('data-id');
-          $.ajax({
-            type:'POST',
-            url:'/user',
-            data:{
-              post_type: 'delete_org_skdjfgh213asRQadSKSFD3123244',
-              org_owner_id: id
-            },
-            success: (res)=>{
-              if (res.ok){
-                alert('Организация удалена.');
-              } else {
-                alert('Ошибка! Невозможно удалить организацию\n',res.err);
-              }
+      });
+      $('.sale_btn').on('click', (e)=>{
+        var item = e.currentTarget;
+        var id = item.getAttribute('data-id');
+        $.ajax({
+          type:'POST',
+          url:'/add',
+          data:{
+            post_type: 'add_to_sale',
+            id: id
+          },
+          success: (res)=>{
+            if (res.ok){
+              alert('Доступ к акции выдан');
+            } else {
+              alert('Ошибка! Невозможно выдать доступ\n',res.err);
             }
-          });
+          }
         });
-      })
+      });
+      $('.del_btn').on('click', (e)=>{
+        var item = e.currentTarget;
+        var id = item.getAttribute('data-id');
+        $.ajax({
+          type:'POST',
+          url:'/user',
+          data:{
+            post_type: 'delete_org_skdjfgh213asRQadSKSFD3123244',
+            confirmed: true,
+            org_owner_id: id
+          },
+          success: (res)=>{
+            if (res.ok){
+              alert('Организация удалена.');
+            } else {
+              alert('Ошибка! Невозможно удалить организацию\n',res.err);
+            }
+          }
+        });
+      });
     }
   });
 });
