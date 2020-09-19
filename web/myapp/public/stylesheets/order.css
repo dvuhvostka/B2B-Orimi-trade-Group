@@ -45,8 +45,7 @@
   text-align: center;
 }
 .delivery__input {
-  width:70%;
-  margin: 0 auto;
+  width:100%;
 }
 .bonuses {
   display:flex;
@@ -91,6 +90,10 @@
 }
 .checkbox_bonuses {
   margin-left: 10px;
+}
+.input_field {
+  width: 70%;
+  margin: 0 auto;
 }
 @media (max-width: 425px){
   .order__radio_set{
