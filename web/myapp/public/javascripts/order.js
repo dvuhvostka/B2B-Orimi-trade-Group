@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if(!r.ok){
             switch(r.error){
               case "ERROR_CART_EMPTY": document.location.href='/shop'; break;
-              default: console.log(r.arg); break;
+              default: document.location.href='/shop'; break;
             }
           }else {
             $('.price').html(r.fullcost+' ');

@@ -22,8 +22,9 @@ function isInteger(num) {
   return Number.isInteger(num);
 }
 
-function check_cart(cart, req) {
+function check_cart(cart, usr_sets_data) {
   var result = 1;
+  var error;
   var object_product = [];
   for (key in cart){
     //Паттерны регулярных выражений
@@ -34,26 +35,52 @@ function check_cart(cart, req) {
     var product_type = key.replace(p2, "");
     var product_count = cart[key]*1;
 
-    if(product_type=='sets'){
-      db.any('SELECT sets FROM users').then(function(data){
-        console.log(data);
-      });
-    }
-
     var obj = {
       id: product_id*1,
       type: product_type,
       count: product_count
     }
+
     if((!obj.id)||(!obj.type)||(!obj.count)){
       result = 0;
+    }else{
+      object_product.push(obj);
     }
-    object_product.push(obj);
-  }
-  if(result){
-    return object_product;
-  }else{
-    return 0;
+
+    if(result){
+      if(product_type=='sets'){
+        for(var i =0; i<usr_sets_data.sets.length; i++){
+          console.log(usr_sets_data.sets[i]);
+          if(usr_sets_data.sets[i].id == product_id){
+            if(usr_sets_data.sets[i].rest < product_count){
+              if(usr_sets_data.sets[i].rest == 0){
+                error = "В этом месяце вы больше не можете приобрести Акционный набор  №"+product_id;
+                return {
+                  ok: false,
+                  err: "ERROR_NO_REST",
+                  err_txt: error,
+                  products: object_product
+                }
+              }else{
+                error = "В этом месяце вам осталось доступно "+usr_sets_data.sets[i].rest+"шт. (Акционный набор №"+product_id+")";
+                return {
+                  ok: false,
+                  err: "ERROR_REST",
+                  err_txt: error,
+                  products: object_product
+                }
+              }
+            }
+          }
+        }
+      }
+      var res = {};
+      res.ok = true;
+      res.products = object_product;
+      return res;
+    }else{
+      return 0;
+    }
   }
 }
 
@@ -121,17 +148,17 @@ var address, payment, bonuses, comments;
       db.one('SELECT * FROM deals_info WHERE id=(SELECT MAX(id) FROM deals_info)').then(function(deal){
         for (var i = 0; i<cart.length; i++){
         db.none('INSERT INTO deals(product, deal_owner, type, count, deal_id, sort, product_id, price_of_one, full_price, subtype, articul, deal_summ) VALUES(${product}, ${deal_owner}, ${type}, ${count}, ${deal_id}, ${sort}, ${product_id}, ${price_of_one}, ${full_price}, ${subtype}, ${articul}, ${deal_summ})',{
-            product: cart[i].product,
+            product: cart.products[i].product,
             deal_owner: userdata[0].id,
-            type: cart[i].type,
-            count: cart[i].count,
+            type: cart.products[i].type,
+            count: cart.products[i].count,
             deal_id: deal.id,
-            sort: cart[i].sort,
-            product_id: cart[i].id,
-            price_of_one: cart[i].price_of_one,
-            full_price: cart[i].full_price,
-            subtype: cart[i].subtype,
-            articul: cart[i].articul,
+            sort: cart.products[i].sort,
+            product_id: cart.products[i].id,
+            price_of_one: cart.products[i].price_of_one,
+            full_price: cart.products[i].full_price,
+            subtype: cart.products[i].subtype,
+            articul: cart.products[i].articul,
             deal_summ: cart.fullcost
           }).catch(error=>{
             console.log(error);
@@ -152,12 +179,32 @@ var address, payment, bonuses, comments;
 
 returnCartCost = (data, res, response_type, bonuses, userId, payment_method, region) => {
   if(response_type=="ajax"){
-    switch(data){
+    switch(data.err){
       case "PRODUCT_TYPE_ERROR": {
         var error = "PRODUCT_TYPE_ERROR";
         res.json({
           ok: false,
           error
+        });
+        break;
+      }
+      case "ERROR_NO_REST": {
+        var fullcost = data.fullcost;
+        var error = data.err_txt;
+        res.json({
+          ok: false,
+          error: error,
+          fullcost: fullcost
+        });
+        break;
+      }
+      case "ERROR_REST": {
+        var fullcost = data.fullcost;
+        var error = data.err_txt;
+        res.json({
+          ok: false,
+          error: error,
+          fullcost: fullcost
         });
         break;
       }
@@ -242,11 +289,12 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
     }
   }else if(response_type=='without_bonus'){
         if(data.fullcost>=2000){
-          var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
-          db.any(getuserbalance_sql).then(function(balance_response){
-            add_deal_with_bonuses(data, payment_method, balance_response, 0, res, region);
-            console.log('!SUCCESS!');
-          });
+          console.log(data);
+          // var getuserbalance_sql = `SELECT * FROM users WHERE id='`+userId+`'`;
+          // db.any(getuserbalance_sql).then(function(balance_response){
+          //   add_deal_with_bonuses(data, payment_method, balance_response, 0, res, region);
+          //   console.log('!SUCCESS!');
+          // });
         }else{
           var error = "ERROR_MIN_DEAL_PRICE_2000"; //Пользователь прислал пустую корзину
           res.json({
@@ -259,40 +307,40 @@ returnCartCost = (data, res, response_type, bonuses, userId, payment_method, reg
 
 get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, region) => {
   switch(cart) {
-    case 0: console.log("ERROR_CART_CONTENT"); break;
+    case 0: console.log('PRODUCT_TYPE_ERROR');
     default: {
       //Если полученный объект с данными корзины не пустой:
-        console.log(cart);
+        //console.log(cart);
         var tea_sql = `SELECT * FROM tea WHERE id=0`;
         var coffee_sql = `SELECT * FROM coffee WHERE id=0`;
         var horeca_sql = `SELECT * FROM horeca WHERE id=0`;
         var other_sql = `SELECT * FROM others WHERE id=0`;
         var sets_sql = `SELECT * FROM sets WHERE set_id=0`;
 
-        for (var i=0; i<cart.length; i++){
-          switch(cart[i].type){
+        for (var i=0; i<cart.products.length; i++){
+          switch(cart.products[i].type){
             case "tea":{
-              tea_sql += ` OR id=`+cart[i].id;
+              tea_sql += ` OR id=`+cart.products[i].id;
               break;
             }
             case "coffee":{
-              coffee_sql += ` OR id=`+cart[i].id;
+              coffee_sql += ` OR id=`+cart.products[i].id;
               break;
             }
             case "horeca": {
-              horeca_sql += ` OR id=`+cart[i].id;
+              horeca_sql += ` OR id=`+cart.products[i].id;
               break;
             }
             case "other": {
-              other_sql += ` OR id=`+cart[i].id;
+              other_sql += ` OR id=`+cart.products[i].id;
               break;
             }
             case "sets": {
-              sets_sql += ` OR set_id=`+cart[i].id;
+              sets_sql += ` OR set_id=`+cart.products[i].id;
               break;
             }
             default: {
-              returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, userId, payment_method, region);
+              returnCartCost(cart, res, response_type, userId, payment_method, region);
               break;
             }
           }
@@ -307,90 +355,90 @@ get_cart_cost = (cart, res, response_type, bonuses, userId, payment_method, regi
         })
            .then(data => {
               var fullcost = 0;
-               for(var i=0; i<cart.length; i++){
-                 switch(cart[i].type){
+               for(var i=0; i<cart.products.length; i++){
+                 switch(cart.products[i].type){
                    case "tea":{
                       for(var x=0; x<data.tea.length; x++){
-                        if(data.tea[x].id==cart[i].id){
+                        if(data.tea[x].id==cart.products[i].id){
                           var price = data.tea[x].item_price;
                           if (data.tea[x].sale_price!=0) price = data.tea[x].sale_price;
-                          cart[i].price_of_one = price;
-                          cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
-                          cart[i].sort = data.tea[x].sort;
-                          cart[i].product = data.tea[x].item_name;
-                          cart[i].subtype = 0;
-                          cart[i].articul = data.tea[x].articul;
-                          fullcost += cart[i].full_price;
+                          cart.products[i].price_of_one = price;
+                          cart.products[i].full_price = Math.ceil((price*cart.products[i].count)*100)/100;
+                          cart.products[i].sort = data.tea[x].sort;
+                          cart.products[i].product = data.tea[x].item_name;
+                          cart.products[i].subtype = 0;
+                          cart.products[i].articul = data.tea[x].articul;
+                          fullcost += cart.products[i].full_price;
                         }
                       }
                      break;
                    }
                    case "coffee":{
                      for(var x=0; x<data.coffee.length; x++){
-                       if(data.coffee[x].id==cart[i].id){
+                       if(data.coffee[x].id==cart.products[i].id){
                          var price = data.coffee[x].item_price;
                          if (data.coffee[x].sale_price!=0) price = data.coffee[x].sale_price;
-                         cart[i].price_of_one = price;
-                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
-                         cart[i].sort = data.coffee[x].sort;
-                         cart[i].product = data.coffee[x].item_name;
-                         cart[i].subtype = 0;
-                         cart[i].articul = data.coffee[x].articul;
-                         fullcost += cart[i].full_price;
+                         cart.products[i].price_of_one = price;
+                         cart.products[i].full_price = Math.ceil((price*cart.products[i].count)*100)/100;
+                         cart.products[i].sort = data.coffee[x].sort;
+                         cart.products[i].product = data.coffee[x].item_name;
+                         cart.products[i].subtype = 0;
+                         cart.products[i].articul = data.coffee[x].articul;
+                         fullcost += cart.products[i].full_price;
                        }
                      }
                      break;
                    }
                    case "horeca": {
                      for(var x=0; x<data.horeca.length; x++){
-                       if(data.horeca[x].id==cart[i].id){
+                       if(data.horeca[x].id==cart.products[i].id){
                          var price = data.horeca[x].item_price;
                          if (data.horeca[x].sale_price!=0) price = data.horeca[x].sale_price;
-                         cart[i].type = data.horeca[x].type;
-                         cart[i].price_of_one = price;
-                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
-                         cart[i].sort = data.horeca[x].sort;
-                         cart[i].product = data.horeca[x].item_name;
-                         cart[i].subtype = 'horeca';
-                         cart[i].articul = data.horeca[x].articul;
-                         fullcost += cart[i].full_price;
+                         cart.products[i].type = data.horeca[x].type;
+                         cart.products[i].price_of_one = price;
+                         cart.products[i].full_price = Math.ceil((price*cart.products[i].count)*100)/100;
+                         cart.products[i].sort = data.horeca[x].sort;
+                         cart.products[i].product = data.horeca[x].item_name;
+                         cart.products[i].subtype = 'horeca';
+                         cart.products[i].articul = data.horeca[x].articul;
+                         fullcost += cart.products[i].full_price;
                        }
                      }
                      break;
                    }
                    case "other": {
                      for(var x=0; x<data.others.length; x++){
-                       if(data.others[x].id==cart[i].id){
+                       if(data.others[x].id==cart.products[i].id){
                          var price = data.others[x].item_price;
                          if (data.others[x].sale_price!=0) price = data.others[x].sale_price;
-                         cart[i].price_of_one = price;
-                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
-                         cart[i].product = data.others[x].item_name;
-                         cart[i].subtype = 0;
-                         cart[i].sort = data.others[x].sort;
-                         cart[i].articul = data.others[x].articul;
-                         fullcost += cart[i].full_price;
+                         cart.products[i].price_of_one = price;
+                         cart.products[i].full_price = Math.ceil((price*cart.products[i].count)*100)/100;
+                         cart.products[i].product = data.others[x].item_name;
+                         cart.products[i].subtype = 0;
+                         cart.products[i].sort = data.others[x].sort;
+                         cart.products[i].articul = data.others[x].articul;
+                         fullcost += cart.products[i].full_price;
                        }
                      }
                      break;
                    }
                    case "sets": {
                      for(var x=0; x<data.sets.length; x++){
-                       if(data.sets[x].set_id==cart[i].id){
+                       if(data.sets[x].set_id==cart.products[i].id){
                          var price = data.sets[x].set_price;
-                         cart[i].price_of_one = price;
-                         cart[i].full_price = Math.ceil((price*cart[i].count)*100)/100;
-                         cart[i].product = data.sets[x].item_name;
-                         cart[i].subtype = 0;
-                         cart[i].sort = 'sets';
-                         cart[i].articul = 0;
-                         fullcost += cart[i].full_price;
+                         cart.products[i].price_of_one = price;
+                         cart.products[i].full_price = Math.ceil((price*cart.products[i].count)*100)/100;
+                         cart.products[i].product = data.sets[x].item_name;
+                         cart.products[i].subtype = 0;
+                         cart.products[i].sort = 'sets';
+                         cart.products[i].articul = 0;
+                         fullcost += cart.products[i].full_price;
                        }
                      }
                      break;
                    }
                    default: {
-                     returnCartCost("PRODUCT_TYPE_ERROR", res, response_type, Math.floor(bonuses), userId, payment_method, region);
+                     returnCartCost(cart, res, response_type, Math.floor(bonuses), userId, payment_method, region);
                      break;
                    }
                  }
@@ -462,10 +510,12 @@ router.route('/order')
         }
         case "getcartcost": { // ЗАПРОС НА ПОЛУЧЕНИЕ ОБЩЕЙ СУММЫ КОРЗИНЫ
           if(req.body.cart!=''){
-            var cart = JSON.parse(req.body.cart); // Получаем корзину
-            var mycart = check_cart(cart, req); // Парсим и проверяем корзину
-            console.log(req.body);
-            get_cart_cost(mycart, res, "ajax", 0, req.session.userId, req.body.region);
+            db.one(`SELECT sets FROM users WHERE id='`+req.session.userId+`'`).then(function(usr_sets_data){
+              var cart = JSON.parse(req.body.cart); // Получаем корзину
+              var mycart = check_cart(cart, usr_sets_data); // Парсим и проверяем корзину
+              console.log(req.body);
+              get_cart_cost(mycart, res, "ajax", 0, req.session.userId, req.body.region);
+            });
           }else{
             var error = "ERROR_CART_EMPTY";
             res.json({
@@ -477,19 +527,21 @@ router.route('/order')
         }
         case "delivery_info": {
           if(req.body.cart!=''){
-            var cart = JSON.parse(req.body.cart);
-            var mycart = check_cart(cart, req); //Проверка корзины
-            var error;
-            if(!mycart){
-              error = "ERROR_CART_CONTENT"; // Корзина была изменена вручную из браузера.
-              res.json({
-                ok: false,
-                error
-              })
-            }else{
-              // Идет проверка введенных данных и запись в бд сделки.
-              let formdata = check_formdata(req.body.formdata, mycart, res, req.session.userId, req.body.region);
-            }
+            db.one(`SELECT sets FROM users WHERE id='`+req.session.userId+`'`).then(function(usr_sets_data){
+              var cart = JSON.parse(req.body.cart);
+              var mycart = check_cart(cart, usr_sets_data); //Проверка корзины
+              var error;
+              if(!mycart){
+                error = "ERROR_CART_CONTENT"; // Корзина была изменена вручную из браузера.
+                res.json({
+                  ok: false,
+                  error
+                })
+              }else{
+                // Идет проверка введенных данных и запись в бд сделки.
+                let formdata = check_formdata(req.body.formdata, mycart, res, req.session.userId, req.body.region);
+              }
+            });
           }else{
             var error = "ERROR_EMPTY_CART"; //Пользователь прислал пустую корзину
             res.json({

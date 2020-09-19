@@ -195,25 +195,30 @@
                 var input =  item.siblings('.range_items').children('.input');
                 var wrap = item.closest('.info_wrap');
                 var articul = data_type+data_id;
-                  if(input.val()*1>0){
-                    cart[articul] = input.val();
-                    var price = Math.round((wrap.children('.price').attr('price')*input.val())*100)/100;
-                    wrap.children('.item_count').html('Кол-во: '+input.val()+' шт.');
-                    wrap.children('.price').html('Цена: '+price+' р.');
-                  }
+                if(input.val()*1>0){
+                  cart[articul] = input.val();
+                  var price = Math.round((wrap.children('.price').attr('price')*input.val())*100)/100;
+                }
                   localStorage.setItem('cart', JSON.stringify(cart));
                   $.ajax({
                     type: 'POST',
                     url: '/order',
                     data: {post_type: "getcartcost", cart: localStorage.getItem('cart')},
                     success: function(r){
-                        var rounded_cost = Math.round((r.fullcost)*100)/100;
-                        $('.final_price').html(rounded_cost+' ');
-                        if(rounded_cost<4000){
-                          var rc3 = Math.round((4000-rounded_cost)*100)/100;
-                          $('.delivery_text').html('До бесплатной доставки осталось: <span class="delivery_price">'+rc3+'</span> р.');
-                        }else {
-                          $('.delivery_text').html('Ваш заказ будет доставлен бесплатно!');
+                        if(r.ok){
+                            wrap.children('.item_count').html('Кол-во: '+input.val()+' шт.');
+                            wrap.children('.price').html('Цена: '+price+' р.');
+                          console.log(r);
+                          var rounded_cost = Math.round((r.fullcost)*100)/100;
+                          $('.final_price').html(rounded_cost+' ');
+                          if(rounded_cost<4000){
+                            var rc3 = Math.round((4000-rounded_cost)*100)/100;
+                            $('.delivery_text').html('До бесплатной доставки осталось: <span class="delivery_price">'+rc3+'</span> р.');
+                          }else {
+                            $('.delivery_text').html('Ваш заказ будет доставлен бесплатно!');
+                          }
+                        }else{
+                          alert(r.error);
                         }
                     }
                   });
