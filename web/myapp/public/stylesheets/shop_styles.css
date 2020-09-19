@@ -493,6 +493,16 @@
   text-align: center;
 }
 
+.gethelp_wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 350px;
+  margin-top:-175px;
+  margin-left:-150px;
+}
+
 @media (max-width: 768px) {
   nav {
     font-size: 0.8em;

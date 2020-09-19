@@ -36,6 +36,22 @@ block content
 		li.control-right
 			a(href='#')
 				i.fas.fa-angle-right.c
+	.gethelp_wrap
+		.get_help__header
+			h5.header Обратная связь
+		.get_help__content
+			.get_help__contacts
+				.in
+					label Имя
+					input(type='text' name='name')
+				.in
+					label Телефон
+					input(type='text' name='phone')
+			.get_help__textarea
+				label.help__label.label Введите ваш вопрос
+				textarea.help__textarea.textarea
+		.get_help__footer
+			button.btn.btn-success.btn-send Отправить
 	.grid-container
 		.carousel
 			form(id='search' method="POST" action="/shop")
