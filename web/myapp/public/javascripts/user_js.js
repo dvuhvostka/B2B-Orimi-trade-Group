@@ -71,11 +71,11 @@ document.addEventListener('DOMContentLoaded', ready);
 window.onload = function() {
   var plus = document.querySelector('.add__addres');
   console.log(plus);
-  plus.addEventListener('click', function(event){
+  plus.addEventListener('click', function(e){
     console.log(123);
     var inputs = document.querySelectorAll('input[data-addres-id]');
     var newDiv = document.createElement('div');
-    var target = event.currentTarget;
+    var target = e.currentTarget;
     var value = target.previousSibling.value;
     console.log(value);
     var number = inputs[inputs.length-1].getAttribute('data-addres-id');

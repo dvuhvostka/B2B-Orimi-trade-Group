@@ -90,14 +90,14 @@ window.onload = function(){
         data: {post_type: "delivery_info", formdata: $('#delivery_info').serialize(), cart: localStorage.getItem('cart'), region: localStorage.getItem('reg')},
         success: function(r){
           switch(r.ok){
-            case true: alert(r.message); localStorage.removeItem('cart'); window.location.href='/shop'; break;
+            case true: showModal(r.message,'Заказ оформлен', true, '/shop'); localStorage.removeItem('cart'); break;
             case false: console.log(r.error); break;
             default: window.location.href = '/shop'; break;
           }
         }
       });
     }else{
-      alert('Корзина пуста');
+      showModal('Корзина пуста','Ошибка', true);
     }
   })
 }

@@ -22,6 +22,7 @@ function isInteger(num) {
   return Number.isInteger(num);
 }
 
+
 function check_cart(cart, usr_sets_data) {
   var result = 1;
   var res = {};
@@ -169,17 +170,17 @@ var address, payment, bonuses, comments;
             console.log(error);
           });
         }
+        var message = 'Ваш заказ №'+deal.id+' оформлен!';
+        res.json({
+          ok: true,
+          message
+        });
       }).catch(error => {
         console.log(error);
       });
   }).catch(error =>{
     console.log(error);
   });
-  var message = 'SUCCESS';
-  res.json({
-    ok: true,
-    message
-  })
 }
 
 returnCartCost = (data, res, response_type, bonuses, userId, payment_method, region) => {

@@ -44,9 +44,9 @@ $('.articul-delete').on('click', ()=>{
     success: (res) => {
       if(res.response.length){
         var name = res.response[0].item_name;
-        alert('Товар успешно удален \n'+name);
+        showModal('Товар успешно удален \n'+name,'Успешно');
       }else{
-        alert('Такого товара нет');
+        showModal('Такого товара нет',"Ошибка");
       }
     }
   });
@@ -83,7 +83,11 @@ $('.btn__item_edit').on('click', ()=>{
     },
     dataType: 'json',
     success: (res)=>{
-      alert(res);
+      if (res.ok){
+        showModal(res.msg, 'Успешно', true)
+      } else {
+        showModal(res.msg, 'Ошибка', false)
+      }
     }
   });
 })
@@ -304,7 +308,7 @@ $('.search_btn').on('click', (e)=>{
             if (res.ok){
               showModal('Организация удалена.','Успешно');
             } else {
-              alert('Ошибка! Невозможно удалить организацию\n'+res.err,"Ошибка");
+              showModal('Ошибка! Невозможно удалить организацию\n'+res.err,"Ошибка");
             }
           }
         });

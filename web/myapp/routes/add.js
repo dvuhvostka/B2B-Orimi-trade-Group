@@ -273,8 +273,17 @@ router.route('/add')
                       sql += ` WHERE id=`+data.id;
                       db.none(sql).then(()=>{
                         console.log('ok');
-                        res.json('Изменения сохранены!');
+                        res.json({
+                          ok:true,
+                          msg: 'Изменения сохранены!'
+                        });
                       })
+                      .catch((err) =>{
+                        res.json({
+                          ok:false,
+                          msg: err
+                        });
+                      });
                       break;
                     case 'coffee':
                       sql = `UPDATE coffee `;
@@ -282,8 +291,17 @@ router.route('/add')
                       sql += ` WHERE id=`+data.id;
                       db.none(sql).then(()=>{
                         console.log('ok');
-                        res.json('Изменения сохранены!');
+                        res.json({
+                          ok:true,
+                          msg: 'Изменения сохранены!'
+                        });
                       })
+                      .catch((err) =>{
+                        res.json({
+                          ok:false,
+                          msg: err
+                        });
+                      });
                       break;
                     case 'other':
                       sql = `UPDATE others `;
@@ -291,8 +309,17 @@ router.route('/add')
                       sql += ` WHERE id=`+data.id;
                       db.none(sql).then(()=>{
                         console.log('ok');
-                        res.json('Изменения сохранены!');
+                        res.json({
+                          ok:true,
+                          msg: 'Изменения сохранены!'
+                        });
                       })
+                      .catch((err) =>{
+                        res.json({
+                          ok:false,
+                          msg: err
+                        });
+                      });
                       break;
                     default:
 
@@ -304,8 +331,17 @@ router.route('/add')
                   console.log(sql);
                   db.none(sql).then(()=>{
                     console.log('ok');
-                    res.json('Изменения сохранены!');
+                    res.json({
+                      ok:true,
+                      msg: 'Изменения сохранены!'
+                    });
                   })
+                  .catch((err) =>{
+                    res.json({
+                      ok:false,
+                      msg: err
+                    });
+                  });
                 }
               } break;
               case 'get_org_info': {

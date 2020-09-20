@@ -124,8 +124,7 @@ block content
                 console.log("123");
                 var foo = $('#'+deal_id);
                 foo.detach();
-                alert('Сделка № '+deal_id+' успешно удалена');
-                location.reload();
+                showModal('Сделка № '+deal_id+' успешно удалена','Успешно',true);
             });
           });
         $('.confirmDeal').on('click', function(){
@@ -136,9 +135,9 @@ block content
                 if(data.ok){
                   var foo = $('#'+deal_id);
                   foo.detach();
-                  alert('Сделка № '+deal_id+' успешно переведена в статус "ПОДТВЕРЖДЕНО"');
+                  showModal('Сделка № '+deal_id+' успешно переведена в статус "ПОДТВЕРЖДЕНО"',"Успешно",false);
                 }else{
-                  alert('Ошибка, попробуйте позже или свяжитесь с администрацией');
+                  showModal('Ошибка, попробуйте позже или свяжитесь с администрацией','Ошибка',false);
                 }
             });
           });
@@ -150,7 +149,7 @@ block content
             var confirmed = $('#confirmed').val();
             console.log(city, time, confirmed);
             $.post("/add",{post_type: "download_deals", city: city, time: time, confirmed: confirmed}, (data)=>{
-                if(!data.ok){alert("По текущим фильтрам сделок не найдено!");}else{
+                if(!data.ok){showModal("По текущим фильтрам сделок не найдено!","Поиск", false);}else{
                   setTimeout(document.location.href=data.src, 1000);
                 }
             });
@@ -163,7 +162,7 @@ block content
               if(data.ok){
                 var foo = $('#'+deal_id);
                 foo.detach();
-                alert('Сделка № '+deal_id+' успешно завершена');
+                showModal('Сделка № '+deal_id+' успешно завершена','Успешно',false);
               }else{
                 alert('Ошибка, попробуйте позже или свяжитесь с администрацией');
               }
