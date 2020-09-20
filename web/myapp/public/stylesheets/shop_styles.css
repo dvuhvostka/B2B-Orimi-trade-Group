@@ -510,7 +510,7 @@
   height: 550px;
   margin-top:-275px;
   margin-left:-250px;
-  z-index: 100;
+  z-index: -1;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -524,6 +524,7 @@
 .visible {
   transition: opacity 1s cubic-bezier(0.0, 0.1, 0.5 ,1.0);
   opacity: 1 !important;
+  z-index: 100;
 }
 .get_help__content{
   width:100%;
