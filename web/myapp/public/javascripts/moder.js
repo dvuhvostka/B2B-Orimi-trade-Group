@@ -175,7 +175,6 @@ $('.btn__request_delete').on('click', function(){
   });
 })
 
-
 $('.search_btn').on('click', (e)=>{
   var input_val = e.currentTarget.previousSibling.value;
   var placement = document.querySelector('.results_wrap');

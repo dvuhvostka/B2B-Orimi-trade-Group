@@ -224,18 +224,19 @@ block content
                       span.status_text нет информации
                   .start_weekly
                     h6.header.start_header Выберите кейс
-                    form(method='POST' enctype='multipart/form-data')#form_photo
+                    form(enctype='multipart/form-data')#form_photo
                       .radio_weekly
                         .radio_set
                           label.radio_label Кейс 1
-                          input(type='radio' name='cases' value='case1').radio_input
+                          input(type='radio' name='cases' value='1' required).radio_input
                         .radio_set
                           label.radio_label Кейс 2
-                          input(type='radio' name='cases' value='case2').radio_input
+                          input(type='radio' name='cases' value='2' required).radio_input
                         .radio_set
                           label.radio_label Кейс 3
-                          input(type='radio' name='cases' value='case3').radio_input
+                          input(type='radio' name='cases' value='3' required).radio_input
                       .btn-column
+                        input(type='text' style='visibility: hidden' name='post_type' value='case_photo')
                         input(type='file' name='photo' id='photo' multiple data-multiple-caption='{count} файлов выбрано' required)
                         label.btn.btn-outline-info.label_photo(type='button' id='photo_label' for='photo')
                           span Прикрепить фото
@@ -694,7 +695,31 @@ block content
                           button.btn.btn-primary.btn__request_info Подробнее об организации
                           button.btn.btn-danger.btn__request_delete Удалить запрос
                 .tab-pane.fade#nav-mod-firms-sales
-                  h4.header Акция Продержи - получи
+                  .accept_firm_wrap
+                  if (weekly.length == undefined)
+                    h4.start-text.header В списке 0 заявок.
+                  else
+                    h4.start-text.header В списке #{weekly.length} запрос(ов).
+                    -for (var u=0; u<weekly.length; u++)
+                      .firm_item
+                        h5.header Заявка #{u+1}
+                        .in
+                          p Название: 
+                          p #{weekly[u].org_name}
+                        .in    
+                          p ИНН:
+                          p #{weekly[u].org_inn}
+                        .in 
+                          p #{weekly[u].org_owner_position}:
+                          p #{weekly[u].org_owner_fio}
+                        h5.header Фото полок:
+                        .img_set
+                          - for(var z=0; z<weekly[u].photos.length; z++)
+                            a(href="./case_photo/"+weekly[u].requester_id+"/"+weekly[u].cases+"/"+weekly[u].photos[z] target='_blank').docs_link
+                              img.docs(src="./case_photo/"+weekly[u].requester_id+"/"+weekly[u].cases+"/"+weekly[u].photos[z])
+                        .btn-row
+                          button.btn.btn-success(onclick="photo_confirm('"+weekly[u].requester_id+"','"+weekly[u].cases+"','"+weekly[u].org_name+"')") Подтвердить
+                          button.btn.btn-danger(onclick="delete_photos('"+weekly[u].requester_id+"','"+weekly[u].cases+"','"+weekly[u].org_name+"')") Отказать
   script(src=src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.min.js" type="text/javascript")
   if (permissions=='mod')
     script(src='moder.js')
@@ -737,10 +762,9 @@ block content
           }
         })
     });
-    $('#org_form').on('submit', function(e) {
+    $('#org_form, #form_photo').on('submit', function(e) {
         e.preventDefault();
         var formData = new FormData(this);
-        console.log("123");
         $.ajax({
             type: "POST",
             url: "/user",
@@ -750,9 +774,9 @@ block content
             success: function(r){
               if(r.ok == false){
                 console.log(r.error);
-                $('#redact').find('span').html(r.error);
+                $('.label_photo').find('span').html(r.error);
               }else{
-                setTimeout(document.location.href='/user', 2000);
+                showModal('Фотографии полок успешно отправлены на ободрение.', 'Успех', true, '/user');
               }
             }
           })
@@ -785,7 +809,13 @@ block content
           window.location.reload();
         }
       }
-    
+      function photo_confirm(owner_id, cases, org_name){
+        var conf = confirm("Вы действительно хотите ПОДТВЕРДИТЬ заявку организации "+org_name+" на участие в акции ФОТО ПОЛОК?");
+        if(conf){
+          $.post("/user",{post_type: "confirm_photos", org_owner_id: owner_id, cases: cases});
+          showModal("Заявка успешно подтверждена.", 'Успех', true, '/user');
+        }
+      }
       $('#add_tea_form, #add_coffee_form, #add_other_form, #add_horeca_tea_form, #add_horeca_coffee_form').on('submit', function(e) {
           e.preventDefault();
           var formData = new FormData(this);

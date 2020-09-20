@@ -66,6 +66,24 @@ var storage = multer.diskStorage({
         cb(null, './public/images/store_prods/other/'+req.body.type+'/'+req.body.articul);
         break;
       }
+      case "case_photo": {
+        var getUsersWeekly = `SELECT weekly FROM users WHERE id='`+req.session.userId+`'`;
+        db.one(getUsersWeekly).then(function(data){
+          var index = parseInt(req.body.cases)-1;
+          var usr_timestamp = data.weekly[index].timestamp;
+          var time_now = Date.now();
+          var week_ms = 604800000;
+          var difference = parseInt(time_now)-parseInt(usr_timestamp);
+          var time_rest = week_ms - difference;
+          if (time_rest<0){
+            fs.mkdir('./public/images/case_photo/'+req.session.userId+'/'+req.body.cases, err=>{});
+            cb(null, './public/images/case_photo/'+req.session.userId+'/'+req.body.cases);
+          }
+        }).catch(function(err){
+          console.log("getUsersWeekly SQL_ERROR - USER undefined");
+        });
+        break;
+      }
       default: {
         fs.mkdir('./public/images/uploads/'+req.session.userId, err=>{});
         cb(null, './public/images/uploads/'+req.session.userId);
@@ -98,6 +116,10 @@ var storage = multer.diskStorage({
       case "add_other": {
           var fls = fs.readdirSync('./public/images/store_prods/other/'+req.body.type+'/'+req.body.articul+'/');
           cb(null, fls.length+1 + path.extname(file.originalname));
+        break;
+      }
+      case "case_photo": {
+          cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
         break;
       }
       default: {
@@ -153,6 +175,14 @@ var upload = multer({
           if (ext!='.jpg'){
             const err = new Error('Extension');
             err.code = "Изображения товара только в формате .jpg";
+            return cb(err);
+          }
+        break;
+      }
+      case "case_photo": {
+          if (ext!='.jpg'&&ext!='.jpeg'&&ext!='.png'){
+            const err = new Error('Extension');
+            err.code = "EXTENSION";
             return cb(err);
           }
         break;
@@ -226,27 +256,33 @@ user.route('/user')
                   }
                 db.any(`SELECT * FROM deals_info`).then(function(deals_info){
                   db.any(`SELECT * FROM requests_from_organizations`).then((requests)=>{
-                    console.log(requests);
-                    res.render('user',{
-                      title: "Аккаунт",
-                      isRegistred: req.session.userId,
-                      user_name: response.rows[0].username,
-                      user_second_name: response.rows[0].second_name,
-                      user_third_name: response.rows[0].third_name,
-                      number: response.rows[0].number,
-                      phone_confirmed: response.rows[0].phone_confirmed,
-                      type: response.rows[0].client_type,
-                      permissions: response.rows[0].permissions,
-                      balance: response.rows[0].balance,
-                      org_info: org_info,
-                      info: info,
-                      deals: d_data,
-                      deals_info: deals_info,
-                      uncorgs: uncorgs,
-                      link_code: response.rows[0].link_code,
-                      attached_org: attachedorg,
-                      requests: requests,
-                      access:response.stock_access
+                    db.any(`SELECT * FROM weekly_checklist`).then((weekly_checklist)=>{
+                      for(var i=0; i<weekly_checklist.length; i++){
+                        var fls_photo = fs.readdirSync('./public/images/case_photo/'+weekly_checklist[i].requester_id+"/"+weekly_checklist[i].cases);
+                        weekly_checklist[i].photos = fls_photo;
+                      }
+                      res.render('user',{
+                        title: "Аккаунт",
+                        isRegistred: req.session.userId,
+                        user_name: response.rows[0].username,
+                        user_second_name: response.rows[0].second_name,
+                        user_third_name: response.rows[0].third_name,
+                        number: response.rows[0].number,
+                        phone_confirmed: response.rows[0].phone_confirmed,
+                        type: response.rows[0].client_type,
+                        permissions: response.rows[0].permissions,
+                        balance: response.rows[0].balance,
+                        org_info: org_info,
+                        info: info,
+                        deals: d_data,
+                        deals_info: deals_info,
+                        uncorgs: uncorgs,
+                        weekly: weekly_checklist,
+                        link_code: response.rows[0].link_code,
+                        attached_org: attachedorg,
+                        requests: requests,
+                        access:response.stock_access
+                      });
                     });
                   });
                 });
@@ -390,7 +426,6 @@ user.route('/user')
         ok: true
       });
     }else if (req.body.post_type == 'request') {
-      console.log('add request')
       db.none("INSERT INTO requests_from_organizations(request, org_id) VALUES (${request},${org_id})",{
         request: req.body.request,
         org_id: req.session.userId,
@@ -406,12 +441,13 @@ user.route('/user')
           ok:false
         })
       });
+    }else if(req.body.post_type== 'confirm_photos'){
+      db.one("SELECT bonus FROM weekly WHERE weekly_id="+req.body.cases+"'").then(function(bonus){
+        console.log(bonus);
+      });
     }else{
-        console.log(12313);
         upload(req, res, err => {
-          console.log(err);
           if (err == undefined){
-            console.log('here2');
             switch(req.body.post_type){
               case "add_coffee": {
                 var fls = fs.readdirSync('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul+'/');
@@ -592,8 +628,65 @@ user.route('/user')
                 });
                 break;
               }
+              case "case_photo": {
+
+                function timeConversion(millisec) {
+
+                       var seconds = (millisec / 1000).toFixed(0);
+                       var minutes = (millisec / (1000 * 60)).toFixed(0);
+                       var hours = (millisec / (1000 * 60 * 60)).toFixed(0);
+                       var days = (millisec / (1000 * 60 * 60 * 24)).toFixed(0);
+                       if (seconds < 60) {
+                           return seconds + " Секунд";
+                       } else if (minutes < 60) {
+                           return minutes + " Минут";
+                       } else if (hours < 24) {
+                           return hours + " Часов";
+                       } else {
+                           return days + " Дней"
+                       }
+                   }
+
+                var getUsersWeekly = `SELECT weekly FROM users WHERE id='`+req.session.userId+`'`;
+                db.one(getUsersWeekly).then(function(data){
+                  var index = parseInt(req.body.cases)-1;
+                  var usr_timestamp = data.weekly[index].timestamp;
+                  var time_now = Date.now();
+                  var week_ms = 604800000;
+                  var difference = parseInt(time_now)-parseInt(usr_timestamp);
+                  var time_rest = week_ms - difference;
+                  console.log(req.body.cases);
+                  if (time_rest<0){
+                    //Можно отправлять.
+                    var getOrgnizationInfo = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+                    db.one(getOrgnizationInfo).then(function(org_info){
+                      db.none('INSERT INTO weekly_checklist (requester_id, cases, org_owner_fio, org_name, org_inn, org_owner_position) VALUES(${requester_id}, ${cases}, ${org_owner_fio}, ${org_name}, ${org_inn}, ${org_owner_position})',  {
+                        requester_id: req.session.userId,
+                        cases: req.body.cases,
+                        org_owner_fio: org_info.owner_sname+" "+org_info.owner_name+" "+org_info.owner_tname,
+                        org_name: org_info.org_name,
+                        org_inn: org_info.owner_inn,
+                        org_owner_position: org_info.owner_position
+                      }).catch(function(err){
+                        console.log(err);
+                      });
+                      res.json({
+                        ok: true
+                      });
+                    });
+                  }else{
+                    var error = 'До следующей попытки осталось: '+timeConversion(time_rest);
+                    res.json({
+                      ok: false,
+                      error
+                    });
+                  }
+                }).catch(function(err){
+                  console.log("getUsersWeekly SQL_ERROR - USER undefined");
+                });
+                break;
+              }
               default: {
-                  console.log(123123);
                   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
                   var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
                   console.log(req.body.custom_type);
