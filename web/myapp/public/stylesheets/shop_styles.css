@@ -48,9 +48,11 @@
 
 .alert_t {
   position: fixed;
-  bottom: 20%;
-  left:20px;
+  bottom: 0;
+  right:10px;
+  z-index: 1000;
 }
+
 
 .carousel {
   grid-area: c;
@@ -76,7 +78,7 @@
 .filters {
   margin-right: auto;
   text-decoration: none;
-  margi
+  z-index: -1;
 }
 
 .filters>li {
@@ -492,17 +494,81 @@
   outline: none;
   text-align: center;
 }
-
+.gethelp_overlay{
+  position: fixed;
+  width:100%;
+  height:100%;
+  z-index: 99;
+  background-color: #000;
+  opacity: 0.5;
+}
 .gethelp_wrap {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
-  width: 300px;
-  height: 350px;
-  margin-top:-175px;
-  margin-left:-150px;
+  width: 500px;
+  height: 550px;
+  margin-top:-275px;
+  margin-left:-250px;
+  z-index: 100;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 0.25rem;
+  opacity: 0;
+
+}
+.visible {
+  transition: opacity 1s cubic-bezier(0.0, 0.1, 0.5 ,1.0);
+  opacity: 1 !important;
+}
+.get_help__content{
+  width:100%;
+  border-top: 1px solid #cbcbcb;
+}
+.get_help__contacts {
+  width: 50%;
+  margin: 0 auto;
+}
+.get_help__textarea {
+  width: 70%;
+  margin: 0 auto;
+
+}
+.header {
+  text-align: center;
+  margin: 10px auto 20px auto;
+}
+.help_row{
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 10px auto;
+}
+.help_label {
+  font-size: 18px;
+  color: #000;
 }
 
+.textarea {
+  resize: none;
+  width: 100%;
+  height: 100px;
+  padding: 15px;
+}
+.textarea_label {
+  text-align: center;
+  width: 100%;
+}
+.help_input {
+  height: 40px;
+  max-width: 226px;
+  min-width: 200px;
+}
 @media (max-width: 768px) {
   nav {
     font-size: 0.8em;
@@ -513,10 +579,6 @@
       "c c c c c"
       "s m m m ."
     ;
-  }
-  .alert_t {
-    position: fixed;
-
   }
   .carousel-inner {
     width: 85%;

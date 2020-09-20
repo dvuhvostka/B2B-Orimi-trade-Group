@@ -21,7 +21,7 @@ html
 					.modal-body
 						p#error_msg
 					.modal-footer
-						button.btn.btn-secondary(data-dismiss='modal') Закрыть
+						button.btn.btn-secondary.btn-close(data-dismiss='modal') Закрыть
 		nav(class='navbar navbar-expand-md navbar-dark bg-dark sticky-top')
 			.container-fluid
 				a(href='/shop' class='navbar-brand') Фирменный магазин Орими-трэйд
@@ -70,13 +70,18 @@ html
 							button.btn.btn-outline-success.btn-help Обратная связь
 	script.
 		
-		function showModal(msg, header){
+		function showModal(msg, header, reload){
 		var modal = $("#modal");
 		var msg_m=$("#error_msg");
 		var header_m = $('#headder_msg');
 			msg_m.html(msg);       
 			header_m.html(header)
 			modal.modal('show');
+			if (reload){
+				$('.btn-close').on('click', ()=>{
+					window.location.reload();
+				})
+				}
 		}
 	script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous")
 	script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous")

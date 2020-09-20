@@ -116,9 +116,9 @@ block content
                       },
                       success: function(res) {
                         if(res.ok)
-                          showModal('ok');
+                          showModal('Запрос отправлен',"Успешно");
                         else 
-                          alert('bad');
+                          showModal('Ошибка при отправлении запроса',"Ошибка");
                       }
                     })
                   });
@@ -633,21 +633,38 @@ block content
                   a.nav-item.nav-link#nav-mod-firms-info-tab(aria-selected='false' aria-controls='nav-mod-firms-info' role='tab' data-toggle="pill" href='#nav-mod-firms-info') Информация о фирме           
               .tab-content.mod__content
                 .tab-pane.fade.show.active#nav-mod-firms-agree
-                  p В списке #{uncorgs.length} фирм(а).
+                  .accept_firm_wrap
+                    h4.start-text.header В списке #{uncorgs.length} фирм(а).
                     -for (var u=0; u<uncorgs.length; u++)
-                      p Название: #{uncorgs[u].org_name}
-                      p Юридический адрес: #{uncorgs[u].org_address_ur}
-                      - for(var i = 0;i<uncorgs[u].org_address_fact.length ;i++)
-                        p Фактический адрес #{i+1}: #{uncorgs[u].org_address_fact[i]}
-                      p ИНН: #{uncorgs[u].owner_inn}
-                      p #{uncorgs[u].owner_position}: #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
-                      label Запретить участвовать в акции фото полок: &#8194;
-                      input(type='checkbox' id=uncorgs[u].owner_id)
-                      p Сканы документов:
-                      - for(var z=0; z<uncorgs[u].docs.length; z++)
-                          img(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
-                      button(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
-                      button(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
+                      .firm_item
+                        h5.header Заявка #{u+1}
+                        .in
+                          p Название: 
+                          p #{uncorgs[u].org_name}
+                        .in
+                          p Юридический адрес:
+                          p #{uncorgs[u].org_address_ur}
+                        - for(var i = 0;i<uncorgs[u].org_address_fact.length ;i++)
+                          .in
+                            p Фактический адрес #{i+1}: 
+                            p #{uncorgs[u].org_address_fact[i]}
+                        .in    
+                          p ИНН:
+                          p #{uncorgs[u].owner_inn}
+                        .in  
+                          p #{uncorgs[u].owner_position}:
+                          p #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
+                        .in.sale_reject
+                          input.sale_reject_input(type='checkbox' id=uncorgs[u].owner_id)
+                          label.sale_reject_label Запретить участвовать в акции "Продержи - получи"
+                        h5.header Сканы документов:
+                        .img_set
+                          - for(var z=0; z<uncorgs[u].docs.length; z++)
+                            a(href="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z] target='_blank').docs_link
+                              img.docs(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
+                        .btn-row
+                          button.btn.btn-success(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
+                          button.btn.btn-danger(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
                 .tab-pane.fade#nav-mod-firms-info
                   .firm_search_wrap
                     h5.header Информация о фирме

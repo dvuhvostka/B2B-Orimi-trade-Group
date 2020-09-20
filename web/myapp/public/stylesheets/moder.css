@@ -187,3 +187,43 @@
 .editing_btns button {
   width: 100%;
 }
+.docs_link{
+  width: 100%;
+}
+.docs {
+  width: 100%;
+  margin-bottom:20px;
+  padding: 10px;
+  border-top: 5px solid #000;
+}
+.firm_item {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+.img_set {
+  display: flex;
+  flex-wrap: wrap;
+}
+.btn-row {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-row button {
+  width: 45%;
+}
+
+.btn-row button:first-child {
+  margin-right:15px;
+}
+.sale_reject {
+  margin: 0 auto 15px auto;
+}
+.sale_reject_label {
+  margin: auto 0;
+}
+.sale_reject_input {
+
+  margin: auto 15px auto 0;
+}

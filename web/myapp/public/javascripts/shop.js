@@ -6,6 +6,20 @@ function showModalCity(mssg){
   modal_city.modal('show');
 }
   window.onload = function(){
+
+    $('.btn-help').on('click', function(){
+      var help = document.querySelector('.gethelp_wrap');
+      var overlay = document.querySelector('.gethelp_overlay');
+      help.classList.add('visible');
+      overlay.classList.remove('d-none');
+    })
+    $('.gethelp_overlay').on('click', function() {
+      var help = document.querySelector('.gethelp_wrap');
+      var overlay = document.querySelector('.gethelp_overlay');
+      help.classList.remove('visible');
+      overlay.classList.add('d-none');
+    });
+
     getRegion();
   $("#select_city").select2({
     data: array,
@@ -232,4 +246,5 @@ $('#accept_region').on('click', function(){
     }
     localStorage.setItem('reg', region_selected);
   }
+
 });

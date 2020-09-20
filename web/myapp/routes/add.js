@@ -355,10 +355,16 @@ router.route('/add')
                 console.log(sql);
                 db.any(sql).then(function(resp){
                   if (resp.length){
-                    res.json(resp);
+                    res.json({
+                      ok:true,
+                      data:resp
+                    });
                   }
                   else{
-                    res.json('Ничего не найдено')
+                    res.json({
+                      ok:true,
+                      data: 0,
+                    })
                   }
                 })
                 .catch(function(err){

@@ -129,13 +129,22 @@ $('.btn__request_info').on('click', function(){
     },
     success: (res) => {
       if (res.ok){
-        var result = 'Имя организации: '+res.data.org_name+'\nИмя владельца: '
-        +res.data.owner_name+'\nФамилия владельца: '+res.data.owner_sname+
-        '\nОтчество владельца: '+res.data.owner_tname+'\nЭлектронная почта: '
-        +res.user_info.email+'\nТелефон: '+res.user_info.number;
-        alert(result);
+        // var result = 'Имя организации: '+res.data.org_name+'\nИмя владельца: '
+        // +res.data.owner_name+'\nФамилия владельца: '+res.data.owner_sname+
+        // '\nОтчество владельца: '+res.data.owner_tname+'\nЭлектронная почта: '
+        // +res.user_info.email+'\nТелефон: '+res.user_info.number;
+        var result = `
+        Название&nbsp;организации:&nbsp;`+res.data.org_name+`<br />
+        Фамилия&nbsp;владельца:&nbsp;`+res.data.owner_sname+`<br />
+        Имя&nbsp;владельца:&nbsp;`+res.data.owner_name+`<br />
+        Отчество&nbsp;владельца:&nbsp;`+res.data.owner_tname+`<br />
+        Электронная&nbsp;почта:&nbsp;`+res.user_info.email+`<br />
+        ИНН&nbsp;`+res.data.owner_inn+`<br />
+        Телефон:&nbsp;`+res.user_info.number+`
+        `;
+        showModal(result, 'Успешно');
       }else {
-        alert('Внутренняя ошибка');
+        showModal('Внутренняя ошибка','Ошибка');
       }
     }
   });
@@ -154,10 +163,9 @@ $('.btn__request_delete').on('click', function(){
     },
     success: (res) => {
       if (res.ok){
-        alert("Обращение удалено!");
-        document.location.reload();
+        showModal("Обращение удалено!",'Успешно',true);
       } else {
-        alert("Внутренняя ошибка, повторите позже"+res.error);
+        showModal("Внутренняя ошибка, повторите позже"+res.error,"Ошибка");
       }
     }
   });
@@ -176,55 +184,63 @@ $('.search_btn').on('click', (e)=>{
       value: input_val,
     },
     success: (res) => {
-      var data = res;
-      data.forEach((elem) => {
-        var div = document.createElement('div');
-        var addres_div =``;
-        for(var i = 0; i < elem.org_address_fact.length;i++){
-          addres_div += `
+      if(res.ok){
+        if(res.data){
+          var data = res.data;
+          data.forEach((elem) => {
+            var div = document.createElement('div');
+            var addres_div =``;
+            for(var i = 0; i < elem.org_address_fact.length;i++){
+              addres_div += `
+              <div class='in b'>
+              <p class='address'>Фактический адрес №`+(i+1)+`</p>
+              <p>`+elem.org_address_fact[i]+`</p>
+              </div>
+              `;
+            }
+            div.innerHTML += `</div>`;
+            div.classList.add('result');
+            div.innerHTML = `
             <div class='in b'>
-            <p class='address'>Фактический адрес №`+(i+1)+`</p>
-            <p>`+elem.org_address_fact[i]+`</p>
-            </div>
-          `;
-        }
-        div.innerHTML += `</div>`;
-        div.classList.add('result');
-        div.innerHTML = `
-          <div class='in b'>
             <p>Название организации</p>
             <p>`+elem.org_name+`</p>
-          </div>
-          <div class='in b'>
+            </div>
+            <div class='in b'>
             <p>Юридический адрес</p>
             <p>`+elem.org_address_ur+`</p>
-          </div>
-          <div class='in b'>
+            </div>
+            <div class='in b'>
             <p>ИНН</p>
             <p>`+elem.owner_inn+`</p>
-          </div>
-          <div class='in b'>
+            </div>
+            <div class='in b'>
             <p>ФИО</p>
             <p>`+elem.owner_sname+` `+elem.owner_name+` `+elem.owner_tname+`</p>
-          </div>
-          <div class='in b'>
+            </div>
+            <div class='in b'>
             <p>Тип организации</p>
             <p>`+elem.type+`</p>
-          </div>
-          <div class='in b'>
+            </div>
+            <div class='in b'>
             <p>Доступ к акции "Продержи-получи"</p>
             <p>`+(elem.stock_access?'Да':'Нет')+`</p>
-          </div>
-          `+addres_div+`
-          <div class='editing_btns'>
-          <button class='btn btn-primary print_btn' data-id='`+elem.owner_id+`'>Распечатать док-ты</button>
-          <button class='btn btn-primary sale_btn' data-id='`+elem.id+`' data-status='`+elem.stock_access+`'>Изменить доступ к акции</button>
-          <button class='btn btn-danger del_btn' data-id='`+elem.owner_id+`'>Удалить организацию</button>
-          </div>
-        `;
+            </div>
+            `+addres_div+`
+            <div class='editing_btns'>
+            <button class='btn btn-primary print_btn' data-id='`+elem.owner_id+`'>Распечатать док-ты</button>
+            <button class='btn btn-primary sale_btn' data-id='`+elem.id+`' data-status='`+elem.stock_access+`'>Изменить доступ к акции</button>
+            <button class='btn btn-danger del_btn' data-id='`+elem.owner_id+`'>Удалить организацию</button>
+            </div>
+            `;
 
-        placement.append(div);
-      });
+            placement.append(div);
+          });
+      } else {
+        showModal('Фирма не найдена', "Ошибка")
+      }
+    } else {
+      showModal(res.err, 'Ошибка');
+    }
       $('.print_btn').on('click', (e)=>{
         var item = e.currentTarget;
         var id = item.getAttribute('data-id');
@@ -248,8 +264,6 @@ $('.search_btn').on('click', (e)=>{
                 window.print();
                 print.innerHTML = "";
               },1500);
-            } else {
-              alert('Ошибка! Невозможно выдать доступ\n',res.err);
             }
           }
         });
@@ -268,9 +282,9 @@ $('.search_btn').on('click', (e)=>{
           },
           success: (res)=>{
             if (res.ok){
-              alert('Доступ к акции изменен');
+              showModal('Доступ к акции изменен','Успешно',true);
             } else {
-              alert('Ошибка! Невозможно изменить доступ\n',res.err);
+              showModal('Ошибка! Невозможно изменить доступ\n'+res.err,'Ошибка');
             }
           }
         });
@@ -288,9 +302,9 @@ $('.search_btn').on('click', (e)=>{
           },
           success: (res)=>{
             if (res.ok){
-              alert('Организация удалена.');
+              showModal('Организация удалена.','Успешно');
             } else {
-              alert('Ошибка! Невозможно удалить организацию\n',res.err);
+              alert('Ошибка! Невозможно удалить организацию\n'+res.err,"Ошибка");
             }
           }
         });
