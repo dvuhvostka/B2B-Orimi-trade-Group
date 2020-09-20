@@ -5,8 +5,26 @@ function showModalCity(mssg){
   msg.html(mssg);
   modal_city.modal('show');
 }
-  window.onload = function(){
 
+document.addEventListener('DOMContentLoaded', ()=>{
+    $('#page0').removeClass('d-none');
+    var page_li_bottom = document.querySelectorAll('.bot .pagenumber');
+    console.log(page_li_bottom);
+    var page_li_top = document.querySelectorAll('.top .pagenumber');
+    page_li_top[0].classList.add('active');
+    page_li_bottom[0].classList.add('active');
+
+    $('.top .nextpage').on('click',(e)=>{
+      e.preventDefault();
+      item = e.currentTarget;
+      console.log(item);
+      var currentPage = item.parentNode;
+      console.log(currentPage);
+      console.log(currentPage.parentNode.querySelector('.active').childNodes[0].getAttribute('data-id'));
+    })
+});
+
+  window.onload = function(){
     $('.btn-help').on('click', function(){
       var help = document.querySelector('.gethelp_wrap');
       var overlay = document.querySelector('.gethelp_overlay');
