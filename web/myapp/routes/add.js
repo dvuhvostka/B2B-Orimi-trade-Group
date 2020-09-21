@@ -52,6 +52,7 @@ router.route('/add')
       pgPool.query(getUsers, [], function(err, resp){
         if(resp.rows[0]!=undefined){
           if(resp.rows[0].permissions=='mod'){
+            console.log(req.body);
             switch(req.body.post_type){
               case 'showattachment': {
                 let get_deal_prods_sql = `SELECT * FROM deals WHERE deal_id='`+req.body.deal_id+`'`;
@@ -253,7 +254,7 @@ router.route('/add')
                 break;
               }
               case 'edit_product': {
-                //console.log(JSON.parse(req.body.data));
+                console.log(JSON.parse(req.body.data));
                 let data = JSON.parse(req.body.data);
                 console.log(data.sale_price);
                 if(data.sale_price){
