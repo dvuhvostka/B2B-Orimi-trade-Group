@@ -570,6 +570,12 @@
   max-width: 226px;
   min-width: 200px;
 }
+
+.pagination {
+  margin: 30px 0;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
   nav {
     font-size: 0.8em;
