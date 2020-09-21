@@ -243,6 +243,7 @@ user.route('/user')
       var get_org = `SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
       var org_info = 0;
       var status;
+      var cases_info = {};
       pgPool.query(get_org,[], function(err, resp){
         if(resp.rows[0]){
           if(resp.rows[0].org_confirmed == 0){org_info=1; var status = 'Организация ожидает подтверждения модератором.'}else{org_info=2; var status = 'Организация подтверждена.'}
@@ -283,6 +284,26 @@ user.route('/user')
               attachedorg = userorgdata[0];
             }
             if (response.rows[0].permissions=='mod'){
+              db.any(`SELECT * FROM weekly_checklist`).then((weekly_checklist)=>{
+                var time_now = Date.now();
+                var week_ms = 604800000;
+                for(var i=0; i<10; i++){
+                  var timestamp = response.rows[0].weekly[i].timestamp;
+                  var difference = parseInt(time_now)-parseInt(timestamp);
+                  var time_rest = week_ms - difference;
+                  if(time_rest<0){
+                    cases_info[i] = "Доступно к участию.";
+                  }else{
+                    cases_info[i] = "Осталось: "+timeConversion(time_rest)+".";
+                  }
+                }
+              for(var i=0; i<weekly_checklist.length; i++){
+                if(weekly_checklist[i].requester_id==req.session.userId){
+                  cases_info[parseInt(weekly_checklist[i].cases)-1] = "Ожидает проверки."
+                }
+                var fls_photo = fs.readdirSync('./public/images/case_photo/'+weekly_checklist[i].requester_id+"/"+weekly_checklist[i].cases);
+                weekly_checklist[i].photos = fls_photo;
+              }
               db.any(`SELECT * FROM organizations WHERE org_confirmed=0`).then(function(uncorgs){
                   for(var i=0; i<uncorgs.length; i++){
                     var fls = fs.readdirSync('./public/images/uploads/'+uncorgs[i].owner_id);
@@ -290,11 +311,6 @@ user.route('/user')
                   }
                 db.any(`SELECT * FROM deals_info`).then(function(deals_info){
                   db.any(`SELECT * FROM requests_from_organizations`).then((requests)=>{
-                    db.any(`SELECT * FROM weekly_checklist`).then((weekly_checklist)=>{
-                      for(var i=0; i<weekly_checklist.length; i++){
-                        var fls_photo = fs.readdirSync('./public/images/case_photo/'+weekly_checklist[i].requester_id+"/"+weekly_checklist[i].cases);
-                        weekly_checklist[i].photos = fls_photo;
-                      }
                       res.render('user',{
                         title: "Аккаунт",
                         isRegistred: req.session.userId,
@@ -315,16 +331,32 @@ user.route('/user')
                         link_code: response.rows[0].link_code,
                         attached_org: attachedorg,
                         requests: requests,
-                        access:response.stock_access
+                        access:response.stock_access,
+                        cases_info: cases_info
                       });
-                    });
                   });
+                });
                 });
               }).catch(error => {
                 console.log('ERROR:', error);
               });
             }else{
-              console.log(response.rows[0].permissions,123);
+              db.any(`SELECT * FROM weekly_checklist WHERE requester_id='`+req.session.userId+`'`).then((usr_weekly_checklist)=>{
+                var time_now = Date.now();
+                var week_ms = 604800000;
+                for(var i=0; i<10; i++){
+                  var timestamp = response.rows[0].weekly[i].timestamp;
+                  var difference = parseInt(time_now)-parseInt(timestamp);
+                  var time_rest = week_ms - difference;
+                  if(time_rest<0){
+                    cases_info[i] = "Доступно к участию.";
+                  }else{
+                    cases_info[i] = "Осталось: "+timeConversion(time_rest)+".";
+                  }
+                }
+              for(var i=0; i<usr_weekly_checklist.length; i++){
+                  cases_info[parseInt(usr_weekly_checklist[i].cases)-1] = "Ожидает проверки."
+              }
               res.render('user',{
                 title: "Аккаунт",
                 isRegistred: req.session.userId,
@@ -341,13 +373,14 @@ user.route('/user')
                 deals: d_data,
                 link_code: response.rows[0].link_code,
                 attached_org: attachedorg,
-                access:response.stock_access
-
+                access:response.stock_access,
+                cases_info: cases_info
               });
+            });
             }
-          });
         }).catch(error => {
           console.log('ERROR:', error);
+        });
         });
       });
     }
