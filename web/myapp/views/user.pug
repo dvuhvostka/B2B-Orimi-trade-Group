@@ -157,17 +157,17 @@ block content
                   input.btn.btn-outline-success(type='submit' value='Создать заявку')
           .settings_wrap
             h5.header.text-muted Настройки
-            .password_change
-              .in.pass
-                label.pass_label Введите старый пароль
-                input(type='password' name='old_pass').pass_input
-              .in.pass
-                label.pass_label Введите новый пароль
-                input(type='password' name='new_pass').pass_input
-              .in.pass
-                label.pass_label Подтвердите новый пароль
-                input(type='password' name='new_pass_conf').pass_input
-              button.btn.btn-success.pass_change Сменить пароль
+              form.password_change
+                .in.pass
+                  label.pass_label Введите старый пароль
+                  input(type='password' name='old_pass' required).pass_input
+                .in.pass
+                  label.pass_label Введите новый пароль
+                  input(type='password' name='new_pass' required).pass_input
+                .in.pass
+                  label.pass_label Подтвердите новый пароль
+                  input(type='password' name='new_pass_conf' required).pass_input
+                button(type='submit').btn.btn-success.pass_change Сменить пароль
       .tab-pane.fade#nav-orders.panel(role='tabpanel' area-labelledby='nav-orders-tab')
         .spinner-border(role='status')
           span.sr-only Loading...
