@@ -76,9 +76,9 @@ block content
 							span(aria-hidden='true') &laquo;
 					- for (var j = 0; j < Math.ceil(q/16);j++)
 						li(class="page-item").pagenumber
-							a(class="page-link" href="#" data-id=j+1) #{j+1}
+							a(class="page-link" href="#" data-id=j) #{j+1}
 					li.page-item
-						a.page-link(href='#' aria-label='Previous').nextpage
+						a.page-link(href='#' aria-label='Next').nextpage
 							span(aria-hidden='true') &raquo;
 			- for (var j = 0; j<= Math.floor(q/16); j++)
 				.item_list(id='page'+j).d-none
@@ -159,13 +159,13 @@ block content
 			nav(aria-label='paginationNav').pagination_wrap
 				ul.pagination.bot
 					li.page-item
-						a.page-link(href='#' aria-label='Previous')
+						a.page-link(href='#' aria-label='Previous').prevpage
 							span(aria-hidden='true') &laquo;
 					- for (var j = 0; j < Math.ceil(q/16);j++)
 						li(class="page-item").pagenumber
-							a(class="page-link" href="#" data-id=j+1) #{j+1}
+							a(class="page-link" href="#" data-id=j) #{j+1}
 					li.page-item
-						a.page-link(href='#' aria-label='Previous')
+						a.page-link(href='#' aria-label='Next').nextpage
 							span(aria-hidden='true') &raquo;
 			if q == 0
 				div.noitems По данному запросу нет товаров
