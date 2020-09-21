@@ -37,7 +37,26 @@ const redirectLogin = function(req,res,next){
     next()
   }
 }
+function timeConversion(millisec) {
 
+       var seconds = (millisec / 1000).toFixed(0);
+       var minutes = (millisec / (1000 * 60)).toFixed(0);
+       var hours = (millisec / (1000 * 60 * 60)).toFixed(0);
+       var days = (millisec / (1000 * 60 * 60 * 24)).toFixed(0);
+       if (seconds < 60) {
+           return seconds + " секунд";
+       } else if (minutes < 60) {
+           return minutes + " минут";
+       } else if (hours < 24) {
+           return hours + " часов";
+       } else {
+          if(days<5){
+            return days + " дня"
+          }else{
+            return days + " дней"
+          }
+       }
+   }
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     switch(req.body.post_type){
@@ -68,19 +87,34 @@ var storage = multer.diskStorage({
       }
       case "case_photo": {
         var getUsersWeekly = `SELECT weekly FROM users WHERE id='`+req.session.userId+`'`;
-        db.one(getUsersWeekly).then(function(data){
-          var index = parseInt(req.body.cases)-1;
-          var usr_timestamp = data.weekly[index].timestamp;
-          var time_now = Date.now();
-          var week_ms = 604800000;
-          var difference = parseInt(time_now)-parseInt(usr_timestamp);
-          var time_rest = week_ms - difference;
-          if (time_rest<0){
-            fs.mkdir('./public/images/case_photo/'+req.session.userId+'/'+req.body.cases, err=>{});
-            cb(null, './public/images/case_photo/'+req.session.userId+'/'+req.body.cases);
+        var check_weekly_checklist_sql = `SELECT * FROM weekly_checklist WHERE requester_id='`+req.session.userId+`'`;
+        db.any(check_weekly_checklist_sql).then(function(check_result){
+          var search_result = 1;
+          for (var i=0; i<check_result.length; i++){
+            if(check_result[i].cases==req.body.cases){
+              search_result = 0;
+            }
           }
-        }).catch(function(err){
-          console.log("getUsersWeekly SQL_ERROR - USER undefined");
+          if(search_result){
+            db.one(getUsersWeekly).then(function(data){
+              var index = parseInt(req.body.cases)-1;
+              var usr_timestamp = data.weekly[index].timestamp;
+              var time_now = Date.now();
+              var week_ms = 604800000;
+              var difference = parseInt(time_now)-parseInt(usr_timestamp);
+              var time_rest = week_ms - difference;
+              if (time_rest<0){
+                fs.mkdir('./public/images/case_photo/'+req.session.userId+'/'+req.body.cases, err=>{});
+                cb(null, './public/images/case_photo/'+req.session.userId+'/'+req.body.cases);
+              }else{
+                resJson(false, "Осталось: "+timeConversion(time_rest));
+              }
+            }).catch(function(err){
+              console.log("getUsersWeekly SQL_ERROR - USER undefined");
+            });
+          }else{
+            resJson(false, "Ваша предыдущая заявка ожидает проверки.");
+          }
         });
         break;
       }
@@ -320,6 +354,23 @@ user.route('/user')
   });
 }).post(function(req,res,next){
     var error;
+    resJson = (bool, error) => {
+      switch(bool){
+        case true: {
+          res.json({
+            ok: true
+          });
+          break;
+        }
+        case false: {
+          res.json({
+            ok: false,
+            error
+          });
+          break;
+        }
+      }
+    }
     if(req.body.post_type=='leave_org'){
       if(req.session.userId){
         db.none("UPDATE users SET link_code='' WHERE id='"+req.session.userId+"'");
@@ -330,7 +381,6 @@ user.route('/user')
         res_ok
       });
     }else if(req.body.post_type=='add_code'){
-      console.log(req.body.post_data);
       let xss_pattern = /`|'|"/gim;
       if(req.body.post_data.match(xss_pattern)){
           console.log('!XSS! from: '+req.ip);
@@ -442,9 +492,23 @@ user.route('/user')
         })
       });
     }else if(req.body.post_type== 'confirm_photos'){
-      db.one("SELECT bonus FROM weekly WHERE weekly_id="+req.body.cases+"'").then(function(bonus){
-        console.log(bonus);
+      db.one("SELECT bonus FROM weekly WHERE weekly_id='"+req.body.cases+"'").then(function(bonus){
+        db.none("UPDATE users SET balance = balance +"+bonus.bonus+" WHERE id='"+req.body.org_owner_id+"'");
       });
+      var getUsersWeekly = `SELECT weekly FROM users WHERE id='`+req.body.org_owner_id+`'`;
+      db.one(getUsersWeekly).then(function(data){
+        var index = parseInt(req.body.cases)-1;
+        data.weekly[index].timestamp = Date.now();
+        var returndata = JSON.stringify(data.weekly);
+        db.none("UPDATE users SET weekly='"+returndata+"' WHERE id='"+req.body.org_owner_id+"'");
+      });
+      var deleteFromWeeklyChecklist_sql = "DELETE FROM weekly_checklist WHERE requester_id='"+req.body.org_owner_id+"' AND cases='"+req.body.cases+"'";
+      db.none(deleteFromWeeklyChecklist_sql);
+      rimraf('./public/images/case_photo/'+req.body.org_owner_id+'/'+req.body.cases, () => {});
+    }else if(req.body.post_type == 'delete_photos'){
+      var deleteFromWeeklyChecklist_sql = "DELETE FROM weekly_checklist WHERE requester_id='"+req.body.org_owner_id+"' AND cases='"+req.body.cases+"'";
+      db.none(deleteFromWeeklyChecklist_sql);
+      rimraf('./public/images/case_photo/'+req.body.org_owner_id+'/'+req.body.cases, () => {});
     }else{
         upload(req, res, err => {
           if (err == undefined){
@@ -629,24 +693,6 @@ user.route('/user')
                 break;
               }
               case "case_photo": {
-
-                function timeConversion(millisec) {
-
-                       var seconds = (millisec / 1000).toFixed(0);
-                       var minutes = (millisec / (1000 * 60)).toFixed(0);
-                       var hours = (millisec / (1000 * 60 * 60)).toFixed(0);
-                       var days = (millisec / (1000 * 60 * 60 * 24)).toFixed(0);
-                       if (seconds < 60) {
-                           return seconds + " Секунд";
-                       } else if (minutes < 60) {
-                           return minutes + " Минут";
-                       } else if (hours < 24) {
-                           return hours + " Часов";
-                       } else {
-                           return days + " Дней"
-                       }
-                   }
-
                 var getUsersWeekly = `SELECT weekly FROM users WHERE id='`+req.session.userId+`'`;
                 db.one(getUsersWeekly).then(function(data){
                   var index = parseInt(req.body.cases)-1;
@@ -673,12 +719,6 @@ user.route('/user')
                       res.json({
                         ok: true
                       });
-                    });
-                  }else{
-                    var error = 'До следующей попытки осталось: '+timeConversion(time_rest);
-                    res.json({
-                      ok: false,
-                      error
                     });
                   }
                 }).catch(function(err){

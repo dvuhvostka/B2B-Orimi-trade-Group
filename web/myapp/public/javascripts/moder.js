@@ -315,3 +315,56 @@ $('.search_btn').on('click', (e)=>{
     }
   });
 });
+function delete_org(owner_id){
+  var del = confirm("Вы действительно хотите УДАЛИТЬ организацию?\n"+owner_id);
+  if(del){
+    $.post("/user",{post_type: "delete_org_skdjfgh213asRQadSKSFD3123244", org_owner_id: owner_id});
+    showModal("Организация успешно удалена.\n"+owner_id);
+    window.location.reload();
+  }
+}
+function confirm_org(owner_id){
+  var conf = confirm("Вы действительно хотите ПОДТВЕРДИТЬ организацию?\n"+owner_id);
+  if(conf){
+    var stock_access = true;
+    var checkbox = $('#'+owner_id);
+    if (checkbox.prop('checked')){
+      stock_access = false;
+    }
+    $.post("/user",{post_type: "confirm_org_askdjfhl123123kaGFDGdfhFsdf3123", org_owner_id: owner_id, stock_access: stock_access});
+    showModal("Организация успешно подтверждена.\n"+owner_id);
+    window.location.reload();
+  }
+}
+function photo_confirm(owner_id, cases, org_name){
+  var conf = confirm("Вы действительно хотите ПОДТВЕРДИТЬ заявку организации "+org_name+" на участие в акции ФОТО ПОЛОК?");
+  if(conf){
+    $.post("/user",{post_type: "confirm_photos", org_owner_id: owner_id, cases: cases});
+    showModal("Заявка успешно подтверждена.", 'Успех', true, '/user');
+  }
+}
+function delete_photos(owner_id, cases, org_name){
+  var conf = confirm("Вы действительно хотите УДАЛИТЬ заявку организации "+org_name+" на участие в акции ФОТО ПОЛОК?");
+  if(conf){
+    $.post("/user",{post_type: "delete_photos", org_owner_id: owner_id, cases: cases});
+    showModal("Заявка успешно удалена.", 'Успех', true, '/user');
+  }
+}
+$('#add_tea_form, #add_coffee_form, #add_other_form, #add_horeca_tea_form, #add_horeca_coffee_form').on('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        type: "POST",
+        url: "/user",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(r){
+          if(r.ok == false){
+            showModal(r.error,'Ошибка');
+          }else{
+            showModal("Товар успешно добавлен.",'Успешно', true);
+          }
+        }
+      })
+  });
