@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 const session = require('express-session');
 var bodyParser = require('body-parser')
+var keywords = require('../keywords');
 var config = require('../config');
 var {Pool, Client} = require('pg');
 var xlsx = require('xlsx-populate');
@@ -38,10 +39,75 @@ function updateItemSql(data){
       sql += key+`=`+`'`+value+`'`+`, `;
   }
   sql = sql.slice(0,-2);
-  console.log(sql);
+  sql_keywords = createKeywords(data);
+  sql = sql+", keywords='"+sql_keywords+"'";
   return sql;
 }
 
+function createKeywords(data){
+  var keywords_res ='';
+  var keys = Object.keys(data);
+  var titles = Object.keys(keywords);
+  for (let each of keys){
+    switch(each){
+      case "sort":{
+        var names = Object.keys(keywords['sort']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['sort'][item];
+          }
+        }
+        keywords_res += ', ';
+      }
+      break;
+      case "packaging":{
+        var names = Object.keys(keywords['packaging']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['packaging'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "about":{
+        var names = Object.keys(keywords['about']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['about'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "category":{
+        var names = Object.keys(keywords['category']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['category'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "tea_bags":{
+        var names = Object.keys(keywords['tea_bags']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['tea_bags'][item];
+          }
+        }
+
+      }
+      break;
+    }
+  }
+  console.log(keywords_res);
+  return keywords_res;
+}
 
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 router.route('/add')
@@ -280,6 +346,7 @@ router.route('/add')
                         });
                       })
                       .catch((err) =>{
+                        console.log(err);
                         res.json({
                           ok:false,
                           msg: err
@@ -338,6 +405,7 @@ router.route('/add')
                     });
                   })
                   .catch((err) =>{
+                    console.log(err);
                     res.json({
                       ok:false,
                       msg: err

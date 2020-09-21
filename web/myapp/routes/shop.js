@@ -4,6 +4,7 @@ var path = require('path');
 const request = require('request');
 var config = require('../config');
 var {Pool, Client} = require('pg');
+var keywords = require('../keywords')
 //var pgp = require("pg-promise")(/*options*/);
 //var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
 
@@ -127,6 +128,7 @@ var getSales = `SELECT * FROM sales ORDER BY id`;
 
 router.route('/shop/:type?')
   .get(function(req,res){
+    console.log(keywords);
     console.log("\n\nshop\n\n");
     pgPool.query(getSales,[],function(e,r){
       var type = req.params.type;
@@ -351,115 +353,40 @@ router.route('/shop/:type?')
     if(!req.body.search){
       res.redirect('/shop');
     }else if(req.body.search){
-      let pattern = {
-        greenfield: /greenfield|гринфилд/gi,
-        tess: /\btess|тэс|tes|тес/gi,
-        java: /java|ява|Принцесса ява/gi,
-        nuri: /nuri|нури|Принцесса нури/gi,
-        candy: /candy|канди|кэнди|Принцесса канди/gi,
-        shah: /шах/gi,
-        jockey: /жакей|жокей|jockey|jockey/gi,
-        jardin: /жардин|jardin/gi,
-        piazza: /пиаза|piazza/g,
-        ceylon: /цейлон|ceylon/gi,
-        arabica: /arabica|арабика/gi,
-        milky: /молочный|с молоком|milky/gi,
-        melissa: /мелиса|мелисса|melissa|melisa/gi,
-        tea: /чай/gi
-      }
 
       let xss_pattern = /`|'|"/gim;
-
-      let find = undefined;
-
       if(req.body.search.match(xss_pattern)){
           console.log('!XSS! from: '+req.ip);
           req.body.search = req.body.search.replace(xss_pattern, " ");
       }
+      let search = req.body.search.toLowerCase();
+      let getTea = `SELECT * FROM tea WHERE keywords LIKE '%`+search+`%' ORDER BY id DESC`;
+      let getCoffee = `SELECT * FROM coffee WHERE keywords LIKE '%`+search+`%' AND type='coffee' ORDER BY id DESC`;
+      let getHoreca = `SELECT * FROM horeca WHERE keywords LIKE '%`+search+`%' AND subtype='horeca' ORDER BY id DESC`;
 
-      if(req.body.search.match(pattern.greenfield)){
-          console.log(1);
-          req.body.search = req.body.search.replace(pattern.greenfield, "Greenfield");
-      }
-
-      if(req.body.search.match(pattern.tess)){
-          console.log(2);
-          req.body.search = req.body.search.replace(pattern.tess, "Tess");
-      }
-
-      if(req.body.search.match(pattern.java)){
-          console.log(3);
-          req.body.search = req.body.search.replace(pattern.java, "Ява");
-      }
-
-      if(req.body.search.match(pattern.nuri)){
-          console.log(4);
-          req.body.search = req.body.search.replace(pattern.nuri, "Нури");
-      }
-
-      if(req.body.search.match(pattern.candy)){
-          console.log(5);
-          req.body.search = req.body.search.replace(pattern.candy, "Канди");
-      }
-
-      if(req.body.search.match(pattern.jockey)){
-          console.log(6);
-          req.body.search = req.body.search.replace(pattern.jockey, "Жокей");
-      }
-
-      if(req.body.search.match(pattern.jadrin)){
-          req.body.search = req.body.search.replace(pattern.jardin, "Jardin");
-      }
-
-      if(req.body.search.match(pattern.piazza)){
-        req.body.search = req.body.search.replace(pattern.piazza, "Piazza del Caffe");
-      }
-
-      if(req.body.search.match(pattern.ceylon)){
-        req.body.search = req.body.search.replace(pattern.ceylon, "Ceylon");
-      }
-
-      if(req.body.search.match(pattern.arabica)){
-        req.body.search = req.body.search.replace(pattern.arabica, "Arabica");
-      }
-
-      if(req.body.search.match(pattern.milky)){
-        req.body.search = req.body.search.replace(pattern.milky, "Milky");
-      }
-
-      if(req.body.search.match(pattern.melissa)){
-        req.body.search = req.body.search.replace(pattern.melissa, "Melissa");
-      }
-
-      if(req.body.search.match(pattern.tea)){
-        req.body.search = req.body.search.replace(pattern.tea, "Чай");
-      }
-
-      console.log(req.body.search);
-
-      let getTea = `SELECT * FROM tea WHERE item_name LIKE '%`+req.body.search+`%' ORDER BY id DESC`;
-      let getCoffee = `SELECT * FROM coffee WHERE item_name LIKE '%`+req.body.search+`%' AND type='coffee' ORDER BY id DESC`;
-
-      pgPool.query(getSales,[],function(e,r){
-      pgPool.query(getTea,[], function(err, response){
-        pgPool.query(getCoffee,[], function(error, responses){
-          if (err) return console.error(err);
-          var prods_tea = response.rows;
-          var prods_coffee = responses.rows;
-          var prods = prods_tea.concat(prods_coffee);
-          console.log(prods);
-          res.render('shop.pug', {
-            isRegistred: userinfo.user_id,
-            products: prods,
-            prod_count: prods.length,
-            title: 'Фирменный магазин Орими-трэйд',
-            needFooter: true,
-            sales: r.rows,
-            sales_q: r.rows.length,
+      pgPool.query(getHoreca,[],function(errors,resp){
+        pgPool.query(getSales,[],function(e,r){
+          pgPool.query(getTea,[], function(err, response){
+            pgPool.query(getCoffee,[], function(error, responses){
+              if (err) return console.error(err);
+              var prods_tea = response.rows;
+              var prods_coffee = responses.rows;
+              var prods_horeca = resp.rows;
+              var prods = prods_tea.concat(prods_coffee).concat(prods_horeca);
+              console.log(prods);
+              res.render('shop.pug', {
+                isRegistred: userinfo.user_id,
+                products: prods,
+                prod_count: prods.length,
+                title: 'Фирменный магазин Орими-трэйд',
+                needFooter: true,
+                sales: r.rows,
+                sales_q: r.rows.length,
+              });
             });
+          });
         });
       });
-    });
     }
   });
 

@@ -5,6 +5,7 @@ const app = require('../app');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const config = require('../config');
+const keywords = require('../keywords');
 const {Pool, Client} = require('pg');
 const multer = require('multer');
 const fs = require('fs');
@@ -29,6 +30,71 @@ var pgPool = new Pool({
   password: "12345",
   database: DBNAME
 });
+
+function createKeywords(data){
+  var keywords_res ='';
+  var keys = Object.keys(data);
+  var titles = Object.keys(keywords);
+  for (let each of keys){
+    switch(each){
+      case "sort":{
+        var names = Object.keys(keywords['sort']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['sort'][item];
+          }
+        }
+        keywords_res += ', ';
+      }
+      break;
+      case "packaging":{
+        var names = Object.keys(keywords['packaging']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['packaging'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "about":{
+        var names = Object.keys(keywords['about']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['about'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "category":{
+        var names = Object.keys(keywords['category']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['category'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "tea_bags":{
+        var names = Object.keys(keywords['tea_bags']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['tea_bags'][item];
+          }
+        }
+
+      }
+      break;
+    }
+  }
+  console.log(keywords_res);
+  return keywords_res;
+}
 
 const redirectLogin = function(req,res,next){
   if(!req.session.userId){
@@ -556,7 +622,8 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO coffee(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
+                    var keywords = createKeywords(req.body);
+                    db.none('INSERT INTO coffee(keywords,item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'coffee',
@@ -569,6 +636,7 @@ user.route('/user')
                       articul: req.body.articul,
                       barcode: req.body.barcode,
                       sale_price: 0,
+                      keywords: keywords,
                       pic_count: fls.length
                     }).catch(error => {
                       console.log('ERROR_COFFEE_ADDING_TO_DB:', error);
@@ -591,7 +659,8 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO tea(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
+                    var keywords = createKeywords(req.body);
+                    db.none('INSERT INTO tea(keywords,item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'tea',
@@ -605,7 +674,8 @@ user.route('/user')
                       articul: req.body.articul,
                       barcode: req.body.barcode,
                       sale_price: 0,
-                      pic_count: fls.length
+                      pic_count: fls.length,
+                      keywords: keywords
                     }).catch(error => {
                       console.log('ERROR_TEA_ADDING_TO_DB:', error);
                     });
@@ -661,8 +731,8 @@ user.route('/user')
                       error
                     });
                   }else{
-                    console.log(req.body.barcode);
-                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
+                    var keywords = createKeywords(req.body);
+                    db.none('INSERT INTO horeca(keywords,item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'tea',
@@ -677,6 +747,7 @@ user.route('/user')
                       sale_price: 0,
                       pic_count: fls.length,
                       barcode: req.body.barcode,
+                      keywords: keywords,
                       subtype: 'horeca'
                     }).catch(error => {
                       console.log('ERROR_HORECA_TEA_ADDING_TO_DB:', error);
@@ -699,7 +770,8 @@ user.route('/user')
                       error
                     });
                   }else{
-                    db.none('INSERT INTO horeca(item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES(${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
+                    var keywords = createKeywords(req.body);
+                    db.none('INSERT INTO horeca(keywords,item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'coffee',
@@ -713,6 +785,7 @@ user.route('/user')
                       sale_price: 0,
                       pic_count: fls.length,
                       barcode: req.body.barcode,
+                      keywords: keywords,
                       subtype: 'horeca'
                     }).catch(error => {
                       console.log('ERROR_HORECA_COFFEE_ADDING_TO_DB:', error);
