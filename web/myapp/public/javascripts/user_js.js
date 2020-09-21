@@ -64,11 +64,34 @@ $(function($){
   }).mask("9999999999",{autoclear: false, placeholder: ''});
 });
 
-
-
 document.addEventListener('DOMContentLoaded', ready);
 
 window.onload = function() {
+  $('.password_change').on('submit', (e)=>{
+    e.preventDefault();
+    var inputs = $('.pass_input');
+    var data = {};
+    for(let each of inputs){
+      var name, value;
+      name = each.name;
+      value = each.value;
+      data[name] = value;
+    }
+    $.ajax({
+      type: "POST",
+      url: "/user",
+      data: {
+        data: data,
+        post_type: "change_pass"
+      },
+      success: (data) => {
+        switch(data.ok){
+          case true: showModal("Вы успешно сменили пароль.", "Успех", true, "/user"); break;
+          case false: showModal(data.error, "Ошибка", false);
+        }
+      }
+    });
+  });
   var plus = document.querySelector('.add__addres');
   console.log(plus);
   plus.addEventListener('click', function(e){

@@ -12,6 +12,11 @@ const rimraf = require('rimraf');
 const ncp = require('ncp').ncp;
 var crypto = require("crypto");
 
+function md5(pass) {
+  var hash = crypto.createHash('md5').update(pass).digest('hex');
+  return hash;
+}
+
 const {
   SESS_LIFETIME = config.SESS_TIME,
   ENVIRONMENT = config.ENVIRONMENT,
@@ -413,6 +418,31 @@ user.route('/user')
         ok: true,
         res_ok
       });
+    }else if(req.body.post_type=='change_pass'){
+      var sql_find_user = "SELECT * FROM users WHERE id='"+req.session.userId+"' AND password='"+md5(req.body['data[old_pass]'])+"'";
+      db.any(sql_find_user).then((data) => {
+        if(data.length!=0){
+          var new_pass = md5(req.body['data[new_pass]']);
+          var new_pass_conf = md5(req.body['data[new_pass_conf]']);
+          switch(new_pass){
+            case new_pass_conf: {
+              if(req.body['data[new_pass]'].length<8){
+                resJson(false, "Новый пароль должен быть не менее 8 символов.");
+              }else{
+                db.none("UPDATE users SET password='"+new_pass+"' WHERE id='"+req.session.userId+"'");
+                resJson(true, "Вы успешно сменили пароль.");
+              }
+              break;
+            }
+            default: {
+              resJson(false, "Пароли не совпадают.");
+              break;
+            }
+          }
+        }else{
+          resJson(false, "Старый пароль введен не верно.");
+        }
+      });
     }else if(req.body.post_type=='add_code'){
       let xss_pattern = /`|'|"/gim;
       if(req.body.post_data.match(xss_pattern)){
@@ -471,13 +501,13 @@ user.route('/user')
         db.none("UPDATE organizations SET org_confirmed=1, stock_access="+req.body.stock_access+" WHERE owner_id='"+req.body.org_owner_id+"'").catch(function(err){
           res.json({
             ok: false,
-            err: "Не удалось подтвердить организацию."
+            err: "ОШИБКА. Не удалось подтвердить организацию."
           });
         });
         db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'").catch(function(err){
           res.json({
             ok: false,
-            err: "Не удалось пополнить баланс."
+            err: "ОШИБКА. Не удалось пополнить баланс пользователя."
           });
         });
         if(data[0].promo.length!=0){
