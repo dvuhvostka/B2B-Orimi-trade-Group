@@ -199,28 +199,38 @@ var storage = multer.diskStorage({
   filename: function (req, file, cb) {
     switch(req.body.post_type){
       case "add_tea": {
+        setTimeout(()=>{
           var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
           cb(null, fls.length+1 + path.extname(file.originalname));
+        },500);
         break;
       }
       case "add_coffee": {
+        setTimeout(()=>{
           var fls = fs.readdirSync('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul+'/');
           cb(null, fls.length+1 + path.extname(file.originalname));
+        }, 500);
         break;
       }
       case "add_horeca_tea": {
+        setTimeout(()=>{
           var fls = fs.readdirSync('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul+'/');
           cb(null, fls.length+1 + path.extname(file.originalname));
+        },500);
         break;
       }
       case "add_horeca_coffee": {
+        setTimeout(()=>{
           var fls = fs.readdirSync('./public/images/store_prods/horeca/'+req.body.sort+'/'+req.body.articul+'/');
           cb(null, fls.length+1 + path.extname(file.originalname));
+        }, 500);
         break;
       }
       case "add_other": {
+        setTimeout(()=>{
           var fls = fs.readdirSync('./public/images/store_prods/other/'+req.body.type+'/'+req.body.articul+'/');
           cb(null, fls.length+1 + path.extname(file.originalname));
+        }, 500);
         break;
       }
       case "case_photo": {
@@ -680,7 +690,7 @@ user.route('/user')
                 break;
               }
               case "add_tea":{
-                var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
+                //var fls = fs.readdirSync('./public/images/store_prods/tea/'+req.body.sort+'/'+req.body.articul+'/');
                 db.any(`SELECT * FROM tea WHERE articul='`+req.body.articul+`'`).then(function(data){
                   if(data.length!=0){
                     var error = "Товар "+req.body.articul+" уже существует!";
@@ -704,7 +714,7 @@ user.route('/user')
                       articul: req.body.articul,
                       barcode: req.body.barcode,
                       sale_price: 0,
-                      pic_count: fls.length,
+                      pic_count: 1,
                       keywords: keywords
                     }).catch(error => {
                       console.log('ERROR_TEA_ADDING_TO_DB:', error);
