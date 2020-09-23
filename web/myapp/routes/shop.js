@@ -237,12 +237,10 @@ router.route('/shop/:type?')
         pgPool.query(getcoffee,[], function(err, response){
           var prods;
           if(response.rows.length==0){
-            console.log("123");
             res.redirect('/shop');
             prods = 0;
           }else{
             prods = response.rows;
-            console.log("123");
             res.render('product.pug', {
               isRegistred: req.session.userId,
               products: prods,

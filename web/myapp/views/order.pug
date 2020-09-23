@@ -31,20 +31,22 @@ block content
             .d-in
               input(type='radio' id="input_nal" name='payment' value="nal" checked).order__radio.order__input
               label.order__label Наличные водителю
-            .d-in
-              input(type='radio' id="input_beznal" name='payment' value="beznal").order__radio.order__input
-              label.order__label Онлайн    
-            .d-in
-              input(type='radio' id="input_bill" name='payment' value="bill").order__radio.order__input
-              label.order__label Рассчетный счёт
+            if (err)
+              .d-in
+                input(type='radio' id="input_beznal" name='payment' value="beznal").order__radio.order__input
+                label.order__label Онлайн  
+            if (!err)  
+              .d-in
+                input(type='radio' id="input_bill" name='payment' value="bill").order__radio.order__input
+                label.order__label Рассчетный счёт
         .order__delivery.mb
           h5.delivery__header.header Адрес доставки
           .input_field
             if (!err)
-              select(name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input
+              select(name='address' placeholder='Введите адрес доставки' required).order__input.delivery__select
                 - for (var i = 0;i < org.org_address_fact.length; i++)
                   option(name=i+1) #{org.org_address_fact[i]}
-                option(name='other') Другое
+                option(value='other') Другой
                 input(type='text' id="js-AddressField" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input.js-AddressField.d-none
             else
               input(type='text' id="js-AddressField" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input.js-AddressField

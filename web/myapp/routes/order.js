@@ -640,6 +640,7 @@ router.route('/order')
           break;
         }
         case "delivery_info": {
+          console.log(req.body);
           if(req.body.cart!=''){
             db.one(`SELECT sets FROM users WHERE id='`+req.session.userId+`'`).then(function(usr_sets_data){
               var cart = JSON.parse(req.body.cart);

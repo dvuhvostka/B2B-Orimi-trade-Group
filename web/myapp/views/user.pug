@@ -62,7 +62,7 @@ block content
                 p #{info.org_address}
               - for(var i = 0;i<info.org_address_fact.length ;i++)
                 .in
-                  p Факт. адрес #{i+1}:
+                  p.mw Факт. адрес #{i+1}:
                   p #{info.org_address_fact[i]}
               .in
                 p ИНН: 
@@ -266,7 +266,16 @@ block content
                 p Организация: 
                 p #{attached_org.org_name}
               .in
+                form.send_cheque
+                  input(type='file' name='cheque' id='cheque' multiple data-multiple-caption='{count} файлов выбрано' required)
+                  label.btn.btn-outline-info.label_photo(type='button' id='photo_label' for='photo')
+                    span Прикрепить фото чеков
                 button.btn.btn-danger#leave_org Покинуть организацию
+              .cheque__requests_wrap
+                h4.header Загруженные чеки
+                hr
+                span Запрос 1: нет информации
+                p
       if (permissions=='mod')
         .tab-pane.fade#nav-mod.panel(role='tabpanel' area-labelledby='nav-mod-tab')
           nav.mod__nav

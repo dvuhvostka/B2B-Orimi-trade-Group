@@ -85,6 +85,9 @@ block content
 					if (j == Math.floor(q/16))
 						- for (var i = 0; i < q%16; i++)
 							div(class='shop_item' id=products[i+j*16].id sort=products[i+j*16].sort about=products[i+j*16].about weight=products[i+j*16].weight packaging=products[i+j*16].packaging bags=products[i+j*16].tea_bags)
+								if (products[i+j*16].bestseller)
+									.bestseller
+										span Бестселлер
 								div(class='carousel_img')
 									if (products[i+j*16].subtype)
 										img(src="../store_prods/horeca/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")

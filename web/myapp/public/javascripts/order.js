@@ -82,8 +82,15 @@ window.onload = function(){
   $('#delivery_info').on('submit', (e)=>{
     e.preventDefault();
     var region = 0;
-
+    var select = $('.delivery__select');
+    var input = $('.delivery__input')
+    console.log(select.val());
     if(localStorage.getItem('cart')){
+      if (select.val() == 'other'){
+        select.remove();
+      } else {
+        input.remove();
+      }
       $.ajax({
         type: 'POST',
         url: '/order',
@@ -99,5 +106,18 @@ window.onload = function(){
     }else{
       showModal('Корзина пуста','Ошибка', true);
     }
-  })
+  });
+  $('.delivery__select').on('change', (e)=>{
+    var thiss = e.currentTarget;
+    var input = $('.delivery__input');
+    console.log(input);
+    if (thiss.value == 'other'){
+      console.log(123);
+      input.removeClass('d-none');
+    }
+    else {
+      console.log(12322);
+      input.addClass('d-none');
+    }
+  });
 }

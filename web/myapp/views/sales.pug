@@ -140,6 +140,33 @@ block content
                   a(href='/shop/'+products_info[i].type+'?id='+products_info[i].id).item_product__name #{products_info[i].item_name}
             .content__footer              
             hr
+    when 'prod'
+      .sale__prod_wrap.sale__wrap_weekly
+        nav(aria-label='breadcrumb')
+          ol.breadcrumb
+            li.breadcrumb-item
+              a(href='/sales') Акции
+            li.breadcrumb-item.active(aria-current='page') Акция для продавцов
+        .sale__content
+          h3.content__header Акция для продавцов
+          .sale__info
+            ul.sale__info_text.ul__info
+              li Если ты работаешь Продавцом в продуктовом магазине прилавочного типа,
+              li зайди в свой 
+                a(href='/user') личный кабинет 
+                | укажи код магазина (узнай его у директора)
+              li В течение октября и ноября рекомендуй и предлагай покупателям чай Тесс в пирамидках.
+              li Фотографируй Чеки, в которых есть Тесс в пирамидках, прежде чем вручить его Покупателям.
+              li Загружай чеки в своем 
+                a(href='/user') личном кабинете
+              li Копи баллы.
+              li Получи возможность еженедельно выигрывать наборы чая Тесс.
+              li Участвуй в розыгрыше премиальной капсульной кофемашины.
+              li Даже если тебе не повезло, и ты не смог выиграть призы, то накопленные баллы, без каких-либо доплат, ты всегда сможешь потратить на покупку любой продукции, представленной на сайте
+          .sale__info
+            p.sale__info_text С подробностями акции можно ознакомиться 
+              a(href='/docs/rules_prod.docx' target='_blank') здесь
+              | .
     default
       .sales_wrap        
         .sales__content

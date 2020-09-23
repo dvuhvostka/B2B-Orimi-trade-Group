@@ -46,6 +46,23 @@ function ready(){
       else
         label_photo.innerHTML = label_photo_value;
     });
+    var input_cheque = document.querySelector('#cheque');
+    var label_cheque = input_cheque?input_cheque.nextElementSibling:'',
+        label_cheque_value = label_cheque?label_cheque.innerHTML:'';
+    if (input_cheque)
+    input_cheque.addEventListener('change', function(e){
+      var fileName = '';
+      console.log(this.files);
+      if (this.files && this.files.length > 1)
+        fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}',this.files.length);
+      else
+        fileName = this.files[0].name;
+
+      if (fileName)
+        label_cheque.querySelector('span').innerHTML = fileName;
+      else
+        label_cheque.innerHTML = label_photo_value;
+    });
 }
 $.fn.setCursorPosition = function(pos) {
   if ($(this).get(0).setSelectionRange) {
