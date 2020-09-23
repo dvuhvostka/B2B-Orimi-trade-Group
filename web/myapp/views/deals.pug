@@ -96,14 +96,12 @@ block content
           if($.trim($('#'+deal_id+'_attach').text()) != "" ){
             $('#'+deal_id+'_attach').html('');
           }else{
-            console.log('123');
             $.post("/add",{post_type: "showattachment", deal_id: deal_id}, (data)=>{
               var out = "";
               var out_array = [];
               for (var i=0; i<data.length; i++){
                   out += "<p>"+data[i].product+", кол-во: "+data[i].count+", Цена: "+data[i].full_price+", Артикул: "+data[i].articul+"</p>";
                 }
-                console.log(out);
                 $('#'+deal_id+'_attach').html(out);
             });
           }
@@ -121,7 +119,6 @@ block content
             var item = $(this);
             var deal_id = item.attr('deal_id');
             $.post("/add",{post_type: "delete_deal", deal_id: deal_id}, (data)=>{
-                console.log("123");
                 var foo = $('#'+deal_id);
                 foo.detach();
                 showModal('Сделка № '+deal_id+' успешно удалена','Успешно',true);
@@ -147,7 +144,6 @@ block content
             var city = $('#city').val();
             var time = $('#time').val();
             var confirmed = $('#confirmed').val();
-            console.log(city, time, confirmed);
             $.post("/add",{post_type: "download_deals", city: city, time: time, confirmed: confirmed}, (data)=>{
                 if(!data.ok){showModal("По текущим фильтрам сделок не найдено!","Поиск", false);}else{
                   setTimeout(document.location.href=data.src, 1000);
@@ -155,7 +151,6 @@ block content
             });
           });
         $('.endDeal').on('click', function(){
-            console.log("123");
             var item = $(this);
             var deal_id = item.attr('deal_id');
             $.post("/add",{post_type: "end_deal", deal_id: deal_id}, (data)=>{
