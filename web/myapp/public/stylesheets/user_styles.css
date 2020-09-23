@@ -112,7 +112,7 @@
   margin: 5rem 47.4%;
 }
 
-#docs,#photo {
+#docs,#photo,#cheque {
   position: absolute;
   width:0.1px;
   height:0.1px;
@@ -138,6 +138,14 @@
 
 }
 
+.mw {
+  min-width: 100px;
+}
+
+#leave_org {
+  margin: auto 10px;
+  height: 38px;
+}
 .deal_wrap > p {
   text-align: right;
   margin-right: 40px;
@@ -306,7 +314,7 @@ margin: 5px 0 0 0;
 .label_photo {
   width: 50%;
   min-width: 200px;
-  margin: 20px auto;
+  margin: 10px auto;
 }
 
 .photo_submit {

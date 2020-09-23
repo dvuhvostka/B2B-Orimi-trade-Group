@@ -46,6 +46,13 @@
 }
 .delivery__input {
   width:100%;
+  margin-top: 15px;
+}
+.invis {
+  visibility: hidden;
+}
+.delivery__select{
+  width: 100%;
 }
 .bonuses {
   display:flex;

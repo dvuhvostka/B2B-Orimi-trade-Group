@@ -229,7 +229,7 @@
 }
 
 .item_price {
-  color: black;
+  color: #007bff;
   font-size: 22px;
   font-weight: bold;
   font-family: 'Josefin Sans', sans-serif;
@@ -359,7 +359,7 @@
 .sale_price_old{
   margin-left:5px;
   text-decoration:line-through;
-  color: black;
+  color: #007bff;
 }
 
 .sale_price {

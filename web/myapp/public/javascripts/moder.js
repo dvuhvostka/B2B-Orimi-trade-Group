@@ -408,8 +408,7 @@ function delete_org(owner_id){
   var del = confirm("Вы действительно хотите УДАЛИТЬ организацию?\n"+owner_id);
   if(del){
     $.post("/user",{post_type: "delete_org_skdjfgh213asRQadSKSFD3123244", org_owner_id: owner_id});
-    showModal("Организация успешно удалена.\n"+owner_id);
-    window.location.reload();
+    showModal("Организация успешно удалена.\n"+owner_id,'Успешно', true);
   }
 }
 function confirm_org(owner_id){
@@ -421,8 +420,7 @@ function confirm_org(owner_id){
       stock_access = false;
     }
     $.post("/user",{post_type: "confirm_org_askdjfhl123123kaGFDGdfhFsdf3123", org_owner_id: owner_id, stock_access: stock_access});
-    showModal("Организация успешно подтверждена.\n"+owner_id);
-    window.location.reload();
+    showModal("Организация успешно подтверждена.\n"+owner_id,'Успешно',true);
   }
 }
 function photo_confirm(owner_id, cases, org_name){

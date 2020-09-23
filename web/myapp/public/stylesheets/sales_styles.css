@@ -262,3 +262,10 @@
   width: 50%;
 }
 /* ---------- */
+
+/* prod styles */
+.ul__info li{
+  list-style: circle !important;
+  margin-left: 20px;
+}
+/* ------------- */

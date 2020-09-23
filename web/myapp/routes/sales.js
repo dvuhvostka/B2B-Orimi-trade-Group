@@ -134,6 +134,15 @@ router.get('/sales/:type?', function(req, res) {
         });
       }
       break;
+      case 'prod': {
+        res.render('sales.pug',{
+          isRegistred: req.session.userId,
+          main: true,
+          type: req.params.type,
+          title: 'Акция для продавцов',
+        });
+      }
+      break;
     default:
       pgPool.query(getNews,[], function(err, response){
         if (err) return console.error(err);
