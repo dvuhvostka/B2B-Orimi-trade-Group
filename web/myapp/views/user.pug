@@ -883,7 +883,7 @@ block content
           }
         })
     });
-    $('#org_form, #form_photo').on('submit', function(e) {
+    $('#form_photo').on('submit', function(e) {
         e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
@@ -901,6 +901,25 @@ block content
               }
             }
           });
+      });
+    $('#org_form').on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: "POST",
+            url: "/user",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(r){
+              if(r.ok == false){
+                console.log(r.error);
+                $('.label_photo').find('span').html(r.error);
+              }else{
+                showModal('Ваши данные успешно отправлены на проверку.', 'Успех', true, '/user');
+              }
+            }
+          })
       });
       function copylinkcode(){
         var copyText = document.getElementById("link_code");

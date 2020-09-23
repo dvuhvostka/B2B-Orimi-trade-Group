@@ -170,12 +170,14 @@
                   +"<span class='delivery_price'>"+Math.round((rc2)*100)/100+"</span>"
                   +" р."
                 +"</p>"
+                +"<p class='rest'></p>"
                 +"<p class='price_text'> Итоговая стоимость: "
                   +"<span class='final_price'>"+Math.round((final_price_result)*100)/100+"</span>"
                   +" р."
                 +"</p>"
               +"</div>";
-            $('.all_li').html(out+"<button class='btn btn-success submit_cart'>Оформить заказ</button>");
+            $('.all_li').html(out
+              +"<button class='btn btn-success submit_cart'>Оформить заказ</button>");
 
             if(rc>4000){
               $('.delivery_text').html('Ваш заказ будет доставлен бесплатно!');
@@ -186,7 +188,9 @@
             });
 
             if(Math.round((final_price_result)*100)/100<2000){
+              var rest = 2000-Math.round((final_price_result)*100)/100;
               $('.submit_cart').prop("disabled", true);
+              $('.rest').html("До минимальной суммы заказа осталось: "+rest+" руб.")
             }
 
             var input_check = $('.sym_none');
@@ -235,9 +239,12 @@
                           $('.final_price').html(rounded_cost+' ');
                           if(rounded_cost<4000){
                             if(rounded_cost<2000){
-                                $('.submit_cart').prop("disabled", true);
+                              var rest = 2000-rounded_cost;
+                              $('.submit_cart').prop("disabled", true);
+                              $('.rest').html("До минимальной суммы заказа осталось: "+rest+" руб.")
                             }else{
                               $('.submit_cart').prop("disabled", false);
+                              $('.rest').html("");
                             }
                             var rc3 = Math.round((4000-rounded_cost)*100)/100;
                             $('.delivery_text').html('До бесплатной доставки осталось: <span class="delivery_price">'+rc3+'</span> р.');

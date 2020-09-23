@@ -663,7 +663,11 @@ user.route('/user')
                     });
                   }else{
                     var keywords = createKeywords(req.body);
-                    db.none('INSERT INTO coffee(keywords,item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
+                    var bestseller = false;
+                    if(req.body.bestseller){
+                      bestseller = true;
+                    }
+                    db.none('INSERT INTO coffee(keywords,item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, barcode, bestseller) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode}, ${bestseller})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'coffee',
@@ -677,6 +681,7 @@ user.route('/user')
                       barcode: req.body.barcode,
                       sale_price: 0,
                       keywords: keywords,
+                      bestseller: bestseller,
                       pic_count: fls.length
                     }).catch(error => {
                       console.log('ERROR_COFFEE_ADDING_TO_DB:', error);
@@ -700,7 +705,11 @@ user.route('/user')
                     });
                   }else{
                     var keywords = createKeywords(req.body);
-                    db.none('INSERT INTO tea(keywords,item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode})',  {
+                    var bestseller = false;
+                    if(req.body.bestseller){
+                      bestseller = true;
+                    }
+                    db.none('INSERT INTO tea(keywords,item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, barcode, bestseller) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${barcode}, ${bestseller})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'tea',
@@ -715,6 +724,7 @@ user.route('/user')
                       barcode: req.body.barcode,
                       sale_price: 0,
                       pic_count: 1,
+                      bestseller: bestseller,
                       keywords: keywords
                     }).catch(error => {
                       console.log('ERROR_TEA_ADDING_TO_DB:', error);
@@ -772,7 +782,11 @@ user.route('/user')
                     });
                   }else{
                     var keywords = createKeywords(req.body);
-                    db.none('INSERT INTO horeca(keywords,item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
+                    var bestseller = false;
+                    if(req.body.bestseller){
+                      bestseller = true;
+                    }
+                    db.none('INSERT INTO horeca(keywords,item_name, item_price, type, sort, about, weight, packaging, tea_bags, box_count, description, articul, sale_price, pic_count, subtype, barcode, bestseller) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${about}, ${weight}, ${packaging}, ${tea_bags}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode}, ${bestseller})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'tea',
@@ -788,6 +802,7 @@ user.route('/user')
                       pic_count: fls.length,
                       barcode: req.body.barcode,
                       keywords: keywords,
+                      bestseller: bestseller,
                       subtype: 'horeca'
                     }).catch(error => {
                       console.log('ERROR_HORECA_TEA_ADDING_TO_DB:', error);
@@ -811,7 +826,7 @@ user.route('/user')
                     });
                   }else{
                     var keywords = createKeywords(req.body);
-                    db.none('INSERT INTO horeca(keywords,item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, subtype, barcode) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode})',  {
+                    db.none('INSERT INTO horeca(keywords,item_name, item_price, type, sort, category, weight, packaging, box_count, description, articul, sale_price, pic_count, subtype, barcode, bestseller) VALUES($(keywords),${item_name}, ${item_price}, ${type}, ${sort}, ${category}, ${weight}, ${packaging}, ${box_count}, ${description}, ${articul}, ${sale_price}, ${pic_count}, ${subtype}, ${barcode}, ${bestseller})',  {
                       item_name: req.body.item_name,
                       item_price: req.body.item_price,
                       type: 'coffee',
@@ -826,6 +841,7 @@ user.route('/user')
                       pic_count: fls.length,
                       barcode: req.body.barcode,
                       keywords: keywords,
+                      bestseller: bestseller,
                       subtype: 'horeca'
                     }).catch(error => {
                       console.log('ERROR_HORECA_COFFEE_ADDING_TO_DB:', error);
