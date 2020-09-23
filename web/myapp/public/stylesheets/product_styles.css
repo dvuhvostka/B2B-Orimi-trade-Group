@@ -1,6 +1,9 @@
 .sale_wrap{
-  width:60%;
+  width:80%;
+  display: flex;
+  justify-content: center;
   margin:0 auto;
+  max-width: 850px;
 }
 #product_wrap {
   display:grid;
@@ -106,7 +109,12 @@
   max-height: 350px;
 }
 
-
+.sht, .kor {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  font-size: 15px;
+}
 
 #info_wrap {
   grid-area: i;

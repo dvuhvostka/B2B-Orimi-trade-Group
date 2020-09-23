@@ -177,6 +177,10 @@ var address, payment, bonuses, comments;
         });
       }).catch(error => {
         console.log(error);
+        res.json({
+          ok:false,
+          error
+        });
       });
   }).catch(error =>{
     console.log(error);
@@ -589,11 +593,24 @@ check_formdata = (formdata, cart, res, userId, region) => {
 
 router.route('/order')
   .get(function(req,res){
-    res.render('order.pug', {
-      isRegistred: userinfo.user_id,
-      title: 'Фирменный магазин Орими-трэйд',
-      needFooter: false,
+    var sql=`SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
+    db.one(sql).then((org_info)=>{
+      console.log(org_info.org_address_fact);
+      res.render('order.pug', {
+        org: org_info,
+        isRegistred: userinfo.user_id,
+        title: 'Фирменный магазин Орими-трэйд',
+        needFooter: false,
       });
+    }).catch((err)=>{
+      console.log(err);
+      res.render('order.pug', {
+        err: err,
+        isRegistred: userinfo.user_id,
+        title: 'Фирменный магазин Орими-трэйд',
+        needFooter: false,
+      });
+    });
   }).post(function(req,res){
     if(req.session.userId){
       switch (req.body.post_type) {

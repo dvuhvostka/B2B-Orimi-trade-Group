@@ -157,17 +157,17 @@ block content
                   input.btn.btn-outline-success(type='submit' value='Создать заявку')
           .settings_wrap
             h5.header.text-muted Настройки
-              form.password_change
-                .in.pass
-                  label.pass_label Введите старый пароль
-                  input(type='password' name='old_pass' required).pass_input
-                .in.pass
-                  label.pass_label Введите новый пароль
-                  input(type='password' name='new_pass' required).pass_input
-                .in.pass
-                  label.pass_label Подтвердите новый пароль
-                  input(type='password' name='new_pass_conf' required).pass_input
-                button(type='submit').btn.btn-success.pass_change Сменить пароль
+            form.password_change
+              .in.pass
+                label.pass_label Введите старый пароль
+                input(type='password' name='old_pass' required).pass_input
+              .in.pass
+                label.pass_label Введите новый пароль
+                input(type='password' name='new_pass' required).pass_input
+              .in.pass
+                label.pass_label Подтвердите новый пароль
+                input(type='password' name='new_pass_conf' required).pass_input
+              button(type='submit').btn.btn-success.pass_change Сменить пароль
       .tab-pane.fade#nav-orders.panel(role='tabpanel' area-labelledby='nav-orders-tab')
         .spinner-border(role='status')
           span.sr-only Loading...
@@ -348,6 +348,9 @@ block content
                             label.form__label Штрихкод
                             input.form__input(name='barcode' required)
                           .d-in
+                            label.form__label Бестселлер
+                            input.form__input(type='checkbox' name='bestseller' ).bestseller
+                          .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
                             label.form__sublabel.text-muted Изображения товара только в формате .jpg
@@ -405,6 +408,9 @@ block content
                           .d-in
                             label.form__label Штрихкод
                             input.form__input(name='barcode' required)
+                          .d-in
+                            label.form__label Бестселлер
+                            input.form__input(type='checkbox' name='bestseller' ).bestseller
                           .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
@@ -524,6 +530,9 @@ block content
                             label.form__label Штрихкод
                             input.form__input(name='barcode' required)
                           .d-in
+                            label.form__label Бестселлер
+                            input.form__input(type='checkbox' name='bestseller' ).bestseller
+                          .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
                             label.form__sublabel.text-muted Изображения товара только в формате .jpg
@@ -579,6 +588,9 @@ block content
                             label.form__label Штрихкод
                             input.form__input(name='barcode' required)
                           .d-in
+                            label.form__label Бестселлер
+                            input.form__input(type='checkbox' name='bestseller').bestseller
+                          .d-in
                             label.form__label Фотография
                             input(type='file' name='documents' multiple required)
                             label.form__sublabel.text-muted Изображения товара только в формате .jpg
@@ -608,7 +620,7 @@ block content
                         option(value='other') Сопутствующие товары
                     .d-in
                       label.form__label Подтип(ХоРеКа)
-                      input(type='checkbox' value='horeca' name='subtype').item__subtype.input      
+                      input(type='checkbox' value='horeca' name='subtype').item__subtype.input.form__input 
                     .d-in
                       label.form__label Название
                       input(type='text' value='' name='item_name').item__name.input
@@ -617,6 +629,9 @@ block content
                       input(type='text' name='item_price').item__price.input
                       label Сделать цену акционной?
                         input(type='checkbox' name='sale').item__price_sale.input
+                    .d-in
+                      label.form__label Бестселлер
+                      input.form__input(type='checkbox' name='bestseller').bestseller.input
                     .d-in
                       label.form__label Кол-во в упаковке
                       input(type='text' value='' name='box_count').item__box_count.input
@@ -876,7 +891,7 @@ block content
                 showModal('Фотографии полок успешно отправлены на ободрение.', 'Успех', true, '/user');
               }
             }
-          })
+          });
       });
     $('#org_form').on('submit', function(e) {
         e.preventDefault();

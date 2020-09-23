@@ -98,7 +98,7 @@ block content
               ol.breadcrumb
                 li.breadcrumb-item
                   a(href='/sales') Акции
-                li.breadcrumb-item.active(aria-current='page') Фотографии полок
+                li.breadcrumb-item.active(aria-current='page') Продержи - получи
           .sale__content_main
             h3.main_content__header Баллы за поддержание ассортимента
             .sale__cards_sets
@@ -122,7 +122,7 @@ block content
                 li.breadcrumb-item
                   a(href='/sales') Акции
                 li.breadcrumb-item
-                  a(href='/sales/weekly') Фотографии полок
+                  a(href='/sales/weekly') Продержи - получи
                 li.breadcrumb-item.active(aria-current='page') Кейс №#{saleInfo.weekly_id}
           .sale__content
             h3.content__header Кейс №#{saleInfo.weekly_id}
@@ -130,7 +130,7 @@ block content
               span.requirments__header Условия программы
               br
               |#{saleInfo.requirements}
-            p.requirments Бонус за ассортимент:
+            p.requirments Бонус за ассортимент: #{saleInfo.bonus_text}
             br
             |
             .content__items_wrap

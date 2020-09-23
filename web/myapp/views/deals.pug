@@ -29,7 +29,7 @@ block content
           option(value='1') Подтвержденные
           option(value='2') Завершенные
         button.btn.btn-primary.showdeals(type='submit')#showDeals Показать
-      button.btn.btn-success.btn-excel#downloadDeals Выгрузить в exel
+      button.btn.btn-success.btn-excel#downloadDeals(target='_blank') Выгрузить в excel
     .deals_info_wrap
       if ((deals_info==0))
           p.deals__no Ничего не найдено

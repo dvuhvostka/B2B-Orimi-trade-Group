@@ -40,7 +40,14 @@ block content
         .order__delivery.mb
           h5.delivery__header.header Адрес доставки
           .input_field
-            input(type='text' id="js-AddressField" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input.js-AddressField
+            if (!err)
+              select(name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input
+                - for (var i = 0;i < org.org_address_fact.length; i++)
+                  option(name=i+1) #{org.org_address_fact[i]}
+                option(name='other') Другое
+                input(type='text' id="js-AddressField" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input.js-AddressField.d-none
+            else
+              input(type='text' id="js-AddressField" name='address' placeholder='Введите адрес доставки' required).order__input.delivery__input.js-AddressField
         .order__comments.mb
           h5.header.comments__headder Комментарии к заказу
           textarea(name='comments').comments__area

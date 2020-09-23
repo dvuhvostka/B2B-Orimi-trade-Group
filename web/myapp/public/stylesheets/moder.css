@@ -93,6 +93,10 @@
   min-height: 32px;
 }
 
+.bestseller, .item__subtype {
+  width: 30px !important;
+}
+
 .form__sublabel {
   font-size:13px;
   margin: auto 0 auto 10px;

@@ -41,6 +41,7 @@ function updateItemSql(data){
   sql = sql.slice(0,-2);
   sql_keywords = createKeywords(data);
   sql = sql+", keywords='"+sql_keywords+"'";
+  // console.log(sql);
   return sql;
 }
 
