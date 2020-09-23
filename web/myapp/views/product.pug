@@ -77,9 +77,14 @@ block content
                   p Зеленый с добавками
                 when 'assorti'
                   p Ассорти
+                when 'herbal'
+                  p Гербальный
             .in.p
               p Число пакетиков
-              p #{products[0].tea_bags}
+              if products[0].tea_bags == '0'
+                p Листовой
+              else
+                p #{products[0].tea_bags}
             .in.p
               p Вес
               p #{products[0].weight}г.
@@ -152,12 +157,20 @@ block content
               #span_change #{products[0].item_price}
               span
                 i.fas.fa-ruble-sign
-            .range_items
-              button(class='btn btn-secondary minus')
-                i.fas.fa-minus.controls
-              input(type='text' value='1' class='input')
-              button(class='btn btn-secondary plus')
-                i.fas.fa-plus.controls
+            div.sht Кол-во в шт
+              .range_items
+                button(class='btn btn-secondary minus')
+                  i.fas.fa-minus.controls
+                input(type='text' value='1' class='input')
+                button(class='btn btn-secondary plus')
+                  i.fas.fa-plus.controls
+            div.kor Кол-во в коробках
+              .range_items
+                button(class='btn btn-secondary box_count_minus' )
+                  i.fas.fa-minus.controls
+                input(type='text' value='0' class='input' ).count_input_box
+                button(class='btn btn-secondary box_count_plus' )
+                  i.fas.fa-plus.controls
           if (products[0].subtype)
             button(data-id=products[0].id type=products[0].subtype).btn.btn-primary#addtocart Добавить в корзину
           else

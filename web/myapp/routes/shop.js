@@ -30,7 +30,7 @@ function checkFilters (data){
   var brand_tea = ['greenfield','nuri','tess','java','candy','shah','nila','gita'];
   var tea_type = ['black','black_1','green','green_1','herbal'];
   var teabag = ['0','20','25','30','50','100','120'];
-  var tea_pack = ['box','package','present','capsule'];
+  var tea_pack = ['box','package','present','capsule','soft_pack'];
   var collection = 'in_one_collection';
   var filters = Object.keys(data);
   var brand_sql = '';

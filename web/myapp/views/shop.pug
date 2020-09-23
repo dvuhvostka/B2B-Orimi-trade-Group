@@ -86,22 +86,24 @@ block content
 						- for (var i = 0; i < q%16; i++)
 							div(class='shop_item' id=products[i+j*16].id sort=products[i+j*16].sort about=products[i+j*16].about weight=products[i+j*16].weight packaging=products[i+j*16].packaging bags=products[i+j*16].tea_bags)
 								div(class='carousel_img')
-									if(products[i+j*16].subtype)
+									if (products[i+j*16].subtype)
 										img(src="../store_prods/horeca/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")
 									else
 										img(src="../store_prods/"+products[i+j*16].type+"/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")
-								if(products[i+j*16].subtype)
+								if (products[i+j*16].subtype)
 									a(href='/shop/'+products[i+j*16].subtype+'?id='+products[i+j*16].id class='item_name') #{products[i+j*16].item_name}
 								else
 									a(href='/shop/'+products[i+j*16].type+'?id='+products[i+j*16].id class='item_name') #{products[i+j*16].item_name}
-								if(products[i+j*16].sale_price!=0)
-									p(class='item_price') #{products[i+j*16].sale_price}
-										i.fas.fa-ruble-sign
+								if (products[i+j*16].sale_price != 0)
+									p(class='item_price sale_price') #{products[i+j*16].sale_price}
+										i.fas.fa-ruble-sign.rs
+										sup.sale_price_old #{products[i+j*16].item_price}
+											i.fas.fa-ruble-sign.rs.sale_sign
 								else
 									p(class='item_price') #{products[i+j*16].item_price}
-										i.fas.fa-ruble-sign
+										i.fas.fa-ruble-sign.rs
 								div.footer_item
-									if(products[i+j*16].subtype)
+									if (products[i+j*16].subtype)
 										button.b(class='btn btn-primary addtocart' type=products[i+j*16].subtype data-id=products[i+j*16].id) Купить
 									else
 										button.b(class='btn btn-primary addtocart' type=products[i+j*16].type data-id=products[i+j*16].id) Купить
@@ -122,6 +124,9 @@ block content
 					else
 						- for(var i=0; i<16; i++)
 								div(class='shop_item' id=products[i+j*16].id sort=products[i+j*16].sort about=products[i+j*16].about weight=products[i+j*16].weight packaging=products[i+j*16].packaging bags=products[i+j*16].tea_bags)
+									if (products[i+j*16].bestseller)
+										.bestseller
+											span Бестселлер
 									div(class='carousel_img')
 										if(products[i+j*16].subtype)
 											img(src="../store_prods/horeca/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")
@@ -132,11 +137,13 @@ block content
 									else
 										a(href='/shop/'+products[i+j*16].type+'?id='+products[i+j*16].id class='item_name') #{products[i+j*16].item_name}
 									if(products[i+j*16].sale_price!=0)
-										p(class='item_price') #{products[i+j*16].sale_price}
-											i.fas.fa-ruble-sign
+										p(class='item_price sale_price') #{products[i+j*16].sale_price}
+											i.fas.fa-ruble-sign.rs
+											sup.sale_price_old #{products[i+j*16].item_price}
+												i.fas.fa-ruble-sign.rs.sale_sign
 									else
 										p(class='item_price') #{products[i+j*16].item_price}
-											i.fas.fa-ruble-sign
+											i.fas.fa-ruble-sign.rs
 									div.footer_item
 										if(products[i+j*16].subtype)
 											button.b(class='btn btn-primary addtocart' type=products[i+j*16].subtype data-id=products[i+j*16].id) Купить

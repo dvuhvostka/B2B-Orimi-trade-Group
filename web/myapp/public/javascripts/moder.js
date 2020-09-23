@@ -16,6 +16,7 @@ $('.articul-find').on('click', ()=>{
             $('.coffee_filters').addClass('d-none');
             $('.other_filters').addClass('d-none');
 
+            $('.bestseller').prop('checked', item.bestseller? true: false)
             $('.item__id span').html(item.id);
             $('.item__name').attr('value', item.item_name);
             $('.item__price').attr('value', item.item_price)
@@ -34,6 +35,7 @@ $('.articul-find').on('click', ()=>{
               $('.item__subtype').prop('checked', true);
             } else {
               $('.item__subtype').attr('disabled', true);
+              $('.item__subtype').val('none');
             }
 
 
@@ -62,6 +64,7 @@ $('.articul-find').on('click', ()=>{
             if (item.subtype){
               $('.item__subtype').prop('checked', true);
             } else {
+              $('.item__subtype').val('none');
               $('.item__subtype').attr('disabled', true);
             }
           }
@@ -86,6 +89,7 @@ $('.articul-find').on('click', ()=>{
             if (item.subtype){
               $('.item__subtype').prop('checked', true);
             } else {
+              $('.item__subtype').val('none');
               $('.item__subtype').attr('disabled', true);
             }
 
@@ -136,6 +140,15 @@ $('.btn__item_edit').on('click', ()=>{
       value = true;
     } else {
       key = 'sale_price';
+      value = false;
+    }
+  }
+  if (key == 'bestseller'){
+    if (each.checked){
+      key = 'bestseller';
+      value = true;
+    } else {
+      key = 'bestseller';
       value = false;
     }
   }

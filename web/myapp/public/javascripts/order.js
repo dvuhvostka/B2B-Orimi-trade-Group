@@ -91,7 +91,7 @@ window.onload = function(){
         success: function(r){
           switch(r.ok){
             case true: showModal(r.message,'Заказ оформлен', true, '/shop'); localStorage.removeItem('cart'); break;
-            case false: console.log(r.error); break;
+            case false: showModal(r.error, 'Ошибка', false); break;
             default: window.location.href = '/shop'; break;
           }
         }
