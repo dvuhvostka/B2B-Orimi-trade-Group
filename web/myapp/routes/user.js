@@ -574,11 +574,8 @@ user.route('/user')
       });
     }else if(req.body.post_type=="confirm_org_askdjfhl123123kaGFDGdfhFsdf3123"){
       db.any("SELECT * FROM organizations WHERE owner_id='"+req.body.org_owner_id+"'").then(function(data){
-        db.none("UPDATE organizations SET org_confirmed=1, stock_access="+req.body.stock_access+" WHERE owner_id='"+req.body.org_owner_id+"'").catch(function(err){
-          res.json({
-            ok: false,
-            err: "ОШИБКА. Не удалось подтвердить организацию."
-          });
+        db.none("UPDATE organizations SET org_confirmed=1, stock_access="+req.body.stock_access+", seller_stock_access="+req.body.seller_stock+" WHERE owner_id='"+req.body.org_owner_id+"'").catch((err)=>{
+          console.log(err);
         });
         db.none("UPDATE users SET balance=balance+200 WHERE id='"+req.body.org_owner_id+"'").catch(function(err){
           res.json({

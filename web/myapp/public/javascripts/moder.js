@@ -412,17 +412,29 @@ function delete_org(owner_id){
     window.location.reload();
   }
 }
-function confirm_org(owner_id){
+
+$('.accept_org').on('click', (e)=>{
+  let item = e.currentTarget
+  let owner_id = item.getAttribute('data-id');
+  console.log(owner_id);
+  confirm_org(owner_id, item);
+});
+
+function confirm_org(owner_id, item){
   var conf = confirm("Вы действительно хотите ПОДТВЕРДИТЬ организацию?\n"+owner_id);
   if(conf){
     var stock_access = true;
-    var checkbox = $('#'+owner_id);
-    if (checkbox.prop('checked')){
+    var seller_stock = true;
+    var seller_input = item.parentNode.parentNode.querySelector('.seller_stock_input');
+    var stock_input = item.parentNode.parentNode.querySelector('.sale_reject_input');
+    if (stock_input.checked){
       stock_access = false;
     }
-    $.post("/user",{post_type: "confirm_org_askdjfhl123123kaGFDGdfhFsdf3123", org_owner_id: owner_id, stock_access: stock_access});
-    showModal("Организация успешно подтверждена.\n"+owner_id);
-    window.location.reload();
+    if (seller_input.checked){
+      seller_stock = false;
+    }
+    $.post("/user",{post_type: "confirm_org_askdjfhl123123kaGFDGdfhFsdf3123", org_owner_id: owner_id, stock_access: stock_access, seller_stock: seller_stock});
+    showModal("Организация успешно подтверждена.\n"+owner_id, "Успех", true, '/user');
   }
 }
 function photo_confirm(owner_id, cases, org_name){

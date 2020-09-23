@@ -766,15 +766,18 @@ block content
                           p #{uncorgs[u].owner_position}:
                           p #{uncorgs[u].owner_sname} #{uncorgs[u].owner_name} #{uncorgs[u].owner_tname}
                         .in.sale_reject
-                          input.sale_reject_input(type='checkbox' id=uncorgs[u].owner_id)
+                          input.sale_reject_input(type='checkbox' name='stock_access')
                           label.sale_reject_label Запретить участвовать в акции "Продержи - получи"
+                        .in.seller_stock
+                          input.seller_stock_input(type='checkbox' name='seller_stock_access')
+                          label.seller_stock_label Запретить участвовать в акции "Загрузка чеков для продавцов"
                         h5.header Сканы документов:
                         .img_set
                           - for(var z=0; z<uncorgs[u].docs.length; z++)
                             a(href="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z] target='_blank').docs_link
                               img.docs(src="./uploads/"+uncorgs[u].owner_id+"/"+uncorgs[u].docs[z])
                         .btn-row
-                          button.btn.btn-success(onclick="confirm_org('"+uncorgs[u].owner_id+"')") Подтвердить
+                          button.btn.btn-success(data-id=uncorgs[u].owner_id).accept_org Подтвердить
                           button.btn.btn-danger(onclick="delete_org('"+uncorgs[u].owner_id+"')") Отказать
                 .tab-pane.fade#nav-mod-firms-info
                   .firm_search_wrap

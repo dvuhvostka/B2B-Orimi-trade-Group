@@ -221,13 +221,13 @@
 .btn-row button:first-child {
   margin-right:15px;
 }
-.sale_reject {
+.sale_reject, .seller_stock {
   margin: 0 auto 15px auto;
 }
-.sale_reject_label {
+.sale_reject_label, .seller_stock_label {
   margin: auto 0;
 }
-.sale_reject_input {
+.sale_reject_input, .seller_stock_input {
 
   margin: auto 15px auto 0;
 }

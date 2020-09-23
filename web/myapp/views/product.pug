@@ -166,10 +166,10 @@ block content
                   i.fas.fa-plus.controls
             div.kor Кол-во в коробках
               .range_items
-                button(class='btn btn-secondary box_count_minus' )
+                button(class='btn btn-secondary box_count_minus' box_count=products[0].box_count)
                   i.fas.fa-minus.controls
-                input(type='text' value='0' class='input' ).count_input_box
-                button(class='btn btn-secondary box_count_plus' )
+                input(type='text' value='0' class='input' box_count=products[0].box_count).count_input_box
+                button(class='btn btn-secondary box_count_plus' box_count=products[0].box_count)
                   i.fas.fa-plus.controls
           if (products[0].subtype)
             button(data-id=products[0].id type=products[0].subtype).btn.btn-primary#addtocart Добавить в корзину

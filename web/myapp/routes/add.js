@@ -149,6 +149,12 @@ router.route('/add')
               case 'end_deal': {
                 let del_deal_sql_1 = `UPDATE deals_info SET confirmed=2 WHERE id='`+req.body.deal_id+`'`;
                 db.none(del_deal_sql_1);
+                let cashback_sql = `SELECT * FROM deals_info WHERE id='`+req.body.deal_id+`'`;
+                db.one(cashback_sql).then((data)=>{
+                  if(data.cashback){
+                    db.none(`UPDATE users SET balance=balance+`+parseInt(data.cashback)+` WHERE id='`+data.owner_id+`'`);
+                  }
+                })
                 res.json({
                   ok: true
                 });

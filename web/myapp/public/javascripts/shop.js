@@ -296,7 +296,7 @@ $('.box_count_plus').on('click', function(){
 
 $('.box_count_minus').on('click', function(){
   var item = $(this);
-  if (item.siblings('.input').val() > 0){
+  if (item.siblings('.input').val() >= 1){
     item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
     var input_sht = item.parentsUntil('.footer_item').siblings('.sht').children('.range_items').children('.input');
     input_sht.val(item.attr('box_count')*item.siblings('.input').val());
