@@ -69,17 +69,18 @@ block content
 				input(type="text" name="search" placeholder="Поиск")
 				input.btn.btn-primary(type="submit" value="Найти")
 		.main-content
-			nav(aria-label='paginationNav').pagination_wrap
-				ul.pagination.top
-					li.page-item
-						a.page-link(href='#' aria-label='Previous').prevpage
-							span(aria-hidden='true') &laquo;
-					- for (var j = 0; j < Math.ceil(q/16);j++)
-						li(class="page-item").pagenumber
-							a(class="page-link" href="#" data-id=j) #{j+1}
-					li.page-item
-						a.page-link(href='#' aria-label='Next').nextpage
-							span(aria-hidden='true') &raquo;
+			if q != 0 
+				nav(aria-label='paginationNav').pagination_wrap
+					ul.pagination.top
+						li.page-item
+							a.page-link(href='#' aria-label='Previous').prevpage
+								span(aria-hidden='true') &laquo;
+						- for (var j = 0; j < Math.ceil(q/16);j++)
+							li(class="page-item").pagenumber
+								a(class="page-link" href="#" data-id=j) #{j+1}
+						li.page-item
+							a.page-link(href='#' aria-label='Next').nextpage
+								span(aria-hidden='true') &raquo;
 			- for (var j = 0; j<= Math.floor(q/16); j++)
 				.item_list(id='page'+j).d-none
 					if (j == Math.floor(q/16))
@@ -166,17 +167,18 @@ block content
 												input(type='text' value='0' box_count=products[i+j*16].box_count class='input' id_data=products[i+j*16].id).count_input_box
 												button(class='btn btn-secondary box_count_plus' box_count=products[i+j*16].box_count)
 													i.fas.fa-plus.controls
-			nav(aria-label='paginationNav').pagination_wrap
-				ul.pagination.bot
-					li.page-item
-						a.page-link(href='#' aria-label='Previous').prevpage
-							span(aria-hidden='true') &laquo;
-					- for (var j = 0; j < Math.ceil(q/16);j++)
-						li(class="page-item").pagenumber
-							a(class="page-link" href="#" data-id=j) #{j+1}
-					li.page-item
-						a.page-link(href='#' aria-label='Next').nextpage
-							span(aria-hidden='true') &raquo;
+			if q != 0
+				nav(aria-label='paginationNav').pagination_wrap
+					ul.pagination.bot
+						li.page-item
+							a.page-link(href='#' aria-label='Previous').prevpage
+								span(aria-hidden='true') &laquo;
+						- for (var j = 0; j < Math.ceil(q/16);j++)
+							li(class="page-item").pagenumber
+								a(class="page-link" href="#" data-id=j) #{j+1}
+						li.page-item
+							a.page-link(href='#' aria-label='Next').nextpage
+								span(aria-hidden='true') &raquo;
 			if q == 0
 				div.noitems По данному запросу нет товаров
 		.sidebar
