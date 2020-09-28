@@ -66,6 +66,7 @@ router.route('/register')
   //  res.sendFile(path.resolve(__dirname, '../public/register.html'));
   //})
   .post(function(req,res){
+    console.log(req.body.customRadioInline1);
     var errCode = reg_data_checker(req.body);
     var ip = req.ip;
     var ip_result = ip.replace("::ffff:", "");

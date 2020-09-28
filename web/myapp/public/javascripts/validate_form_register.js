@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       e.preventDefault();
       var radio;
-      if($(".phys").is('checked')){
+      if($(".phys").prop('checked')){
         radio = $(".phys").val();
       }else{
         radio = $(".ur").val();
