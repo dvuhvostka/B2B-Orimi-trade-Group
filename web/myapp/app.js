@@ -101,11 +101,7 @@ app.use(bodyParser.json());
 // })
 
 app.get('/', function(req,res){
-  pgSession.get(req.sessionID,(error,session)=>{
-    console.log(123,session);
-  })
   const { userId } = req.session;
-  console.log(req.sessionID);
   res.redirect('/shop');
 });
 
