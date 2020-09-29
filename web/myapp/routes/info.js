@@ -10,7 +10,7 @@ var {Pool, Client} = require('pg');
 router.route('/info')
   .get(function(req,res){
     res.render('info.pug', {
-      isRegistred: userinfo.user_id,
+      isRegistred: req.session.userId,
       title: 'Фирменный магазин Орими-трэйд',
       needFooter: false,
       });

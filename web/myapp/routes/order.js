@@ -598,7 +598,7 @@ router.route('/order')
       console.log(org_info.org_address_fact);
       res.render('order.pug', {
         org: org_info,
-        isRegistred: userinfo.user_id,
+        isRegistred: req.session.userId,
         title: 'Фирменный магазин Орими-трэйд',
         needFooter: false,
       });
@@ -606,7 +606,7 @@ router.route('/order')
       console.log(err);
       res.render('order.pug', {
         err: err,
-        isRegistred: userinfo.user_id,
+        isRegistred: req.session.userId,
         title: 'Фирменный магазин Орими-трэйд',
         needFooter: false,
       });
@@ -669,7 +669,7 @@ router.route('/order')
         default: {
           console.log(req.body);
           res.render('order.pug', {
-            isRegistred: userinfo.user_id,
+            isRegistred: req.session.userId,
             title: 'Фирменный магазин Орими-трэйд',
             needFooter: false,
             });

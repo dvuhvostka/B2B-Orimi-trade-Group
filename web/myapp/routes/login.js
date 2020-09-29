@@ -9,10 +9,6 @@ var crypto = require('crypto');
 var app = require('../app');
 var config = require('../config');
 
-global.userinfo = {
-  user_id: null
-}
-
 /* GET users listing. */
 
 //const TWO_DAYS = 1000 * 60 * 60 * 24 * 2; //2 days in miliseconds
@@ -66,30 +62,27 @@ login.route('/login')
     .post(function(req, res){
       var error;
       const {email, password} = req.body;
-      console.log(email + ' ' + password)
-try {
-  pgPool.query(query,[email,md5(password)], function(err, resp){
-    console.log(resp.rows);
-    if(resp.rows.length!=0){
-      userinfo.user_id = resp.rows[0].id;
-      res.json({
-        ok:true,
-      })
-    } else {
-      error = "Неверное имя пользователя или пароль";
-      res.json({
-        ok:false,
-        error:error,
-      })
-    }
-  });
-} catch (e) {
-  console.log("error: "+e);
-}
+      try {
+        pgPool.query(query,[email,md5(password)], function(err, resp){
+          if(resp.rows.length!=0){
+            req.session.userId = resp.rows[0].id;
+            res.json({
+              ok:true,
+            })
+          } else {
+            error = "Неверное имя пользователя или пароль";
+            res.json({
+              ok:false,
+              error:error,
+            })
+          }
+        });
+      } catch (e) {
+        console.log("error: "+e);
+      }
 });
 
 
 module.exports = {
   login: login,
-  //user_identifier: userinfo.user_id
 }

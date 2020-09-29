@@ -128,8 +128,6 @@ var getSales = `SELECT * FROM sales ORDER BY id`;
 
 router.route('/shop/:type?')
   .get(function(req,res){
-    console.log(keywords);
-    console.log("\n\nshop\n\n");
     pgPool.query(getSales,[],function(e,r){
       var type = req.params.type;
       var getTea = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? 'AND item_price <= '+req.query.range_of_price : ' ') +`ORDER BY id DESC`;
@@ -151,7 +149,7 @@ router.route('/shop/:type?')
                 var prods = prods_triple.concat(prods_horeca);
                 // console.log(prods);
                 res.status(200).render('shop.pug', {
-                  isRegistred: userinfo.user_id,
+                  isRegistred: req.session.userId,
                   products: prods,
                   prod_count: prods.length,
                   title: 'Фирменный магазин Орими-трэйд',
@@ -166,9 +164,7 @@ router.route('/shop/:type?')
       }else if(type == 'tea'){
         if(req.query.id==undefined){
           var sql = checkFilters(req.query);
-          console.log('here ', req.query);
            var teaFilters = `SELECT * FROM tea WHERE type='tea' ` + (req.query.range_of_price? 'AND item_price <= ' + req.query.range_of_price : ' ') + (req.query.weight? ' AND weight <= '+ req.query.weight : ' ') + sql + ` ORDER BY id DESC`;
-           console.log(teaFilters);
           pgPool.query(teaFilters,[], function(err, response){
           if (err) return console.log(err);
           var prods;
@@ -373,7 +369,7 @@ router.route('/shop/:type?')
               var prods = prods_tea.concat(prods_coffee).concat(prods_horeca);
               console.log(prods);
               res.render('shop.pug', {
-                isRegistred: userinfo.user_id,
+                isRegistred: req.session.userId,
                 products: prods,
                 prod_count: prods.length,
                 title: 'Фирменный магазин Орими-трэйд',

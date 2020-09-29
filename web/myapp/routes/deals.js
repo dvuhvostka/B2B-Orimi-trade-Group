@@ -22,7 +22,7 @@ router.route('/deals')
     db.one(`SELECT * FROM users WHERE id='`+req.session.userId+`'`).then(function(data){
       if(data.permissions=='mod'){
         res.render('deals.pug', {
-          isRegistred: userinfo.user_id,
+          isRegistred: req.session.userId,
           title: 'Фирменный магазин Орими-трэйд',
           needFooter: false,
           deals_info: 0
@@ -63,7 +63,7 @@ router.route('/deals')
             }
           }
           res.render('deals.pug', {
-            isRegistred: userinfo.user_id,
+            isRegistred: req.session.userId,
             title: 'Фирменный магазин Орими-трэйд',
             needFooter: false,
             deals_info: deals,

@@ -92,22 +92,20 @@ app.use(express.static('public/stylesheets'));
 app.use(express.static('public/javascripts'));
 app.use(bodyParser.json());
 
-app.use(function(req, res, next) {
-  switch (!null) {
-    case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
-    case req.session.userId!=null: userinfo.user_id = req.session.userId; break;
-  }
-  next();
-})
+// app.use(function(req, res, next) {
+//   switch (!null) {
+//     case userinfo.user_id!=null: req.session.userId = userinfo.user_id; break;
+//     case req.session.userId!=null: userinfo.user_id = req.session.userId; break;
+//   }
+//   next();
+// })
 
 app.get('/', function(req,res){
-  console.log("\n\nMAIN ROOT\n\n");
+  pgSession.get(req.sessionID,(error,session)=>{
+    console.log(123,session);
+  })
   const { userId } = req.session;
-  console.log('main page seeing id is ',userinfo.user_id);
-  console.log('main page coockie id is ', req.session.userId);
-  if(req.session.userId){
-    userinfo.user_id = req.session.userId;
-  }
+  console.log(req.sessionID);
   res.redirect('/shop');
 });
 

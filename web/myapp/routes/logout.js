@@ -20,7 +20,6 @@ logout.route('/logout')
     if(err){
       console.log(err);
     }
-    userinfo.user_id = null;
     res.clearCookie('sid');
     res.redirect('/');
   })

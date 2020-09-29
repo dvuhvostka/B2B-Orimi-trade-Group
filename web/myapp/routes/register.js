@@ -54,7 +54,7 @@ function md5(pass) {
 router.route('/register')
   .get(function(req, res) {
     console.log("\n\nregister page\n\n")
-    if(!userinfo.user_id){
+    if(!req.session.userId){
     res.render('register.pug',{
       isRegister: req.session.userId,
       title: 'Регистрация',
@@ -90,7 +90,7 @@ router.route('/register')
               error: error
             });
           } else {
-            userinfo.user_id = uuidv4();
+            req.session.userId = uuidv4();
             db.none('INSERT INTO users(username, second_name , third_name, email, password, ip_addr, balance, permissions, client_type, number, id) VALUES(${username}, ${second_name}, ${third_name}, ${email}, ${password}, ${ip_addr}, ${balance}, ${permissions}, ${client_type}, ${number}, ${id})',  {
                 username: req.body.name,
                 second_name: req.body.second_name,
@@ -102,7 +102,7 @@ router.route('/register')
                 permissions: 'user',
                 client_type: req.body.customRadioInline1,
                 number: req.body.phone_number,
-                id: userinfo.user_id
+                id: req.session.userId
             });
             res.json({
               ok:true,
