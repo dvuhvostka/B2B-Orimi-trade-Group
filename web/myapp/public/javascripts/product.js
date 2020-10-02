@@ -42,8 +42,8 @@ $('#addtocart').on('click', ()=>{
   console.log(item);
   var data_id = item.attr('data-id');
   var data_type = item.attr('type');
-  console.log(data_id, data_type)
-  var input =  item.siblings('.range_items').children('.input');
+  var input =  item.siblings('.amount').children('.sht').children('.range_items').children('.input');
+  console.log(input);
   var articul = data_type+data_id;
     cart[articul] = input.val();
     localStorage.setItem('cart', JSON.stringify(cart));
