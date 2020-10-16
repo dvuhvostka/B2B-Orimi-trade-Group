@@ -3,6 +3,21 @@ function deals(){
   document.querySelector('#deals').classList.remove('d-none');
 }
 function ready(){
+  var dog = document.querySelector('#ready_doc');
+  dog.addEventListener('click', (e)=>{
+    var id = e.currentTarget.getAttribute('data-id');
+    $.ajax({
+      type: "GET",
+      url: "/user",
+      data: {
+        id: id
+      },
+      success: (res)=>{
+        window.location.href = res;
+      }
+    });
+  });
+
   var a = document.querySelector('#nav-orders-tab');
   a.addEventListener('click', function(){
     setTimeout(deals,3000);

@@ -32,7 +32,7 @@
                         +'<button class="btn btn-secondary minus">'
                           +'<i class="fas fa-minus controls"></i>'
                         +'</button>'
-                        +'<input type="text" value='+cart[data.other[i].type+data.other[i].id]+' class="input count_input_pack sym_none">'
+                        +'<input type="text" value='+cart[data.other[i].type+data.other[i].id]+' class="input count_input_pack sym_none count_others"  box_count='+data.other[i].box_count+'>'
                         +'<button class="btn btn-secondary plus">'
                           +'<i class="fas fa-plus controls"></i>'
                         +'</button>'
@@ -208,8 +208,15 @@
 
               $('.count_input_pack').on('keyup', function(){
                 var item = $(this);
-                if(item.val()>1000){
+                var other = item.hasClass('count_others');
+                var get_box_count = parseInt(item.attr('box_count'));
+                if(item.val()>1000 && !other){
                   item.val(1000);
+                } else if (other && item.val() % get_box_count != 0 && item.val()<=get_box_count*1000) {
+                  var amount = Math.round(item.val()/get_box_count)+1;
+                  item.val(amount*get_box_count);
+                } else if (item.val()>get_box_count*1000){
+                  item.val(1000*get_box_count);
                 }
               });
 
@@ -231,6 +238,7 @@
                     data: {post_type: "getcartcost", cart: localStorage.getItem('cart')},
                     success: function(r){
                         if(r.ok){
+                          console.log('ok');
                             localStorage.setItem('cart', JSON.stringify(cart));
                             $('.submit_cart').prop("disabled", false);
                             wrap.children('.item_count').html('Кол-во: '+input.val()+' шт.');
@@ -267,27 +275,49 @@
                   });
               });
 
-            $('.minus').on('click', function(){
-              var item = $(this);
-              if (item.siblings('.input').val() > 1){
-                item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
-              } else {
-                return 0;
-              }
-            })
-            $('.plus').on('click', function(){
-              var item = $(this);
-              if(item.attr('type')=='sets'){
-                if (item.siblings('.input').val() < 3){
-                  item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+              $('.minus').on('click', function(){
+                var item = $(this);
+                var input = item.siblings('.input');
+                var other = input.hasClass('count_others')
+                if (item.siblings('.input').val() > 1 && !other){
+                  item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
+                  var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
+                  var get_box_count = input_kor.attr('box_count');
+                  input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
+                } else if (other){
+                  console.log(1234);
+                    var get_box_count = parseInt(input.attr('box_count'));
+
+                    if(item.siblings('.input').val() >= get_box_count ){
+
+                      item.siblings('.input').val(parseInt(item.siblings('.input').val())-get_box_count);
+
+                    }
+
                 } else {
                   return 0;
                 }
-              }else if((item.siblings('.input').val() > 1)&&(item.siblings('.input').val() < 1000)){
-                item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
-              }
-            })
+              })
+              $('.plus').on('click', function(){
+                var item = $(this);
+                var input = item.siblings('.input');
+                var other = input.hasClass('count_others')
+                if(item.siblings('.input').val()<1000 && !other){
+                  item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
+                  var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
+                  var get_box_count = input_kor.attr('box_count');
+                  input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
+                } else if (other){
 
+                    var get_box_count = parseInt(input.attr('box_count'));
+                    if(item.siblings('.input').val() < get_box_count*1000){
+
+                      item.siblings('.input').val(parseInt(item.siblings('.input').val())+get_box_count);
+
+                    }
+
+                }
+              })
     });
     function delfromcart(articul){
       delete cart[articul];

@@ -315,9 +315,40 @@ var upload = multer({
   }
 }).any();
 
-
+const nativeDogPath = 'public/docs/dogovor_p.doc';
+const nativePath = 'public/docs/';
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
+  if(req.query.id){
+    var id = req.query.id;
+    var dest = 'public/docs/'+id+'/'+id+'.doc';
+
+    function callback(err) {
+      if (err) throw err;
+      console.log('file copyed starting to rewrite');
+      fs.readFile(dest,'cp1251',(err,data)=>{
+        if (err) throw err;
+        var newdata = data.replace(/INN/gim,'123');
+         fs.writeFile('public/docs/'+id+'/'+id+'.txt', newdata,'cp1251' ,(err, data)=>{
+           if (err) throw err;
+           console.log('Записано!');
+         })
+      });
+    }
+
+    try {
+      fs.statSync(nativePath+id);
+    } catch (e) {
+        if (e.code === 'ENOENT'){
+          fs.mkdir(nativePath+id, (err)=>{
+            if (err) throw err;
+            console.log('directory created for id '+ id);
+          });
+        };
+      } finally {
+        fs.copyFile(nativeDogPath, dest, callback);
+      }
+  }
   var getUserData = `SELECT * FROM users WHERE id='`+req.session.userId+`'`;
   pgPool.query(getUserData,[], function(err, response){
     if(response.rows[0]){

@@ -255,22 +255,45 @@ function check_green(){
 
 $('.minus').on('click', function(){
   var item = $(this);
-  if (item.siblings('.input').val() > 1){
+  var input = item.siblings('.input');
+  var other = input.hasClass('count_others')
+  if (item.siblings('.input').val() > 1 && !other){
     item.siblings('.input').val(parseInt(item.siblings('.input').val())-1);
     var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
     var get_box_count = input_kor.attr('box_count');
     input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
+  } else if (other){
+    console.log(1234);
+      var get_box_count = parseInt(input.attr('box_count'));
+
+      if(item.siblings('.input').val() >= get_box_count ){
+        
+        item.siblings('.input').val(parseInt(item.siblings('.input').val())-get_box_count);
+
+      }
+
   } else {
     return 0;
   }
 })
 $('.plus').on('click', function(){
   var item = $(this);
-  if(item.siblings('.input').val()<1000){
+  var input = item.siblings('.input');
+  var other = input.hasClass('count_others')
+  if(item.siblings('.input').val()<1000 && !other){
     item.siblings('.input').val(parseInt(item.siblings('.input').val())+1);
     var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
     var get_box_count = input_kor.attr('box_count');
     input_kor.val(Math.round((item.siblings('.input').val()/get_box_count)*10)/10);
+  } else if (other){
+
+      var get_box_count = parseInt(input.attr('box_count'));
+      if(item.siblings('.input').val() <= get_box_count*1000){
+
+        item.siblings('.input').val(parseInt(item.siblings('.input').val())+get_box_count);
+
+      }
+
   }
 })
 

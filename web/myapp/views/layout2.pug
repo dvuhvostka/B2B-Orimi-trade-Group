@@ -24,12 +24,14 @@ html
 						button.btn.btn-secondary.btn-close(data-dismiss='modal') Закрыть
 		nav(class='navbar navbar-expand-md navbar-dark bg-dark sticky-top')
 			.container-fluid
-				a(href='/shop' class='navbar-brand') Фирменный магазин Орими-трэйд
+				a(href='/shop' class='navbar-brand') Фирменный магазин ОРИМИ ТРЭЙД
 				button(class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarContent')
 					span(class='navbar-toggler-icon')
 				div(class='collapse navbar-collapse' id='navbarContent')
 					if isRegistred
 						ul(class='navbar-nav ml-auto')
+							li(class='nav-item ')
+								a(href='/shop' class='nav-link') Главная
 							li(class='nav-item ')
 								a(href='/cart' class='nav-link') Корзина
 							li(class='nav-item')
@@ -38,6 +40,8 @@ html
 								a(href='/logout' class='nav-link') Выйти
 					else
 						ul(class='navbar-nav ml-auto')
+							li.nav-item
+								a.nav-link(href='/shop') Главная
 							li(class='nav-item ')
 								a(href='/cart' class='nav-link') Корзина
 							li(class='nav-item')
