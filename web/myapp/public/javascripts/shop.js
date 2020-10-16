@@ -267,7 +267,7 @@ $('.minus').on('click', function(){
       var get_box_count = parseInt(input.attr('box_count'));
 
       if(item.siblings('.input').val() >= get_box_count ){
-        
+
         item.siblings('.input').val(parseInt(item.siblings('.input').val())-get_box_count);
 
       }
@@ -328,11 +328,27 @@ $('.box_count_minus').on('click', function(){
   }
 });
 
-$('.count_input_pack').on('change paste keyup',function(){
+$('.count_input_pack').on('change paste',function(){
   var item = $(this);
   var input_kor = item.parentsUntil('.footer_item').siblings('.kor').children('.range_items').children('.input');
   var get_box_count = input_kor.attr('box_count');
   input_kor.val(Math.round((item.val()/get_box_count)*10)/10);
+});
+
+$('.count_input_pack').on('keyup', function(){
+  var item = $(this);
+  var other = item.hasClass('count_others');
+  var get_box_count = parseInt(item.attr('box_count'));
+  if(item.val()>1000 && !other){
+    item.val(1000);
+  } else if (other && item.val() % get_box_count != 0 && item.val()<=get_box_count*1000) {
+    var amount = Math.round(item.val()/get_box_count)+1;
+    item.val(amount*get_box_count);
+  } else if (item.val()>get_box_count*1000){
+    item.val(1000*get_box_count);
+  } else if (item.val()==0){
+    item.val(get_box_count);
+  }
 });
 
 var input_check = $('.input');
