@@ -48,7 +48,7 @@
 
 .alert_t {
   position: fixed;
-  bottom: 0;
+  bottom: 60px;
   right:10px;
   z-index: 1000;
 }
@@ -557,6 +557,9 @@
   opacity: 0;
 
 }
+.btn-help {
+  z-index:1001;
+}
 .visible {
   transition: opacity .5s cubic-bezier(0.0, 0.1, 0.5 ,1.0);
   z-index: 10000;
@@ -612,6 +615,10 @@
   justify-content: center;
 }
 
+.select_city_size {
+  width:100%;
+}
+
 @media (max-width: 768px) {
   nav {
     font-size: 0.8em;
@@ -664,7 +671,7 @@
 
   .alert_t {
     position: fixed;
-    top: calc(100vh - 200px);
+    top: calc(100vh - 600px);
     right:20px;
     z-index: 100;
   }

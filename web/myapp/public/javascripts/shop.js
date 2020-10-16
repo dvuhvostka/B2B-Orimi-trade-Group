@@ -442,6 +442,7 @@ $('#accept_region').on('click', function(){
       case "Волгоград": region_selected = 34; break;
       case "Краснодар": region_selected = 123; break;
       case "Саратов": region_selected = 64; break;
+      case "Иваново": region_selected = 65; break;
       default: region_selected = 77; break;
     }
     localStorage.setItem('reg', region_selected);
