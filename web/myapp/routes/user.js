@@ -157,6 +157,7 @@ var storage = multer.diskStorage({
         break;
       }
       case "case_photo": {
+        console.log('i am in cases');
         var getUsersWeekly = `SELECT weekly FROM users WHERE id='`+req.session.userId+`'`;
         var check_weekly_checklist_sql = `SELECT * FROM weekly_checklist WHERE requester_id='`+req.session.userId+`'`;
         db.any(check_weekly_checklist_sql).then(function(check_result){
@@ -190,6 +191,7 @@ var storage = multer.diskStorage({
         break;
       }
       default: {
+        console.log('wtf i am here shit ass');
         fs.mkdir('./public/images/uploads/'+req.session.userId, err=>{});
         cb(null, './public/images/uploads/'+req.session.userId);
         break;
@@ -197,6 +199,7 @@ var storage = multer.diskStorage({
     }
   },
   filename: function (req, file, cb) {
+    console.log("and here too");
     switch(req.body.post_type){
       case "add_tea": {
         setTimeout(()=>{
@@ -319,6 +322,22 @@ const nativeDogPath = 'public/docs/dogovor_p.doc';
 const nativePath = 'public/docs/';
 user.route('/user')
 .get(redirectLogin, function(req, res, next) {
+  // console.log('here');
+  // db.any(`SELECT * FROM horeca`).then(
+  //   (res)=>{
+  //     for (let each of res){
+  //       console.log(each.id);
+  //       var keywords = createKeywords(each);
+  //       db.none(`UPDATE horeca SET keywords ='`+keywords+`' WHERE id=`+each.id,{
+  //         keywords: keywords
+  //       }).then(()=>{
+  //         console.log('done');
+  //       }).catch((err)=>{
+  //         console.log(err);
+  //       });
+  //     }
+  //   }
+  // )
   if(req.query.id){
     var id = req.query.id;
     var dest = 'public/docs/'+id+'/'+id+'.doc';
@@ -678,7 +697,9 @@ user.route('/user')
       rimraf('./public/images/case_photo/'+req.body.org_owner_id+'/'+req.body.cases, () => {});
     }else{
         upload(req, res, err => {
+          console.log(req.body,err);
           if (err == undefined){
+            console.log('wtf '+req.body.post_type);
             switch(req.body.post_type){
               case "add_coffee": {
                 var fls = fs.readdirSync('./public/images/store_prods/coffee/'+req.body.sort+'/'+req.body.articul+'/');

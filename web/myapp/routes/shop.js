@@ -6,7 +6,7 @@ var config = require('../config');
 var {Pool, Client} = require('pg');
 var keywords = require('../keywords')
 //var pgp = require("pg-promise")(/*options*/);
-//var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
+// var db = pgp("postgres://"+config.DB_USER+":"+config.DB_PASSWORD+"@"+config.DB_HOST+":5432/"+config.DB_NAME);
 
 const {
   SESS_LIFETIME = config.SESS_TIME,
@@ -25,7 +25,70 @@ var pgPool = new Pool({
   password: "MffdwehqsqAREs228T",
   database: DBNAME
 });
+function createKeywords(data){
+  var keywords_res ='';
+  var keys = Object.keys(data);
+  var titles = Object.keys(keywords);
+  for (let each of keys){
+    switch(each){
+      case "sort":{
+        var names = Object.keys(keywords['sort']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['sort'][item];
+          }
+        }
+        keywords_res += ', ';
+      }
+      break;
+      case "packaging":{
+        var names = Object.keys(keywords['packaging']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['packaging'][item];
+          }
+        }
+        keywords_res += ', ';
 
+      }
+      break;
+      case "about":{
+        var names = Object.keys(keywords['about']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['about'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "category":{
+        var names = Object.keys(keywords['category']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['category'][item];
+          }
+        }
+        keywords_res += ', ';
+
+      }
+      break;
+      case "tea_bags":{
+        var names = Object.keys(keywords['tea_bags']);
+        for (let item of names){
+          if (item == data[each]){
+            keywords_res += keywords['tea_bags'][item];
+          }
+        }
+
+      }
+      break;
+    }
+  }
+  console.log(keywords_res);
+  return keywords_res;
+}
 function checkFilters (data){
   var brand_tea = ['greenfield','nuri','tess','java','candy','shah','nila','gita'];
   var tea_type = ['black','black_1','green','green_1','herbal'];
@@ -152,7 +215,7 @@ router.route('/shop/:type?')
                   isRegistred: req.session.userId,
                   products: prods,
                   prod_count: prods.length,
-                  title: 'Фирменный магазин Орими-трэйд',
+                  title: 'Фирменный магазин Орими Трейд',
                   needFooter: true,
                   sales: r.rows,
                   sales_q: r.rows.length,
@@ -177,7 +240,7 @@ router.route('/shop/:type?')
             isRegistred: req.session.userId,
             products: prods,
             prod_count: prods.length,
-            title: 'Фирменный магазин Орими-трэйд',
+            title: 'Фирменный магазин Орими Трейд',
             type: 'tea',
             needFooter: true,
             sales: r.rows,
@@ -195,7 +258,7 @@ router.route('/shop/:type?')
                 isRegistred: req.session.userId,
                 products: prods,
                 prod_count: prods.length,
-                title: 'Фирменный магазин Орими-трэйд',
+                title: 'Фирменный магазин Орими Трейд',
                 type: 'tea',
                 needFooter: false
                 });
@@ -220,7 +283,7 @@ router.route('/shop/:type?')
             isRegistred: req.session.userId,
             products: prods,
             prod_count: prods.length,
-            title: 'Фирменный магазин Орими-трэйд',
+            title: 'Фирменный магазин Орими Трейд',
             type: 'coffee',
             needFooter: true,
             sales: r.rows,
@@ -241,7 +304,7 @@ router.route('/shop/:type?')
               isRegistred: req.session.userId,
               products: prods,
               prod_count: prods.length,
-              title: 'Фирменный магазин Орими-трэйд',
+              title: 'Фирменный магазин Орими Трейд',
               type: 'tea',
               needFooter: false
               });
@@ -262,7 +325,7 @@ router.route('/shop/:type?')
           isRegistred: req.session.userId,
           products: prods,
           prod_count: prods.length,
-          title: 'Фирменный магазин Орими-трэйд',
+          title: 'Фирменный магазин Орими Трейд',
           type: 'other',
           needFooter: true,
           sales: r.rows,
@@ -283,7 +346,7 @@ router.route('/shop/:type?')
             isRegistred: req.session.userId,
             products: prods,
             prod_count: prods.length,
-            title: 'Фирменный магазин Орими-трэйд',
+            title: 'Фирменный магазин Орими Трейд',
             type: 'other',
             needFooter: false
             });
@@ -312,7 +375,7 @@ router.route('/shop/:type?')
         isRegistred: req.session.userId,
         products: prods,
         prod_count: prods.length,
-        title: 'Фирменный магазин Орими-трэйд',
+        title: 'Фирменный магазин Орими Трейд',
         type: 'horeca',
         needFooter: true,
         sales: r.rows,
@@ -333,7 +396,7 @@ router.route('/shop/:type?')
           isRegistred: req.session.userId,
           products: prods,
           prod_count: prods.length,
-          title: 'Фирменный магазин Орими-трэйд',
+          title: 'Фирменный магазин Орими Трейд',
           type: 'horeca',
           needFooter: false
           });
@@ -372,7 +435,7 @@ router.route('/shop/:type?')
                 isRegistred: req.session.userId,
                 products: prods,
                 prod_count: prods.length,
-                title: 'Фирменный магазин Орими-трэйд',
+                title: 'Фирменный магазин Орими Трейд',
                 needFooter: true,
                 sales: r.rows,
                 sales_q: r.rows.length,

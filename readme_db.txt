@@ -13,7 +13,7 @@ packaging -
 'present' - подарочная упаковка
 
 Таблица coffee
-sort - 'Jardin','Jokey','Piazza'
+sort - 'jardin','jokey','piazza'
 
 category - 
  milled - Молотый
