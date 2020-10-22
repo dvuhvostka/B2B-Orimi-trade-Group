@@ -82,7 +82,7 @@ function checkFilters (data){
 }
 
 function checkCoffeeFilters (data){
-  var coffee_brand = ['Jardin','Jockey','Piazza'];
+  var coffee_brand = ['jardin','jokey','piazza'];
   var coffee_type = ['milled','milled_2','cereal','cereal_2','cereal_3', 'cereal_4', 'sublem', 'granul'];
   var coffee_pack = ['glass_jar','can','soft_pack', 'capsule'];
   var filters = Object.keys(data);
