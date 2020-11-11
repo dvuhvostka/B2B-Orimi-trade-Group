@@ -79,7 +79,7 @@ $.fn.setCursorPosition = function(pos) {
 $(function($){
   $("#inn").click(function(){
     $(this).setCursorPosition(0);
-  }).mask("9999999999",{autoclear: false, placeholder: ''});
+  }).mask("999999999999",{autoclear: false, placeholder: ''});
 });
 
 document.addEventListener('DOMContentLoaded', ready);

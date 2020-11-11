@@ -593,6 +593,9 @@ check_formdata = (formdata, cart, res, userId, region) => {
 
 router.route('/order')
   .get(function(req,res){
+    if(!req.session.userId) {
+      res.redirect('/login')
+    }
     var sql=`SELECT * FROM organizations WHERE owner_id='`+req.session.userId+`'`;
     db.one(sql).then((org_info)=>{
       console.log(org_info.org_address_fact);

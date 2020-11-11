@@ -6,6 +6,7 @@ block scripts
 block content
 	- var q = prod_count
 	- var Type = type;
+	- var products = JSON.parse(products)
 	script(src="../jquery-3.5.1.js")
 	.modal.fade#modal_city(role='dialog' tabindex='-1' )
 		.modal-dialog
@@ -69,125 +70,48 @@ block content
 				input(type="text" name="search" placeholder="Поиск")
 				input.btn.btn-primary(type="submit" value="Найти")
 		.main-content
-			if q != 0 
-				nav(aria-label='paginationNav').pagination_wrap
-					ul.pagination.top
-						li.page-item
-							a.page-link(href='#' aria-label='Previous').prevpage
-								span(aria-hidden='true') &laquo;
-						- for (var j = 0; j < Math.ceil(q/16);j++)
-							li(class="page-item").pagenumber
-								a(class="page-link" href="#" data-id=j) #{j+1}
-						li.page-item
-							a.page-link(href='#' aria-label='Next').nextpage
-								span(aria-hidden='true') &raquo;
-			- for (var j = 0; j<= Math.floor(q/16); j++)
-				.item_list(id='page'+j).d-none
-					if (j == Math.floor(q/16))
-						- for (var i = 0; i < q%16; i++)
-							div(class='shop_item' id=products[i+j*16].id sort=products[i+j*16].sort about=products[i+j*16].about weight=products[i+j*16].weight packaging=products[i+j*16].packaging bags=products[i+j*16].tea_bags)
-								if (products[i+j*16].bestseller)
-									.bestseller
-										span Бестселлер
-								div(class='carousel_img')
-									if (products[i+j*16].subtype)
-										img(src="../store_prods/horeca/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")
-									else
-										img(src="../store_prods/"+products[i+j*16].type+"/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")
-								if (products[i+j*16].subtype)
-									a(href='/shop/'+products[i+j*16].subtype+'?id='+products[i+j*16].id class='item_name') #{products[i+j*16].item_name}
+			.item_list
+				- for(var i=0; i<(q < 16 ? q : 16); i++)
+						div(class='shop_item' id=products[i].id sort=products[i].sort about=products[i].about weight=products[i].weight packaging=products[i].packaging bags=products[i].tea_bags)
+							if (products[i].bestseller)
+								.bestseller
+									span Бестселлер
+							div(class='carousel_img')
+								if(products[i].subtype)
+									img(src="../store_prods/horeca/"+products[i].sort+"/"+products[i].articul+"/"+"1.jpg")
 								else
-									a(href='/shop/'+products[i+j*16].type+'?id='+products[i+j*16].id class='item_name') #{products[i+j*16].item_name}
-								if (products[i+j*16].sale_price != 0)
-									p(class='item_price sale_price') #{products[i+j*16].sale_price}
-										i.fas.fa-ruble-sign.rs
-										sup.sale_price_old #{products[i+j*16].item_price}
-											i.fas.fa-ruble-sign.rs.sale_sign
+									img(src="../store_prods/"+products[i].type+"/"+products[i].sort+"/"+products[i].articul+"/"+"1.jpg")
+							if(products[i].subtype)
+								a(href='/shop/'+products[i].subtype+'?id='+products[i].id class='item_name') #{products[i].item_name}
+							else
+								a(href='/shop/'+products[i].type+'?id='+products[i].id class='item_name') #{products[i].item_name}
+							if(products[i].sale_price!=0)
+								p(class='item_price sale_price') #{products[i].sale_price}
+									i.fas.fa-ruble-sign.rs
+									sup.sale_price_old #{products[i].item_price}
+										i.fas.fa-ruble-sign.rs.sale_sign
+							else
+								p(class='item_price') #{products[i].item_price}
+									i.fas.fa-ruble-sign.rs
+							div.footer_item
+								if(products[i].subtype)
+									button.b(class='btn btn-primary addtocart' type=products[i].subtype data-id=products[i].id) Купить
 								else
-									p(class='item_price') #{products[i+j*16].item_price}
-										i.fas.fa-ruble-sign.rs
-								div.footer_item
-									if (products[i+j*16].subtype)
-										button.b(class='btn btn-primary addtocart' type=products[i+j*16].subtype data-id=products[i+j*16].id) Купить
-									else
-										button.b(class='btn btn-primary addtocart' type=products[i+j*16].type data-id=products[i+j*16].id) Купить
-									if (type != 'other')
-										div.sht Кол-во в шт
-											.range_items
-												button(class='btn btn-secondary minus')
-													i.fas.fa-minus.controls
-												input(type='text' value='1' class='input count_input_pack' data-id=products[i+j*16].id)
-												button(class='btn btn-secondary plus')
-													i.fas.fa-plus.controls
-										div.kor Кол-во в коробках
-											.range_items
-												button(class='btn btn-secondary box_count_minus' box_count=products[i+j*16].box_count)
-													i.fas.fa-minus.controls
-												input(type='text' value='0' box_count=products[i+j*16].box_count class='input' id_data=products[i+j*16].id).count_input_box
-												button(class='btn btn-secondary box_count_plus' box_count=products[i+j*16].box_count)
-													i.fas.fa-plus.controls
-									else
-										div.sht Кол-во в шт
-											.range_items
-												button(class='btn btn-secondary minus')
-													i.fas.fa-minus.controls
-												input(type='text' value=products[i+j*16].box_count class='input count_input_pack count_others' box_count=products[i+j*16].box_count data-id=products[i+j*16].id)
-												button(class='btn btn-secondary plus')
-													i.fas.fa-plus.controls
-					else
-						- for(var i=0; i<16; i++)
-								div(class='shop_item' id=products[i+j*16].id sort=products[i+j*16].sort about=products[i+j*16].about weight=products[i+j*16].weight packaging=products[i+j*16].packaging bags=products[i+j*16].tea_bags)
-									if (products[i+j*16].bestseller)
-										.bestseller
-											span Бестселлер
-									div(class='carousel_img')
-										if(products[i+j*16].subtype)
-											img(src="../store_prods/horeca/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")
-										else
-											img(src="../store_prods/"+products[i+j*16].type+"/"+products[i+j*16].sort+"/"+products[i+j*16].articul+"/"+"1.jpg")
-									if(products[i+j*16].subtype)
-										a(href='/shop/'+products[i+j*16].subtype+'?id='+products[i+j*16].id class='item_name') #{products[i+j*16].item_name}
-									else
-										a(href='/shop/'+products[i+j*16].type+'?id='+products[i+j*16].id class='item_name') #{products[i+j*16].item_name}
-									if(products[i+j*16].sale_price!=0)
-										p(class='item_price sale_price') #{products[i+j*16].sale_price}
-											i.fas.fa-ruble-sign.rs
-											sup.sale_price_old #{products[i+j*16].item_price}
-												i.fas.fa-ruble-sign.rs.sale_sign
-									else
-										p(class='item_price') #{products[i+j*16].item_price}
-											i.fas.fa-ruble-sign.rs
-									div.footer_item
-										if(products[i+j*16].subtype)
-											button.b(class='btn btn-primary addtocart' type=products[i+j*16].subtype data-id=products[i+j*16].id) Купить
-										else
-											button.b(class='btn btn-primary addtocart' type=products[i+j*16].type data-id=products[i+j*16].id) Купить
-										div.sht Кол-во в шт
-											.range_items
-												button(class='btn btn-secondary minus')
-													i.fas.fa-minus.controls
-												input(type='text' value='1' class='input count_input_pack' data-id=products[i+j*16].id)
-												button(class='btn btn-secondary plus')
-													i.fas.fa-plus.controls
-										div.kor Кол-во в коробках
-											.range_items
-												button(class='btn btn-secondary box_count_minus' box_count=products[i+j*16].box_count)
-													i.fas.fa-minus.controls
-												input(type='text' value='0' box_count=products[i+j*16].box_count class='input' id_data=products[i+j*16].id).count_input_box
-												button(class='btn btn-secondary box_count_plus' box_count=products[i+j*16].box_count)
-													i.fas.fa-plus.controls
-			if q != 0
-				nav(aria-label='paginationNav').pagination_wrap
-					ul.pagination.bot
-						li.page-item
-							a.page-link(href='#' aria-label='Previous').prevpage
-								span(aria-hidden='true') &laquo;
-						- for (var j = 0; j < Math.ceil(q/16);j++)
-							li(class="page-item").pagenumber
-								a(class="page-link" href="#" data-id=j) #{j+1}
-						li.page-item
-							a.page-link(href='#' aria-label='Next').nextpage
-								span(aria-hidden='true') &raquo;
+									button.b(class='btn btn-primary addtocart' type=products[i].type data-id=products[i].id) Купить
+								div.sht Кол-во в шт
+									.range_items
+										button(class='btn btn-secondary minus')
+											i.fas.fa-minus.controls
+										input(type='text' value='1' class='input count_input_pack' data-id=products[i].id)
+										button(class='btn btn-secondary plus')
+											i.fas.fa-plus.controls
+								div.kor Кол-во в коробках
+									.range_items
+										button(class='btn btn-secondary box_count_minus' box_count=products[i].box_count)
+											i.fas.fa-minus.controls
+										input(type='text' value='0' box_count=products[i].box_count class='input' id_data=products[i].id).count_input_box
+										button(class='btn btn-secondary box_count_plus' box_count=products[i].box_count)
+											i.fas.fa-plus.controls
 			if q == 0
 				div.noitems По данному запросу нет товаров
 		.sidebar
@@ -459,6 +383,7 @@ block content
 	script(src='../cities.js')
 	script(src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js")
 	script(src='../shop.js')
+	script(src='../scroll.js')
 	script.
 		slider(#{sales_q});
-	
+		infscroll(!{JSON.stringify(products)});

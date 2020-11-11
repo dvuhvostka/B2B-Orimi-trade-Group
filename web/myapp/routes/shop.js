@@ -210,12 +210,12 @@ router.route('/shop/:type?')
                 var prods_double = prods_tea.concat(prods_coffee);
                 var prods_triple = prods_double.concat(prods_others);
                 var prods = prods_triple.concat(prods_horeca);
-                // console.log(prods);
+                console.log(JSON.stringify(prods[0]));
                 res.status(200).render('shop.pug', {
                   isRegistred: req.session.userId,
-                  products: prods,
+                  products: JSON.stringify(prods),
                   prod_count: prods.length,
-                  title: 'Фирменный магазин Орими Трейд',
+                  title: 'Фирменный магазин Орими Трэйд',
                   needFooter: true,
                   sales: r.rows,
                   sales_q: r.rows.length,
@@ -238,9 +238,9 @@ router.route('/shop/:type?')
           }
           res.render('shop.pug', {
             isRegistred: req.session.userId,
-            products: prods,
+            products: JSON.stringify(prods),
             prod_count: prods.length,
-            title: 'Фирменный магазин Орими Трейд',
+            title: 'Фирменный магазин Орими Трэйд',
             type: 'tea',
             needFooter: true,
             sales: r.rows,
@@ -258,7 +258,7 @@ router.route('/shop/:type?')
                 isRegistred: req.session.userId,
                 products: prods,
                 prod_count: prods.length,
-                title: 'Фирменный магазин Орими Трейд',
+                title: 'Фирменный магазин Орими Трэйд',
                 type: 'tea',
                 needFooter: false
                 });
@@ -281,9 +281,9 @@ router.route('/shop/:type?')
           console.log(prods); //debug
           res.render('shop.pug', {
             isRegistred: req.session.userId,
-            products: prods,
+            products: JSON.stringify(prods),
             prod_count: prods.length,
-            title: 'Фирменный магазин Орими Трейд',
+            title: 'Фирменный магазин Орими Трэйд',
             type: 'coffee',
             needFooter: true,
             sales: r.rows,
@@ -304,7 +304,7 @@ router.route('/shop/:type?')
               isRegistred: req.session.userId,
               products: prods,
               prod_count: prods.length,
-              title: 'Фирменный магазин Орими Трейд',
+              title: 'Фирменный магазин Орими Трэйд',
               type: 'tea',
               needFooter: false
               });
@@ -323,9 +323,9 @@ router.route('/shop/:type?')
         console.log(prods); //debug
         res.render('shop.pug', {
           isRegistred: req.session.userId,
-          products: prods,
+          products: JSON.stringify(prods),
           prod_count: prods.length,
-          title: 'Фирменный магазин Орими Трейд',
+          title: 'Фирменный магазин Орими Трэйд',
           type: 'other',
           needFooter: true,
           sales: r.rows,
@@ -346,7 +346,7 @@ router.route('/shop/:type?')
             isRegistred: req.session.userId,
             products: prods,
             prod_count: prods.length,
-            title: 'Фирменный магазин Орими Трейд',
+            title: 'Фирменный магазин Орими Трэйд',
             type: 'other',
             needFooter: false
             });
@@ -373,9 +373,9 @@ router.route('/shop/:type?')
       console.log(prods); //debug
       res.render('shop.pug', {
         isRegistred: req.session.userId,
-        products: prods,
+        products: JSON.stringify(prods),
         prod_count: prods.length,
-        title: 'Фирменный магазин Орими Трейд',
+        title: 'Фирменный магазин Орими Трэйд',
         type: 'horeca',
         needFooter: true,
         sales: r.rows,
@@ -396,7 +396,7 @@ router.route('/shop/:type?')
           isRegistred: req.session.userId,
           products: prods,
           prod_count: prods.length,
-          title: 'Фирменный магазин Орими Трейд',
+          title: 'Фирменный магазин Орими Трэйд',
           type: 'horeca',
           needFooter: false
           });
@@ -433,9 +433,9 @@ router.route('/shop/:type?')
               console.log(prods);
               res.render('shop.pug', {
                 isRegistred: req.session.userId,
-                products: prods,
+                products: JSON.stringify(prods),
                 prod_count: prods.length,
-                title: 'Фирменный магазин Орими Трейд',
+                title: 'Фирменный магазин Орими Трэйд',
                 needFooter: true,
                 sales: r.rows,
                 sales_q: r.rows.length,

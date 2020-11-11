@@ -48,7 +48,7 @@
 
 .alert_t {
   position: fixed;
-  bottom: 60px;
+  bottom: 100px;
   right:10px;
   z-index: 1000;
 }
